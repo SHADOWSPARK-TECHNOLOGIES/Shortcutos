@@ -1,0 +1,12 @@
+{
+  "name": "shortcutos-v100-runtime",
+  "version": "100.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "check": "npm test && node cli.mjs self-check",
+    "audit:conformance": "node scripts/run-conformance.mjs"
+  }
+}

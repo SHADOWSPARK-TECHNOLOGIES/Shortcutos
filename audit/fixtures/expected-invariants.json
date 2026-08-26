@@ -1,0 +1,20 @@
+[
+  {"id":"INV-001","statement":"System, developer, tool/runtime, and user authority cannot be overridden by ShortcutOS.","evidenceRequired":["source","test"]},
+  {"id":"INV-002","statement":"Planning remains distinct from routing.","evidenceRequired":["source","test_or_design_contract"]},
+  {"id":"INV-003","statement":"Routing remains distinct from dispatch.","evidenceRequired":["source","test_or_design_contract"]},
+  {"id":"INV-004","statement":"Dispatch remains distinct from execution.","evidenceRequired":["source","test"]},
+  {"id":"INV-005","statement":"Execution remains distinct from verification.","evidenceRequired":["source","test"]},
+  {"id":"INV-006","statement":"Task success remains distinct from mission completion.","evidenceRequired":["source","test"]},
+  {"id":"INV-007","statement":"UNKNOWN is never silently promoted to success.","evidenceRequired":["source","test"]},
+  {"id":"INV-008","statement":"PARTIAL remains explicit and is not silently promoted.","evidenceRequired":["source","test_or_gap"]},
+  {"id":"INV-009","statement":"STALE context remains explicit.","evidenceRequired":["source","test"]},
+  {"id":"INV-010","statement":"Missing capabilities are not invented.","evidenceRequired":["source","test"]},
+  {"id":"INV-011","statement":"Unavailable adapters are not invoked.","evidenceRequired":["source","test"]},
+  {"id":"INV-012","statement":"The current runtime execution slice performs at most one adapter invocation.","evidenceRequired":["source","test"]},
+  {"id":"INV-013","statement":"Invocation failure does not silently retry.","evidenceRequired":["source","test"]},
+  {"id":"INV-014","statement":"Runtime verification state promotion requires evidence.","evidenceRequired":["source","test","raw_evidence"]},
+  {"id":"INV-015","statement":"Conflicting context is surfaced rather than silently merged.","evidenceRequired":["source","test"]},
+  {"id":"INV-016","statement":"Persistent memory preserves append history, supersession, and tombstones.","evidenceRequired":["source","test"]},
+  {"id":"INV-017","statement":"Local file reads remain confined to the configured root.","evidenceRequired":["source","test"]},
+  {"id":"INV-018","statement":"Portable package host integration remains explicitly false.","evidenceRequired":["source","test","raw_evidence"]}
+]

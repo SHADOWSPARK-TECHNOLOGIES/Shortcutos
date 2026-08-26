@@ -1,0 +1,8 @@
+dist/
+*.zip
+.DS_Store
+
+.worktrees/
+
+audit/reports/*.json
+!audit/reports/.gitkeep
