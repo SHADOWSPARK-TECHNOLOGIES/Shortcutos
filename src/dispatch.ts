@@ -1,4 +1,6 @@
-import { AdapterAvailability, type ToolAdapterRegistry } from './adapter.js';
+﻿import { AdapterAvailability, SideEffectClass, type ToolAdapterRegistry } from './adapter.js';
+import { AuthorityLevel } from './authority.js';
+import { ContextFreshness } from './context.js';
 
 export enum DispatchStatus {
   DRAFT = 'DRAFT',
@@ -17,6 +19,72 @@ export type DispatchRequest = DispatchInput & {
   status: DispatchStatus;
   blockReason: string | null;
 };
+
+export type DispatchPreflightInput = {
+  dispatch: DispatchInput;
+  actorAuthority?: AuthorityLevel;
+  adapters?: ToolAdapterRegistry;
+  contextFreshness?: ContextFreshness;
+  hasConflicts?: boolean;
+  idempotencyKey?: string | null;
+};
+
+export type DispatchPreflightResult = {
+  eligible: boolean;
+  reasons: string[];
+};
+
+export function preflightDispatch(input: DispatchPreflightInput): DispatchPreflightResult {
+  const reasons: string[] = [];
+
+  if (!input.adapters) {
+    reasons.push('PREFLIGHT_ADAPTER_REGISTRY_REQUIRED');
+    return { eligible: false, reasons };
+  }
+
+  const adapter = input.adapters.get(input.dispatch.adapterId);
+  if (!adapter) {
+    reasons.push('PREFLIGHT_ADAPTER_NOT_FOUND');
+    return { eligible: false, reasons };
+  }
+
+  if (adapter.capability !== input.dispatch.capability) {
+    reasons.push('PREFLIGHT_CAPABILITY_MISMATCH');
+  }
+
+  if (adapter.availability !== AdapterAvailability.AVAILABLE) {
+    reasons.push(`PREFLIGHT_ADAPTER_${adapter.availability}`);
+  }
+
+  if (
+    adapter.requiredAuthority !== undefined &&
+    input.actorAuthority !== undefined &&
+    input.actorAuthority > adapter.requiredAuthority
+  ) {
+    reasons.push('PREFLIGHT_AUTHORITY_INSUFFICIENT');
+  }
+
+  const isMutation =
+    adapter.sideEffectClass === SideEffectClass.NON_IDEMPOTENT_MUTATION ||
+    adapter.sideEffectClass === SideEffectClass.IRREVERSIBLE;
+
+  if (isMutation) {
+    if (input.contextFreshness === ContextFreshness.STALE) {
+      reasons.push('PREFLIGHT_CONTEXT_STALE');
+    }
+    if (input.hasConflicts) {
+      reasons.push('PREFLIGHT_CONTEXT_CONFLICT');
+    }
+    if (!input.idempotencyKey) {
+      reasons.push('PREFLIGHT_IDEMPOTENCY_REQUIRED');
+    }
+  }
+
+  return {
+    eligible: reasons.length === 0,
+    reasons
+  };
+}
 
 export function createDispatch(
   input: DispatchInput,

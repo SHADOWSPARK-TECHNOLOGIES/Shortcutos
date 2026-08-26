@@ -11,3 +11,4 @@ export * from './registry.js';
 export * from './status.js';
 
 export * from './memory.js';
+export * from './acceptance.js';

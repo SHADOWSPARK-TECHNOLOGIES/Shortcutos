@@ -55,6 +55,15 @@ export class ShortcutOSKernel {
         safeNextAction: 'Call markPlanned() before markExecuted().'
       });
     }
+    if (!evidence) {
+      throw new ShortcutOSError({
+        code: 'EXECUTION_EVIDENCE_REQUIRED',
+        message: 'Runtime execution evidence is required to mark execution.',
+        scope: runId,
+        retryable: false,
+        safeNextAction: 'Provide valid RuntimeEvidence when calling markExecuted().'
+      });
+    }
     run.evidence.push(evidence);
     run.verificationStatus = promoteStatus(
       run.verificationStatus,

@@ -1,4 +1,4 @@
-import { assembleContext, type ContextAssembly, type ContextRecord } from './context.js';
+import { assembleContext, type ContextAssembly, type ContextRecord, ContextFreshness } from './context.js';
 import { ShortcutOSError } from './errors.js';
 
 export enum MemoryRecordStatus {
@@ -57,10 +57,22 @@ export type MemoryTextStore = {
 };
 
 export class MemoryRepository {
+  private currentEvents: MemoryJournalEvent[] = [];
+
   constructor(private readonly store: MemoryTextStore) {}
 
-  async put(input: { eventId: string; record: MemoryRecordInput }): Promise<void> {
+  get version(): number {
+    return this.currentEvents.length;
+  }
+
+  async put(input: {
+    eventId: string;
+    record: MemoryRecordInput;
+    expectedVersion?: number;
+  }): Promise<void> {
+    this.validateRecordInput(input.record, input.eventId);
     const events = await this.loadEvents();
+    this.checkConcurrency(events, input.expectedVersion, input.eventId);
     this.assertUniqueEvent(events, input.eventId);
     this.assertUniqueRecord(events, input.record.id);
     events.push({ eventId: input.eventId, type: MemoryEventType.PUT, record: structuredClone(input.record) });
@@ -71,8 +83,11 @@ export class MemoryRepository {
     eventId: string;
     targetId: string;
     replacement: MemoryRecordInput;
+    expectedVersion?: number;
   }): Promise<void> {
+    this.validateRecordInput(input.replacement, input.eventId);
     const events = await this.loadEvents();
+    this.checkConcurrency(events, input.expectedVersion, input.eventId);
     this.assertUniqueEvent(events, input.eventId);
     this.assertUniqueRecord(events, input.replacement.id);
     const state = this.replay(events);
@@ -94,8 +109,13 @@ export class MemoryRepository {
     await this.saveEvents(events);
   }
 
-  async tombstone(input: { eventId: string; targetId: string }): Promise<void> {
+  async tombstone(input: {
+    eventId: string;
+    targetId: string;
+    expectedVersion?: number;
+  }): Promise<void> {
     const events = await this.loadEvents();
+    this.checkConcurrency(events, input.expectedVersion, input.eventId);
     this.assertUniqueEvent(events, input.eventId);
     const state = this.replay(events);
     const target = state.get(input.targetId);
@@ -132,9 +152,39 @@ export class MemoryRepository {
     return assembleContext(active);
   }
 
+  private validateRecordInput(record: MemoryRecordInput, eventId: string): void {
+    if (!record || typeof record !== 'object') {
+      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record must be an object.', 'Provide a valid memory record object.');
+    }
+    if (typeof record.id !== 'string' || record.id.trim().length === 0) {
+      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record id must be a non-empty string.', 'Provide a non-empty string for record id.');
+    }
+    if (typeof record.key !== 'string' || record.key.trim().length === 0) {
+      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record key must be a non-empty string.', 'Provide a non-empty string for record key.');
+    }
+    if (!record.freshness || !Object.values(ContextFreshness).includes(record.freshness)) {
+      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record freshness must be a valid ContextFreshness enum value.', 'Provide a valid freshness value.');
+    }
+    if (!record.provenance || typeof record.provenance !== 'object' || typeof record.provenance.kind !== 'string' || typeof record.provenance.ref !== 'string') {
+      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record provenance must contain kind and ref strings.', 'Provide valid provenance information.');
+    }
+  }
+
+  private checkConcurrency(events: MemoryJournalEvent[], expectedVersion: number | undefined, eventId: string): void {
+    if (expectedVersion !== undefined && expectedVersion !== events.length) {
+      throw this.memoryError(
+        'MEMORY_CONCURRENCY_CONFLICT',
+        eventId,
+        `Memory concurrency conflict: expected version ${expectedVersion}, but store is at version ${events.length}.`,
+        'Reload current memory state and retry operation with updated expected version.'
+      );
+    }
+  }
+
   private async loadEvents(): Promise<MemoryJournalEvent[]> {
     const text = await this.store.read();
     if (text === null || text.trim() === '') {
+      this.currentEvents = [];
       return [];
     }
     let parsed: unknown;
@@ -156,10 +206,12 @@ export class MemoryRepository {
         'Restore a valid ShortcutOS memory journal.'
       );
     }
-    return parsed as MemoryJournalEvent[];
+    this.currentEvents = parsed as MemoryJournalEvent[];
+    return this.currentEvents;
   }
 
   private async saveEvents(events: MemoryJournalEvent[]): Promise<void> {
+    this.currentEvents = events;
     await this.store.write(JSON.stringify(events, null, 2));
   }
 

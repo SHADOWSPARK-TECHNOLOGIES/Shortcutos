@@ -1,7 +1,9 @@
 import {
   AdapterAvailability,
   ExecutionResultStatus,
-  type ToolAdapterRegistry
+  SideEffectClass,
+  type ToolAdapterRegistry,
+  type ToolInvocationOptions
 } from './adapter.js';
 import { DispatchStatus, type DispatchRequest } from './dispatch.js';
 import type { RuntimeEvidence } from './status.js';
@@ -19,9 +21,12 @@ export type ExecutionEnvelope = {
   evidence: RuntimeEvidence[];
 };
 
+export type ExecuteOptions = ToolInvocationOptions;
+
 export async function executeOnce(
   dispatch: DispatchRequest,
-  adapters: ToolAdapterRegistry
+  adapters: ToolAdapterRegistry,
+  options?: ExecuteOptions
 ): Promise<ExecutionEnvelope> {
   if (dispatch.status !== DispatchStatus.READY_FOR_EXECUTION) {
     return {
@@ -63,8 +68,30 @@ export async function executeOnce(
     };
   }
 
+  const isMutation =
+    adapter.sideEffectClass === SideEffectClass.NON_IDEMPOTENT_MUTATION ||
+    adapter.sideEffectClass === SideEffectClass.IRREVERSIBLE;
+
   try {
-    const result = await adapter.invoke(dispatch.input);
+    let invocationPromise = adapter.invoke(dispatch.input, options);
+
+    if (options?.timeoutMs && options.timeoutMs > 0) {
+      let timeoutId: ReturnType<typeof setTimeout>;
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => {
+          const timeoutErr = new Error(`EXECUTION_TIMEOUT: Exceeded ${options.timeoutMs}ms`);
+          timeoutErr.name = 'TimeoutError';
+          reject(timeoutErr);
+        }, options.timeoutMs);
+      });
+
+      invocationPromise = Promise.race([
+        invocationPromise.finally(() => clearTimeout(timeoutId)),
+        timeoutPromise
+      ]);
+    }
+
+    const result = await invocationPromise;
     return {
       dispatchId: dispatch.id,
       status: result.status,
@@ -73,13 +100,42 @@ export async function executeOnce(
       evidence: [...result.evidence]
     };
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const isTimeout =
+      (error instanceof Error && error.name === 'TimeoutError') ||
+      message.includes('EXECUTION_TIMEOUT') ||
+      message.includes('timeout');
+    const isAbort =
+      (error instanceof Error && error.name === 'AbortError') ||
+      message.includes('ABORT') ||
+      message.includes('abort');
+
+    if (isTimeout && isMutation) {
+      return {
+        dispatchId: dispatch.id,
+        status: ExecutionResultStatus.UNKNOWN,
+        output: null,
+        error: {
+          code: 'EXECUTION_AMBIGUOUS_SIDE_EFFECT',
+          message: `Timed out on mutating operation. Result is unknown: ${message}`
+        },
+        evidence: []
+      };
+    }
+
+    const code = isTimeout
+      ? 'EXECUTION_TIMEOUT'
+      : isAbort
+      ? 'EXECUTION_ABORTED'
+      : 'EXECUTION_INVOCATION_FAILED';
+
     return {
       dispatchId: dispatch.id,
       status: ExecutionResultStatus.FAILED,
       output: null,
       error: {
-        code: 'EXECUTION_INVOCATION_FAILED',
-        message: error instanceof Error ? error.message : String(error)
+        code,
+        message
       },
       evidence: []
     };
