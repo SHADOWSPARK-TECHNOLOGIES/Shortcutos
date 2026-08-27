@@ -14,3 +14,4 @@ export * from './memory.js';
 export * from './acceptance.js';
 export * from './retry.js';
 export * from './scheduler.js';
+export * from './parallel.js';
