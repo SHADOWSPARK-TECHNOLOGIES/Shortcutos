@@ -43,8 +43,8 @@ const manifest = {
 
 for (const relPath of fileList) {
   const fullPath = resolve(rootDir, relPath);
-  const buf = readFileSync(fullPath);
-  const hash = createHash('sha256').update(buf).digest('hex');
+  const content = readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');
+  const hash = createHash('sha256').update(content, 'utf8').digest('hex');
   manifest.files[relPath] = hash;
 }
 

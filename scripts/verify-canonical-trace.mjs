@@ -90,8 +90,8 @@ if (existsSync(fileManifestPath)) {
         fileManifestTampered = true;
         break;
       }
-      const fileBuffer = readFileSync(fullPath);
-      const actualHash = createHash('sha256').update(fileBuffer).digest('hex');
+      const content = readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');
+      const actualHash = createHash('sha256').update(content, 'utf8').digest('hex');
       if (actualHash !== expectedHash) {
         console.error(`File hash mismatch for ${relPath}: expected ${expectedHash}, got ${actualHash}`);
         fileManifestTampered = true;
