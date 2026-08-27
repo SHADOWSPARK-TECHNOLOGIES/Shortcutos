@@ -4,6 +4,51 @@ import { resolve, relative } from 'node:path';
 
 const rootDir = resolve(process.cwd());
 
+const targetDirs = ['src', 'tests', 'scripts', 'audit', '.agents'];
+const singleFiles = [
+  'package.json',
+  'package-lock.json',
+  'tsconfig.json',
+  'cli.mjs',
+  'node-adapters.mjs',
+  'README.md',
+  'CONFORMANCE.md',
+  'IMPLEMENTATION_STATUS.md',
+  'ShortcutOS_V100_Always_On_Profile.md',
+  'REPRODUCING_V100.md'
+];
+
+function getFilesRecursively(dir, fileList = []) {
+  const files = readdirSync(dir);
+  for (const file of files) {
+    const filePath = resolve(dir, file);
+    if (statSync(filePath).isDirectory()) {
+      getFilesRecursively(filePath, fileList);
+    } else {
+      fileList.push(filePath);
+    }
+  }
+  return fileList;
+}
+
+const allFilePaths = [];
+for (const sf of singleFiles) {
+  const fullPath = resolve(rootDir, sf);
+  try {
+    if (statSync(fullPath).isFile()) {
+      allFilePaths.push(fullPath);
+    }
+  } catch {}
+}
+for (const dir of targetDirs) {
+  const fullDir = resolve(rootDir, dir);
+  try {
+    if (statSync(fullDir).isDirectory()) {
+      getFilesRecursively(fullDir, allFilePaths);
+    }
+  } catch {}
+}
+
 const skipFiles = new Set([
   'audit/reports/v100-file-manifest.json',
   'audit/reports/v100-canonical-certification.json',
@@ -12,29 +57,14 @@ const skipFiles = new Set([
   'shortcutos-v100-runtime-final.zip'
 ]);
 
-const skipDirs = new Set(['.git', 'node_modules', 'dist', 'scratch']);
-
-function walk(dir) {
-  const files = [];
-  for (const item of readdirSync(dir)) {
-    const fullPath = resolve(dir, item);
-    const relPath = relative(rootDir, fullPath).replace(/\\/g, '/');
-    const stat = statSync(fullPath);
-
-    if (stat.isDirectory()) {
-      if (!skipDirs.has(item)) {
-        files.push(...walk(fullPath));
-      }
-    } else {
-      if (!skipFiles.has(relPath)) {
-        files.push(relPath);
-      }
-    }
-  }
-  return files;
+const fileList = [];
+for (const fp of allFilePaths) {
+  const relPath = relative(rootDir, fp).replace(/\\/g, '/');
+  if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-')) continue;
+  fileList.push(relPath);
 }
+fileList.sort();
 
-const fileList = walk(rootDir).sort();
 const manifest = {
   version: 'V100',
   generatedAt: new Date().toISOString(),
@@ -42,7 +72,6 @@ const manifest = {
 };
 
 for (const relPath of fileList) {
-  if (relPath.startsWith('audit/reports/conformance-')) continue;
   const fullPath = resolve(rootDir, relPath);
   const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
   let hash = '';
