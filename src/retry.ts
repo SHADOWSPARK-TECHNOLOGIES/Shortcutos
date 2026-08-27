@@ -1,4 +1,4 @@
-﻿import {
+import {
   AdapterAvailability,
   ExecutionResultStatus,
   SideEffectClass,
@@ -45,13 +45,13 @@ export type RetryExecutionResult = {
 export type RetryExecutionOptions = {
   dispatch: DispatchRequest;
   adapters: ToolAdapterRegistry;
-  policy?: RetryPolicy;
-  timeoutMs?: number;
-  abortSignal?: AbortSignal;
-  actorAuthority?: AuthorityLevel;
-  contextFreshness?: ContextFreshness;
-  hasConflicts?: boolean;
-  idempotencyKey?: string | null;
+  policy?: RetryPolicy | undefined;
+  timeoutMs?: number | undefined;
+  abortSignal?: AbortSignal | undefined;
+  actorAuthority?: AuthorityLevel | undefined;
+  contextFreshness?: ContextFreshness | undefined;
+  hasConflicts?: boolean | undefined;
+  idempotencyKey?: string | null | undefined;
 };
 
 export async function executeWithRetryAndFallback(
