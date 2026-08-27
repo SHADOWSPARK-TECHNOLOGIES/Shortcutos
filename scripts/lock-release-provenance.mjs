@@ -238,14 +238,23 @@ const filesManifest = {};
 const skipFiles = new Set([
   'audit/reports/v100-file-manifest.json',
   'audit/reports/v100-canonical-certification.json',
-  'audit/reports/v100-release-manifest.json'
+  'audit/reports/v100-release-manifest.json',
+  'shortcutos-v100-runtime-final.release.json',
+  'shortcutos-v100-runtime-final.zip'
 ]);
 
 for (const fp of allFilePaths) {
   const relPath = relative(rootDir, fp).replace(/\\/g, '/');
   if (skipFiles.has(relPath)) continue;
-  const content = readFileSync(fp);
-  const hash = createHash('sha256').update(content).digest('hex');
+  const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
+  let hash = '';
+  if (isText) {
+    const text = readFileSync(fp, 'utf8').replace(/\r\n/g, '\n');
+    hash = createHash('sha256').update(text, 'utf8').digest('hex');
+  } else {
+    const buf = readFileSync(fp);
+    hash = createHash('sha256').update(buf).digest('hex');
+  }
   filesManifest[relPath] = hash;
 }
 
