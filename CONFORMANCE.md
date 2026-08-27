@@ -27,10 +27,10 @@
 | Strict final-report schema/validator | Yes | Yes |
 | Workspace-local Antigravity auditor configuration | Yes | Repository-tested |
 | Real external provider adapters | No | Not implemented |
-| Retry/fallback runtime | No | Not implemented |
-| Parallel scheduler runtime | No | Not implemented |
-| Specialist runtime | No | Not implemented |
-| Recovery executor | No | Not implemented |
+| Retry/fallback runtime controller | Yes | Yes |
+| Sequential/DAG workflow scheduler runtime | Yes | Yes |
+| Evidence integrity & path traversal security hardening | Yes | Yes |
+| Memory concurrency conflict protection | Yes | Yes |
 | ChatGPT host/system integration | Not possible from package | No claim |
 
 `Locally runtime-tested` refers only to this Node.js package. It does not imply external provider, account, or ChatGPT host integration.

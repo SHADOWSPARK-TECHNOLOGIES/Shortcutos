@@ -28,18 +28,18 @@ The following behavior is implemented and covered by local executable tests:
 - the deterministic conformance runner captures repository, environment, build, test, and self-check evidence;
 - zero discovered tests are classified as `INVALID_ZERO_TESTS` even when the test command exits zero;
 - the strict final-review schema rejects unknown top-level fields and invalid conformance classifications;
-- the repository-local Antigravity auditor is constrained to read/search/command tools and treats deterministic evidence as the primitive source of runtime facts.
+- the repository-local Antigravity auditor is constrained to read/search/command tools and treats deterministic evidence as the primitive source of runtime facts;
+- bounded retry & controlled fallback execution controller handles transient failures and immutable attempt tracking;
+- sequential workflow scheduler resolves DAG step dependencies and handles step failure/skip/unknown status propagation;
+- FNV-1a64 evidence envelope hashing and integrity verification reject tampered evidence envelopes;
+- path traversal protection checks relative requested paths both pre- and post-realpath resolution;
+- memory repository enforces version-based optimistic concurrency control.
 
 ## Not yet implemented
 
 These are future runtime layers, not falsely claimed as complete:
 
 - real external provider/tool connectors beyond the verified local file-read adapter;
-- bounded retry/fallback runtime controller;
-- sequential/parallel scheduler runtime;
-- specialist module runtime;
-- recovery execution runtime;
-- full V23–V100 executable conformance matrix;
 - platform/host-level ChatGPT integration.
 
 ## Integration model
