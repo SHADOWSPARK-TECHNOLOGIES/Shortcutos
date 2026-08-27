@@ -88,13 +88,13 @@ export function preflightDispatch(input: DispatchPreflightInput): DispatchPrefli
 
 export function createDispatch(
   input: DispatchInput,
-  adapters?: ToolAdapterRegistry,
+  adapters?: ToolAdapterRegistry | undefined,
   options?: {
-    actorAuthority?: AuthorityLevel;
-    contextFreshness?: ContextFreshness;
-    hasConflicts?: boolean;
-    idempotencyKey?: string | null;
-  }
+    actorAuthority?: AuthorityLevel | undefined;
+    contextFreshness?: ContextFreshness | undefined;
+    hasConflicts?: boolean | undefined;
+    idempotencyKey?: string | null | undefined;
+  } | undefined
 ): DispatchRequest {
   if (!adapters) {
     return {

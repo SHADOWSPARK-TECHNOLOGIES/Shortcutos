@@ -115,7 +115,7 @@ test('P1: Non-retryable error (ambiguous side-effect) blocks retry immediately',
     capability: 'db.update',
     adapterId: 'mutate.api',
     input: { rowId: 1 }
-  }, adapters);
+  }, adapters, { actorAuthority: AuthorityLevel.USER, idempotencyKey: 'idem-key-123' });
 
   const result = await executeWithRetryAndFallback({
     dispatch,

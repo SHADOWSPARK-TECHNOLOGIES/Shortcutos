@@ -15,6 +15,7 @@ test('P3 Security: Tampered evidence envelope is rejected by promoteStatus and k
   const validEnvelope = createEvidenceEnvelope({
     kind: 'test-evidence',
     ref: 'ref-1',
+    source: 'trusted-source',
     payload: { test: true }
   });
 
@@ -25,10 +26,10 @@ test('P3 Security: Tampered evidence envelope is rejected by promoteStatus and k
 
   assert.throws(
     () => {
-      promoteStatus(VerificationStatus.RUNTIME_EXECUTED, VerificationStatus.RUNTIME_VERIFIED, [tamperedEnvelope]);
+      promoteStatus(VerificationStatus.RUNTIME_EXECUTED, VerificationStatus.RUNTIME_VERIFIED, [tamperedEnvelope], ['trusted-source']);
     },
     (err) => {
-      return err instanceof Error && err.message.includes('INVALID_EVIDENCE_ENVELOPE');
+      return err instanceof Error && (err.message.includes('INVALID_EVIDENCE_ENVELOPE') || err.message.includes('INTEGRITY_MISMATCH'));
     }
   );
 
@@ -39,7 +40,7 @@ test('P3 Security: Tampered evidence envelope is rejected by promoteStatus and k
 
   assert.throws(
     () => {
-      kernel.verify(run.id, [tamperedEnvelope], true);
+      kernel.verify(run.id, [tamperedEnvelope], true, ['trusted-source']);
     },
     (err) => {
       return err instanceof Error && (err.message.includes('INVALID_EVIDENCE_ENVELOPE') || err.message.includes('INTEGRITY_MISMATCH'));

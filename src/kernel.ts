@@ -74,7 +74,7 @@ export class ShortcutOSKernel {
     return structuredClone(run);
   }
 
-  verify(runId: string, evidence: RuntimeEvidence[], acceptancePassed: boolean): ShortcutRun {
+  verify(runId: string, evidence: RuntimeEvidence[], acceptancePassed: boolean, trustedSources?: string[]): ShortcutRun {
     const run = this.requireRun(runId);
     if (run.verificationStatus !== VerificationStatus.RUNTIME_EXECUTED) {
       throw new ShortcutOSError({
@@ -91,7 +91,8 @@ export class ShortcutOSKernel {
       run.verificationStatus = promoteStatus(
         run.verificationStatus,
         VerificationStatus.RUNTIME_VERIFIED,
-        run.evidence
+        run.evidence,
+        trustedSources
       );
       run.completed = true;
     } else {

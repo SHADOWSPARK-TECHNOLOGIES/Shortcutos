@@ -256,7 +256,7 @@ test('P0: Explicit UNKNOWN-side-effect handling after ambiguous timeout on mutat
     capability: 'remote.transfer',
     adapterId: 'mutating-adapter',
     input: { amount: 100 }
-  }, adapters);
+  }, adapters, { actorAuthority: AuthorityLevel.USER, idempotencyKey: 'idem-123' });
 
   const envelope = await executeOnce(dispatch, adapters, { timeoutMs: 40 });
   assert.equal(envelope.status, ExecutionResultStatus.UNKNOWN);

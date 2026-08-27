@@ -77,7 +77,13 @@ export async function executeWithRetryAndFallback(
         adapterId: currentAdapterId,
         input: options.dispatch.input
       },
-      options.adapters
+      options.adapters,
+      {
+        actorAuthority: options.actorAuthority,
+        contextFreshness: options.contextFreshness,
+        hasConflicts: options.hasConflicts,
+        idempotencyKey: options.idempotencyKey
+      }
     );
 
     const preflight = preflightDispatch({

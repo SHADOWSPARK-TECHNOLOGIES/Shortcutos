@@ -1,12 +1,14 @@
 import {
+  AdapterAvailability,
   ExecutionResultStatus,
-  ToolAdapterRegistry
+  SideEffectClass,
+  type ToolAdapterRegistry
 } from './adapter.js';
+import { AuthorityLevel } from './authority.js';
 import { createDispatch } from './dispatch.js';
 import { executeWithRetryAndFallback, type RetryPolicy } from './retry.js';
 import type { ExecutionError } from './executor.js';
 import type { RuntimeEvidence } from './status.js';
-import type { AuthorityLevel } from './authority.js';
 import type { ContextFreshness } from './context.js';
 
 export type WorkflowStep = {
@@ -171,7 +173,11 @@ export async function executeWorkflow(
         adapterId: step.adapterId,
         input: stepInput
       },
-      adapters
+      adapters,
+      {
+        actorAuthority: AuthorityLevel.USER,
+        idempotencyKey: step.idempotencyKey ?? `idem-${stepId}`
+      }
     );
 
     const stepTimeout = step.timeoutMs ?? options?.timeoutMs;
