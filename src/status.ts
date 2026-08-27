@@ -105,6 +105,49 @@ export function validateEvidenceEnvelope(envelope: unknown): { valid: boolean; e
   return { valid: true };
 }
 
+export enum AuthenticityClassification {
+  CHECKSUM_VALID = 'CHECKSUM_VALID',
+  INTEGRITY_RECORDED = 'INTEGRITY_RECORDED',
+  PROVENANCE_RECORDED = 'PROVENANCE_RECORDED',
+  AUTHENTICITY_UNKNOWN = 'AUTHENTICITY_UNKNOWN',
+  AUTHENTICITY_VERIFIED = 'AUTHENTICITY_VERIFIED'
+}
+
+export type EvidenceAuthenticityResult = {
+  checksumValid: boolean;
+  integrityRecorded: boolean;
+  provenanceRecorded: boolean;
+  status: AuthenticityClassification;
+};
+
+export function classifyEvidenceAuthenticity(
+  envelope: unknown,
+  trustedSources?: string[] | undefined
+): EvidenceAuthenticityResult {
+  const val = validateEvidenceEnvelope(envelope);
+  const checksumValid = val.valid;
+  const item = (envelope ?? {}) as Record<string, unknown>;
+
+  const integrityRecorded = typeof item.integrity === 'string' && item.integrity.length > 0;
+  const provenanceRecorded = typeof item.source === 'string' && item.source.length > 0;
+
+  let status = AuthenticityClassification.AUTHENTICITY_UNKNOWN;
+
+  if (checksumValid && provenanceRecorded && trustedSources) {
+    const src = item.source as string;
+    if (trustedSources.includes(src)) {
+      status = AuthenticityClassification.AUTHENTICITY_VERIFIED;
+    }
+  }
+
+  return {
+    checksumValid,
+    integrityRecorded,
+    provenanceRecorded,
+    status
+  };
+}
+
 export function promoteStatus(
   current: VerificationStatus,
   target: VerificationStatus,

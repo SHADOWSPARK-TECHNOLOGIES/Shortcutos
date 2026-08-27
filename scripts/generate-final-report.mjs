@@ -297,14 +297,22 @@ const report = {
       evidence: ['cli.mjs', 'tests/cli.test.mjs']
     }
   ],
-  test_coverage_gaps: [],
+  test_coverage_gaps: [
+    'P4 — Bounded Parallel Execution (V31-V35)',
+    'P5 — Deterministic Resource Scheduler (V36-V40)',
+    'P6 — Complete Evidence System (V41-V55)',
+    'P7 — Memory/Context Tiers & Checkpoints (V56-V70)',
+    'P8 — Specialist Runtime (V71-V85)',
+    'P9 — Failure/Recovery Runtime (V86-V95)',
+    'P10 — Full V23-V100 Executable Matrix (V96-V100)'
+  ],
   runtime_overclaims: [],
   critical_blockers: [],
   smallest_safe_next_actions: [
-    'Maintain deterministic regression test suite during future feature additions.',
-    'Register real external provider adapters when credentials and network bindings are provided.'
+    'Formal claim challenge complete: retracted 100/100 to PORTABLE_V100_RUNTIME = NOT_100',
+    'Resume sequential TDD implementation starting from P4 bounded parallel execution'
   ],
-  production_readiness_verdict: 'PORTABLE_V100_RUNTIME = 100/100 (VERIFIED_LOCAL_CONFORMANCE)'
+  production_readiness_verdict: 'PORTABLE_V100_RUNTIME = NOT_100 (PARTIAL_CONFORMANCE: P0-P3 COMPLETE, P4-P10 IN PROGRESS)'
 };
 
 const validation = validateConformanceReport(report);
