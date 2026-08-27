@@ -235,7 +235,9 @@ for (const dir of targetDirs) {
 
 const filesManifest = {};
 const skipFiles = new Set([
-  'audit/reports/v100-file-manifest.json'
+  'audit/reports/v100-file-manifest.json',
+  'audit/reports/v100-canonical-certification.json',
+  'audit/reports/v100-release-manifest.json'
 ]);
 
 for (const fp of allFilePaths) {

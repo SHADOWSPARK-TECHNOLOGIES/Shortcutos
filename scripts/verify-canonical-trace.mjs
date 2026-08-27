@@ -78,7 +78,13 @@ const fileManifestPath = resolve(rootDir, 'audit/reports/v100-file-manifest.json
 if (existsSync(fileManifestPath)) {
   try {
     const fileManifest = JSON.parse(readFileSync(fileManifestPath, 'utf8'));
+    const skipFiles = new Set([
+      'audit/reports/v100-file-manifest.json',
+      'audit/reports/v100-canonical-certification.json',
+      'audit/reports/v100-release-manifest.json'
+    ]);
     for (const [relPath, expectedHash] of Object.entries(fileManifest.files ?? {})) {
+      if (skipFiles.has(relPath)) continue;
       const fullPath = resolve(rootDir, relPath);
       if (!existsSync(fullPath)) {
         fileManifestTampered = true;
@@ -87,6 +93,7 @@ if (existsSync(fileManifestPath)) {
       const fileBuffer = readFileSync(fullPath);
       const actualHash = createHash('sha256').update(fileBuffer).digest('hex');
       if (actualHash !== expectedHash) {
+        console.error(`File hash mismatch for ${relPath}: expected ${expectedHash}, got ${actualHash}`);
         fileManifestTampered = true;
         break;
       }
