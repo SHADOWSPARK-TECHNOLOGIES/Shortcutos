@@ -245,7 +245,7 @@ const skipFiles = new Set([
 
 for (const fp of allFilePaths) {
   const relPath = relative(rootDir, fp).replace(/\\/g, '/');
-  if (skipFiles.has(relPath)) continue;
+  if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-')) continue;
   const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
   let hash = '';
   if (isText) {

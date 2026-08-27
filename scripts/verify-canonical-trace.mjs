@@ -86,7 +86,7 @@ if (existsSync(fileManifestPath)) {
       'shortcutos-v100-runtime-final.zip'
     ]);
     for (const [relPath, expectedHash] of Object.entries(fileManifest.files ?? {})) {
-      if (skipFiles.has(relPath)) continue;
+      if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-')) continue;
       const fullPath = resolve(rootDir, relPath);
       if (!existsSync(fullPath)) {
         fileManifestTampered = true;

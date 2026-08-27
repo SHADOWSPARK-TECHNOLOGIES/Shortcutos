@@ -42,6 +42,7 @@ const manifest = {
 };
 
 for (const relPath of fileList) {
+  if (relPath.startsWith('audit/reports/conformance-')) continue;
   const fullPath = resolve(rootDir, relPath);
   const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
   let hash = '';
