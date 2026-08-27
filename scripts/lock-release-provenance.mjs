@@ -56,6 +56,7 @@ const testFiles = [
   'tests/authority.test.mjs',
   'tests/capability.test.mjs',
   'tests/cli.test.mjs',
+  'tests/conformance-runner.test.mjs',
   'tests/conformance-schema.test.mjs',
   'tests/context.test.mjs',
   'tests/evidence.test.mjs',

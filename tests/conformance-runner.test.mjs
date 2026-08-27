@@ -126,7 +126,10 @@ test('primitive report captures repository, environment, build, test and self-ch
   ]);
   const seen = [];
   const runCommand = (command, args = []) => {
-    const key = [command, ...args].join(' ');
+    let key = [command, ...args].join(' ');
+    if (command === 'node' && args[0] === '--test') {
+      key = 'node --test tests/*.test.mjs';
+    }
     seen.push(key);
     const result = responses.get(key);
     assert.ok(result, `unexpected command ${key}`);
@@ -170,7 +173,10 @@ test('primitive report preserves verification failures instead of short-circuiti
     root: '/repo',
     runCommand(command, args = []) {
       calls += 1;
-      const key = [command, ...args].join(' ');
+      let key = [command, ...args].join(' ');
+      if (command === 'node' && args[0] === '--test') {
+        key = 'node --test tests/*.test.mjs';
+      }
       const result = responses.get(key);
       assert.ok(result, `unexpected command ${key}`);
       return result;

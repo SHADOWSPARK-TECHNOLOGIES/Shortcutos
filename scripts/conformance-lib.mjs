@@ -63,10 +63,13 @@ export function captureCommandEvidence(command, args = [], options = {}) {
   let result;
 
   try {
+    const childEnv = { ...process.env, SHORTCUTOS_CONFORMANCE_NESTED: '1' };
+    delete childEnv.NODE_TEST_CONTEXT;
     result = spawn(command, args, {
       cwd: options.cwd,
       shell: options.shell ?? false,
-      encoding: 'utf8'
+      encoding: 'utf8',
+      env: childEnv
     });
   } catch (error) {
     result = { status: null, stdout: '', stderr: '', error };
@@ -110,6 +113,7 @@ export function runPrimitiveConformance({ root, runCommand = captureCommandEvide
     'tests/authority.test.mjs',
     'tests/capability.test.mjs',
     'tests/cli.test.mjs',
+    'tests/conformance-runner.test.mjs',
     'tests/conformance-schema.test.mjs',
     'tests/context.test.mjs',
     'tests/evidence.test.mjs',
@@ -131,7 +135,8 @@ export function runPrimitiveConformance({ root, runCommand = captureCommandEvide
     'tests/registry.test.mjs',
     'tests/status.test.mjs',
     'tests/audit-remediation.test.mjs',
-    'tests/audit-remediation-round2.test.mjs'
+    'tests/audit-remediation-round2.test.mjs',
+    'tests/v100-mandatory-gaps.test.mjs'
   ];
 
   const rawTests = invoke('node', ['--test', ...testFiles]);

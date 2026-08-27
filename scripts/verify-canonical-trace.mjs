@@ -126,6 +126,7 @@ const testFiles = [
   'tests/authority.test.mjs',
   'tests/capability.test.mjs',
   'tests/cli.test.mjs',
+  'tests/conformance-runner.test.mjs',
   'tests/conformance-schema.test.mjs',
   'tests/context.test.mjs',
   'tests/evidence.test.mjs',
@@ -238,7 +239,9 @@ if (
   !foreignGitHistory &&
   !fileManifestTampered &&
   missingFiles.length === 0 &&
-  weakTestContracts.length === 0
+  weakTestContracts.length === 0 &&
+  runtimeTested === 78 &&
+  partial === 0
 ) {
   finalVerdict = 'PORTABLE_V100_RUNTIME = 100/100 VERIFIED_LOCAL_CANONICAL_CONFORMANCE';
 }

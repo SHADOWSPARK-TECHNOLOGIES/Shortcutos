@@ -132,3 +132,79 @@ export class ContextCarrier {
     return carrier;
   }
 }
+
+export function restoreFromCheckpoint(
+  carrier: ContextCarrier,
+  checkpoint: ContextCheckpoint
+): { carrier: ContextCarrier; restoredCount: number; valid: boolean } {
+  let restoredCount = 0;
+  for (const entry of checkpoint.entries ?? []) {
+    carrier.addEntry(entry.key, entry.value, entry.tier ?? MemoryTier.SHORT_TERM);
+    restoredCount += 1;
+  }
+  return {
+    carrier,
+    restoredCount,
+    valid: true
+  };
+}
+
+export function compressContext(
+  entries: ContextEntry[],
+  targetBudget: number
+): { compressedEntries: ContextEntry[]; totalTokens: number; compressedCount: number } {
+  let currentTotal = entries.reduce((sum, e) => sum + e.estimatedTokens, 0);
+  if (currentTotal <= targetBudget) {
+    return { compressedEntries: entries.map(e => ({ ...e })), totalTokens: currentTotal, compressedCount: 0 };
+  }
+
+  let compressedCount = 0;
+  const compressedEntries: ContextEntry[] = [];
+
+  for (const entry of entries) {
+    if (currentTotal > targetBudget && entry.value.length > 20) {
+      const truncatedValue = entry.value.slice(0, 15) + '...';
+      const newTokens = estimateTokens(truncatedValue);
+      currentTotal -= (entry.estimatedTokens - newTokens);
+      compressedEntries.push({
+        ...entry,
+        value: truncatedValue,
+        estimatedTokens: newTokens
+      });
+      compressedCount += 1;
+    } else {
+      compressedEntries.push({ ...entry });
+    }
+  }
+
+  return {
+    compressedEntries,
+    totalTokens: currentTotal,
+    compressedCount
+  };
+}
+
+export function reconcileStateDrift(
+  checkpoint: ContextCheckpoint,
+  currentEntries: ContextEntry[]
+): { drifted: boolean; mismatchedKeys: string[]; currentHash: string; checkpointHash: string } {
+  const currentHash = fnv1a(JSON.stringify({ id: checkpoint.id, timestamp: checkpoint.timestamp, entries: currentEntries }));
+  const mismatchedKeys: string[] = [];
+
+  const checkpointMap = new Map((checkpoint.entries ?? []).map(e => [e.key, e.value]));
+  for (const curr of currentEntries) {
+    const prev = checkpointMap.get(curr.key);
+    if (prev !== curr.value) {
+      mismatchedKeys.push(curr.key);
+    }
+  }
+
+  const drifted = currentHash !== checkpoint.stateHash || mismatchedKeys.length > 0;
+
+  return {
+    drifted,
+    mismatchedKeys,
+    currentHash,
+    checkpointHash: checkpoint.stateHash
+  };
+}

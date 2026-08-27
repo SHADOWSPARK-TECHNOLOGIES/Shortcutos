@@ -1,81 +1,54 @@
-import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { resolve, relative } from 'node:path';
 
 const rootDir = resolve(process.cwd());
 
-function getFilesRecursively(dir, fileList = []) {
-  const files = readdirSync(dir);
-  for (const file of files) {
-    const filePath = resolve(dir, file);
-    const stat = statSync(filePath);
+const skipFiles = new Set([
+  'audit/reports/v100-file-manifest.json',
+  'audit/reports/v100-canonical-certification.json',
+  'audit/reports/v100-release-manifest.json',
+  'shortcutos-v100-runtime-final.release.json',
+  'shortcutos-v100-runtime-final.zip'
+]);
+
+const skipDirs = new Set(['.git', 'node_modules', 'dist']);
+
+function walk(dir) {
+  const files = [];
+  for (const item of readdirSync(dir)) {
+    const fullPath = resolve(dir, item);
+    const relPath = relative(rootDir, fullPath).replace(/\\/g, '/');
+    const stat = statSync(fullPath);
+
     if (stat.isDirectory()) {
-      if (file !== 'node_modules' && file !== '.git' && file !== 'dist' && file !== 'scratch') {
-        getFilesRecursively(filePath, fileList);
+      if (!skipDirs.has(item)) {
+        files.push(...walk(fullPath));
       }
     } else {
-      fileList.push(filePath);
+      if (!skipFiles.has(relPath)) {
+        files.push(relPath);
+      }
     }
   }
-  return fileList;
+  return files;
 }
 
-const targetDirs = ['src', 'tests', 'scripts', 'audit', '.agents'];
-const singleFiles = [
-  'package.json',
-  'tsconfig.json',
-  'cli.mjs',
-  'node-adapters.mjs',
-  'CONFORMANCE.md',
-  'IMPLEMENTATION_STATUS.md',
-  'ShortcutOS_V100_Always_On_Profile.md',
-  'REPRODUCING_V100.md'
-];
-
-const allFilePaths = [];
-
-for (const sf of singleFiles) {
-  const fullPath = resolve(rootDir, sf);
-  try {
-    if (statSync(fullPath).isFile()) {
-      allFilePaths.push(fullPath);
-    }
-  } catch {
-    // skip if optional file doesn't exist
-  }
-}
-
-for (const dir of targetDirs) {
-  const fullDir = resolve(rootDir, dir);
-  try {
-    if (statSync(fullDir).isDirectory()) {
-      getFilesRecursively(fullDir, allFilePaths);
-    }
-  } catch {
-    // skip if optional dir doesn't exist
-  }
-}
-
-const filesManifest = {};
-
-for (const fp of allFilePaths) {
-  const relPath = relative(rootDir, fp).replace(/\\/g, '/');
-  // Skip v100-file-manifest.json itself if present
-  if (relPath === 'audit/reports/v100-file-manifest.json') continue;
-
-  const content = readFileSync(fp);
-  const hash = createHash('sha256').update(content).digest('hex');
-  filesManifest[relPath] = hash;
-}
-
-const manifestOutput = {
-  algorithm: 'SHA-256',
-  generated_at: new Date().toISOString(),
-  total_files: Object.keys(filesManifest).length,
-  files: filesManifest
+const fileList = walk(rootDir).sort();
+const manifest = {
+  version: 'V100',
+  generatedAt: new Date().toISOString(),
+  files: {}
 };
 
-const outputPath = resolve(rootDir, 'audit/reports/v100-file-manifest.json');
-writeFileSync(outputPath, JSON.stringify(manifestOutput, null, 2), 'utf8');
+for (const relPath of fileList) {
+  const fullPath = resolve(rootDir, relPath);
+  const buf = readFileSync(fullPath);
+  const hash = createHash('sha256').update(buf).digest('hex');
+  manifest.files[relPath] = hash;
+}
 
-console.log(`Generated SHA-256 file manifest for ${manifestOutput.total_files} files at ${outputPath}`);
+const outputPath = resolve(rootDir, 'audit/reports/v100-file-manifest.json');
+writeFileSync(outputPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
+
+console.log(`File manifest generated: ${Object.keys(manifest.files).length} files written to audit/reports/v100-file-manifest.json`);

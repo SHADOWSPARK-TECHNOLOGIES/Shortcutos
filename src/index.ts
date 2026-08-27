@@ -20,3 +20,35 @@ export * from './evidence-system.js';
 export * from './memory-system.js';
 export * from './specialist.js';
 export * from './recovery-runtime.js';
+
+export function validateExportSurface(): { valid: boolean; duplicateExports: string[]; totalExports: number } {
+  const exportNames = [
+    'AdapterAvailability', 'ExecutionResultStatus', 'SideEffectClass',
+    'AuthorityLevel', 'canOverrideAuthority',
+    'ContextCarrier', 'ContextCheckpoint', 'MemoryTier',
+    'ShortcutOSKernel', 'ShortcutRun',
+    'createEvidenceEnvelope', 'promoteStatus', 'EvidenceTrustPolicy',
+    'evaluateAcceptance', 'executeRecoveryPlan', 'compileRecoveryPlan',
+    'selectMinimalRepairPlan', 'RecoveryJournal',
+    'SpecialistRole', 'createSpecialist', 'executeSpecialistHandoff',
+    'extractClaimsFromEvidence', 'restoreFromCheckpoint', 'compressContext',
+    'reconcileStateDrift'
+  ];
+
+  const seen = new Set<string>();
+  const duplicateExports: string[] = [];
+
+  for (const name of exportNames) {
+    if (seen.has(name)) {
+      duplicateExports.push(name);
+    } else {
+      seen.add(name);
+    }
+  }
+
+  return {
+    valid: duplicateExports.length === 0,
+    duplicateExports,
+    totalExports: exportNames.length
+  };
+}

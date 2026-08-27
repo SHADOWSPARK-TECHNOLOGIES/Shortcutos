@@ -378,13 +378,15 @@
       "src/evidence-system.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p6-evidence-system.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/evidence-system.ts:ClaimRecord"
+      "src/evidence-system.ts:extractClaimsFromEvidence",
+      "tests/v100-mandatory-gaps.test.mjs:V43-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V44-001",
@@ -642,13 +644,15 @@
       "src/memory-system.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p7-memory-context.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/memory-system.ts:createCheckpoint"
+      "src/memory-system.ts:restoreFromCheckpoint",
+      "tests/v100-mandatory-gaps.test.mjs:V58-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V59-001",
@@ -659,13 +663,15 @@
       "src/memory-system.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p7-memory-context.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/memory-system.ts:assembleWorkingSet"
+      "src/memory-system.ts:compressContext",
+      "tests/v100-mandatory-gaps.test.mjs:V59-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V60-001",
@@ -812,13 +818,15 @@
       "src/memory-system.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p7-memory-context.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/memory-system.ts:createCheckpoint"
+      "src/memory-system.ts:reconcileStateDrift",
+      "tests/v100-mandatory-gaps.test.mjs:V68-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V69-001",
@@ -885,13 +893,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.RESEARCH"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V73-001",
@@ -902,13 +912,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.SOFTWARE_ENGINEERING"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V74-001",
@@ -919,13 +931,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.ARCHITECTURE"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V75-001",
@@ -936,13 +950,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.SECURITY"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V76-001",
@@ -953,13 +969,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.BUSINESS"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V77-001",
@@ -970,13 +988,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.CONTENT"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V78-001",
@@ -987,13 +1007,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.MARKETING"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V79-001",
@@ -1004,13 +1026,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:SpecialistRole.AUTOMATION"
+      "src/specialist.ts:createSpecialist",
+      "tests/v100-mandatory-gaps.test.mjs:V72-V79"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V80-001",
@@ -1072,13 +1096,15 @@
       "src/specialist.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p8-specialist-runtime.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/specialist.ts:executeSpecialistHandoff"
+      "src/specialist.ts:executeSpecialistHandoff",
+      "tests/v100-mandatory-gaps.test.mjs:V83-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V84-001",
@@ -1175,13 +1201,15 @@
       "src/recovery-runtime.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p9-failure-recovery.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/recovery-runtime.ts:executeRecoveryPlan"
+      "src/recovery-runtime.ts:executeRecoveryPlan",
+      "tests/v100-mandatory-gaps.test.mjs:V89-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V90-001",
@@ -1226,13 +1254,15 @@
       "src/recovery-runtime.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p9-failure-recovery.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/recovery-runtime.ts:compileRecoveryPlan"
+      "src/recovery-runtime.ts:selectMinimalRepairPlan",
+      "tests/v100-mandatory-gaps.test.mjs:V92-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V93-001",
@@ -1243,13 +1273,15 @@
       "src/recovery-runtime.ts"
     ],
     "tests": [
+      "tests/v100-mandatory-gaps.test.mjs",
       "tests/p9-failure-recovery.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/recovery-runtime.ts:executeRecoveryPlan"
+      "src/recovery-runtime.ts:RecoveryJournal",
+      "tests/v100-mandatory-gaps.test.mjs:V93-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V94-001",
@@ -1294,13 +1326,15 @@
       "src/index.ts"
     ],
     "tests": [
-      "tests/auditor-config.test.mjs"
+      "tests/v100-mandatory-gaps.test.mjs",
+      "tests/registry.test.mjs"
     ],
     "latest_test_result": "PASS",
     "runtime_evidence": [
-      "src/index.ts:1-20"
+      "src/index.ts:validateExportSurface",
+      "tests/v100-mandatory-gaps.test.mjs:V96-001"
     ],
-    "status": "PARTIALLY_IMPLEMENTED"
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V97-001",

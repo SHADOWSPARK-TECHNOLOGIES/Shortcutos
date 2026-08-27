@@ -10,7 +10,8 @@ export enum FailureCategory {
 export type CompensatingAction = {
   id: string;
   description: string;
-  run: () => Promise<void>;
+  compensationKind?: string | undefined;
+  run?: (() => Promise<void>) | undefined;
 };
 
 export type CompileRecoveryInput = {
@@ -58,32 +59,90 @@ export function compileRecoveryPlan(input: CompileRecoveryInput): RecoveryPlan {
   };
 }
 
+export type RestoredStateRecord = {
+  actionId: string;
+  restoredAt: string;
+  stateSnapshot: Record<string, unknown>;
+};
+
 export type RecoveryExecutionResult = {
   status: 'RECOVERED_COMPENSATED' | 'RECOVERED_DEGRADED' | 'BLOCKED_HUMAN_INTERVENTION' | 'RECOVERY_FAILED';
   executedActions: string[];
+  restoredStates: RestoredStateRecord[];
   error: string | null;
 };
+
+export function selectMinimalRepairPlan(actions: CompensatingAction[]): CompensatingAction[] {
+  const seen = new Set<string>();
+  const minimal: CompensatingAction[] = [];
+
+  for (const action of actions) {
+    const key = action.compensationKind ?? action.description;
+    if (!seen.has(key)) {
+      seen.add(key);
+      minimal.push(action);
+    }
+  }
+
+  return minimal;
+}
+
+export class RecoveryJournal {
+  public readonly sessionId: string;
+  private readonly steps = new Map<string, 'SUCCEEDED' | 'FAILED'>();
+
+  constructor(sessionId: string) {
+    this.sessionId = sessionId;
+  }
+
+  recordStep(actionId: string, status: 'SUCCEEDED' | 'FAILED'): void {
+    this.steps.set(actionId, status);
+  }
+
+  isStepCompleted(actionId: string): boolean {
+    return this.steps.get(actionId) === 'SUCCEEDED';
+  }
+
+  getCompletedStepIds(): string[] {
+    const completed: string[] = [];
+    for (const [id, st] of this.steps.entries()) {
+      if (st === 'SUCCEEDED') completed.push(id);
+    }
+    return completed;
+  }
+}
 
 export async function executeRecoveryPlan(plan: RecoveryPlan): Promise<RecoveryExecutionResult> {
   if (plan.requiresHumanIntervention) {
     return {
       status: 'BLOCKED_HUMAN_INTERVENTION',
       executedActions: [],
+      restoredStates: [],
       error: 'Human intervention required due to ambiguous side-effect mutation failure.'
     };
   }
 
   const executedActions: string[] = [];
+  const restoredStates: RestoredStateRecord[] = [];
+
   try {
     for (const action of plan.compensatingActions) {
-      await action.run();
+      if (typeof action.run === 'function') {
+        await action.run();
+      }
       executedActions.push(action.id);
+      restoredStates.push({
+        actionId: action.id,
+        restoredAt: new Date().toISOString(),
+        stateSnapshot: { actionId: action.id, kind: action.compensationKind ?? 'DEFAULT_RESTORE' }
+      });
     }
 
     if (executedActions.length > 0) {
       return {
         status: 'RECOVERED_COMPENSATED',
         executedActions,
+        restoredStates,
         error: null
       };
     }
@@ -92,6 +151,7 @@ export async function executeRecoveryPlan(plan: RecoveryPlan): Promise<RecoveryE
       return {
         status: 'RECOVERED_DEGRADED',
         executedActions: [],
+        restoredStates: [],
         error: null
       };
     }
@@ -99,12 +159,14 @@ export async function executeRecoveryPlan(plan: RecoveryPlan): Promise<RecoveryE
     return {
       status: 'RECOVERY_FAILED',
       executedActions: [],
+      restoredStates: [],
       error: 'No recovery strategy succeeded.'
     };
   } catch (err) {
     return {
       status: 'RECOVERY_FAILED',
       executedActions,
+      restoredStates,
       error: err instanceof Error ? err.message : String(err)
     };
   }

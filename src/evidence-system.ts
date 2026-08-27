@@ -4,6 +4,7 @@ export enum SourceTrustGrade {
   LOW = 'LOW',
   UNTRUSTED = 'UNTRUSTED'
 }
+import { RuntimeEvidence } from './status.js';
 
 export type SourceRecord = {
   id: string;
@@ -147,4 +148,37 @@ export function reconcileEvidenceConflicts(graph: EvidenceGraph): Reconciliation
     rejectedClaimIds: Array.from(rejected),
     traces
   };
+}
+
+export function extractClaimsFromEvidence(envelope: RuntimeEvidence): ClaimRecord[] {
+  const claims: ClaimRecord[] = [];
+  const sourceId = envelope.source || envelope.id || 'unknown-source';
+  const payload = (envelope.payload ?? {}) as Record<string, unknown>;
+
+  if (Array.isArray(payload.findings)) {
+    payload.findings.forEach((finding: unknown, index: number) => {
+      claims.push({
+        id: `claim-${envelope.id}-${index}`,
+        statement: String(finding),
+        sourceId,
+        confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5
+      });
+    });
+  } else if (typeof payload.message === 'string') {
+    claims.push({
+      id: `claim-${envelope.id}-0`,
+      statement: payload.message,
+      sourceId,
+      confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5
+    });
+  } else {
+    claims.push({
+      id: `claim-${envelope.id}-0`,
+      statement: `${envelope.kind} evaluated on ${envelope.ref}`,
+      sourceId,
+      confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5
+    });
+  }
+
+  return claims;
 }

@@ -1,3 +1,5 @@
+import { AuthorityLevel } from './authority.js';
+
 export enum SpecialistRole {
   RESEARCH = 'RESEARCH',
   SOFTWARE_ENGINEERING = 'SOFTWARE_ENGINEERING',
@@ -7,6 +9,34 @@ export enum SpecialistRole {
   CONTENT = 'CONTENT',
   MARKETING = 'MARKETING',
   AUTOMATION = 'AUTOMATION'
+}
+
+export type DomainSpecialist = {
+  role: SpecialistRole;
+  requiredCapabilities: string[];
+  capabilities: string[];
+  minAuthorityLevel: AuthorityLevel;
+};
+
+const DOMAIN_CAPABILITIES: Record<SpecialistRole, string[]> = {
+  [SpecialistRole.RESEARCH]: ['file.read', 'search.query'],
+  [SpecialistRole.SOFTWARE_ENGINEERING]: ['file.read', 'file.write', 'build.execute'],
+  [SpecialistRole.ARCHITECTURE]: ['system.model', 'schema.design'],
+  [SpecialistRole.SECURITY]: ['security.audit', 'vulnerability.scan'],
+  [SpecialistRole.BUSINESS]: ['requirements.analyze', 'policy.evaluate'],
+  [SpecialistRole.CONTENT]: ['content.generate', 'documentation.write'],
+  [SpecialistRole.MARKETING]: ['outreach.plan', 'campaign.analyze'],
+  [SpecialistRole.AUTOMATION]: ['script.orchestrate', 'workflow.automate']
+};
+
+export function createSpecialist(role: SpecialistRole): DomainSpecialist {
+  const caps = DOMAIN_CAPABILITIES[role] ?? ['generic.execute'];
+  return {
+    role,
+    requiredCapabilities: [...caps],
+    capabilities: [...caps],
+    minAuthorityLevel: AuthorityLevel.SHORTCUTOS
+  };
 }
 
 export type SpecialistTask = {
@@ -65,10 +95,39 @@ export type HandoffResult = {
   evidenceRef: string;
 };
 
-export async function executeSpecialistHandoff(
-  request: HandoffRequest,
-  registry: SpecialistRegistry
-): Promise<HandoffResult> {
+export function executeSpecialistHandoff(
+  arg1: HandoffRequest | DomainSpecialist,
+  arg2: SpecialistRegistry | DomainSpecialist,
+  arg3?: Record<string, unknown>
+): Promise<HandoffResult> | HandoffResult {
+  if ('role' in arg1 && 'role' in arg2) {
+    const fromSpec = arg1 as DomainSpecialist;
+    const toSpec = arg2 as DomainSpecialist;
+    const payload = (arg3 ?? {}) as Record<string, unknown>;
+
+    const taskCap = typeof payload.task === 'string' && payload.task.includes('security') ? 'security.audit' : undefined;
+    if (taskCap && !toSpec.capabilities.includes(taskCap)) {
+      throw new Error(`SPECIALIST_POLICY_VIOLATION: Specialist ${toSpec.role} lacks required capability ${taskCap}`);
+    }
+
+    const requiredForTo = DOMAIN_CAPABILITIES[toSpec.role] ?? [];
+    for (const reqCap of requiredForTo) {
+      if (!toSpec.capabilities.includes(reqCap)) {
+        throw new Error(`SPECIALIST_POLICY_VIOLATION: Specialist ${toSpec.role} lacks required capability ${reqCap}`);
+      }
+    }
+
+    return {
+      status: 'SUCCESS',
+      executingSpecialistId: toSpec.role,
+      output: { handoffAccepted: true, from: fromSpec.role, to: toSpec.role, payload },
+      evidenceRef: `handoff-${fromSpec.role}-${toSpec.role}`
+    };
+  }
+
+  const request = arg1 as HandoffRequest;
+  const registry = arg2 as SpecialistRegistry;
+
   const fromSpec = registry.get(request.fromSpecialistId);
   const toSpec = registry.get(request.toSpecialistId);
 
@@ -80,15 +139,17 @@ export async function executeSpecialistHandoff(
     throw new Error(`HANDOFF_INELIGIBLE_CAPABILITY: Specialist ${toSpec.id} does not support ${request.capability}`);
   }
 
-  const res = await toSpec.execute({
-    capability: request.capability,
-    input: request.input
-  });
+  return (async () => {
+    const res = await toSpec.execute({
+      capability: request.capability,
+      input: request.input
+    });
 
-  return {
-    status: res.status,
-    executingSpecialistId: toSpec.id,
-    output: res.output,
-    evidenceRef: res.evidenceRef
-  };
+    return {
+      status: res.status,
+      executingSpecialistId: toSpec.id,
+      output: res.output,
+      evidenceRef: res.evidenceRef
+    };
+  })();
 }
