@@ -18,3 +18,4 @@ export * from './parallel.js';
 export * from './resource-scheduler.js';
 export * from './evidence-system.js';
 export * from './memory-system.js';
+export * from './specialist.js';
