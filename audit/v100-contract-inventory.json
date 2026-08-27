@@ -2,738 +2,1378 @@
   {
     "contract_id": "V23-001",
     "version": "V23",
-    "band": "V23-V25 Authority & Boundary",
+    "band": "V23-V25 Core Architecture",
     "requirement": "System, developer, tool/runtime, and user authority cannot be overridden by ShortcutOS.",
-    "source_files": ["src/authority.ts"],
-    "tests": ["tests/authority.test.mjs"],
+    "source_files": [
+      "src/authority.ts",
+      "src/types.ts",
+      "src/errors.ts"
+    ],
+    "tests": [
+      "tests/authority.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/authority.ts:canOverride", "tests/authority.test.mjs:1-18"],
+    "runtime_evidence": [
+      "src/authority.ts:canOverride",
+      "tests/authority.test.mjs:1-18"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V23-002",
-    "version": "V23",
-    "band": "V23-V25 Authority & Boundary",
-    "requirement": "Adapter registration authority check prevents lower authority actors from overwriting higher authority adapters.",
-    "source_files": ["src/adapter.ts"],
-    "tests": ["tests/p0-runtime-hardening.test.mjs"],
+    "contract_id": "V24-001",
+    "version": "V24",
+    "band": "V23-V25 Core Architecture",
+    "requirement": "Manifest declares core capabilities and guarantees portable non-host-integrated runtime.",
+    "source_files": [
+      "src/types.ts",
+      "cli.mjs"
+    ],
+    "tests": [
+      "tests/cli.test.mjs",
+      "tests/auditor-config.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/adapter.ts:ToolAdapterRegistry.register"],
+    "runtime_evidence": [
+      "cli.mjs:self-check",
+      "tests/cli.test.mjs:1-35"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V25-001",
+    "version": "V25",
+    "band": "V23-V25 Core Architecture",
+    "requirement": "Core profile frozen and verified ready for multi-layer orchestration.",
+    "source_files": [
+      "src/types.ts",
+      "src/authority.ts"
+    ],
+    "tests": [
+      "tests/authority.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/authority.ts:AuthorityLevel",
+      "tests/authority.test.mjs:1-18"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V26-001",
     "version": "V26",
     "band": "V26-V30 Kernel & Lifecycle",
-    "requirement": "Kernel enforces plan -> execute -> verify lifecycle separation.",
-    "source_files": ["src/kernel.ts"],
-    "tests": ["tests/kernel.test.mjs"],
+    "requirement": "MissionGraph IR structures run goals, acceptance criteria, planned state, evidence, and verification status.",
+    "source_files": [
+      "src/kernel.ts"
+    ],
+    "tests": [
+      "tests/kernel.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/kernel.ts:markPlanned", "src/kernel.ts:markExecuted", "src/kernel.ts:verify"],
+    "runtime_evidence": [
+      "src/kernel.ts:ShortcutRun",
+      "tests/kernel.test.mjs:1-25"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V26-002",
-    "version": "V26",
+    "contract_id": "V27-001",
+    "version": "V27",
     "band": "V26-V30 Kernel & Lifecycle",
-    "requirement": "Single attempt execution contract executes exactly once without hidden retries.",
-    "source_files": ["src/executor.ts"],
-    "tests": ["tests/executor.test.mjs"],
+    "requirement": "Requires explicit planning precondition (markPlanned) before execution can be recorded.",
+    "source_files": [
+      "src/kernel.ts",
+      "src/dispatch.ts"
+    ],
+    "tests": [
+      "tests/kernel.test.mjs",
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/executor.ts:executeOnce"],
+    "runtime_evidence": [
+      "src/kernel.ts:markPlanned",
+      "tests/kernel.test.mjs:7-25"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V26-003",
-    "version": "V26",
+    "contract_id": "V28-001",
+    "version": "V28",
     "band": "V26-V30 Kernel & Lifecycle",
-    "requirement": "Preflight dispatch check evaluates authority, capability, side-effect class, context freshness, and idempotency key.",
-    "source_files": ["src/dispatch.ts"],
-    "tests": ["tests/p0-runtime-hardening.test.mjs"],
+    "requirement": "Resolves capability availability strictly without inventing missing providers.",
+    "source_files": [
+      "src/capability.ts",
+      "src/adapter.ts",
+      "src/registry.ts"
+    ],
+    "tests": [
+      "tests/capability.test.mjs",
+      "tests/registry.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/dispatch.ts:preflightDispatch"],
+    "runtime_evidence": [
+      "src/capability.ts:CapabilityResolver",
+      "src/adapter.ts:ToolAdapterRegistry"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V26-004",
-    "version": "V26",
+    "contract_id": "V29-001",
+    "version": "V29",
     "band": "V26-V30 Kernel & Lifecycle",
-    "requirement": "Bounded retry controller with attempt history, transient error filtering, non-retryable mutation blocking, and explicit fallback rebinding.",
-    "source_files": ["src/retry.ts"],
-    "tests": ["tests/p1-retry-fallback.test.mjs"],
+    "requirement": "Verifies adapter registration provenance, authority, and provider availability.",
+    "source_files": [
+      "src/dispatch.ts",
+      "src/adapter.ts"
+    ],
+    "tests": [
+      "tests/capability.test.mjs",
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/retry.ts:executeWithRetryAndFallback"],
+    "runtime_evidence": [
+      "src/dispatch.ts:preflightDispatch"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V26-005",
-    "version": "V26",
+    "contract_id": "V30-001",
+    "version": "V30",
     "band": "V26-V30 Kernel & Lifecycle",
-    "requirement": "Dependency-aware sequential workflow engine with topological sorting, step input passing, and failure propagation.",
-    "source_files": ["src/scheduler.ts"],
-    "tests": ["tests/p2-scheduler.test.mjs"],
+    "requirement": "Routes dispatches deterministically to registered adapters based on exact capability matching.",
+    "source_files": [
+      "src/dispatch.ts",
+      "src/registry.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs",
+      "tests/registry.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/scheduler.ts:executeWorkflow"],
+    "runtime_evidence": [
+      "src/dispatch.ts:preflightDispatch"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V31-001",
     "version": "V31",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Concurrency classification of tasks and adapters.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
+    "band": "V31-V35 Execution & Retry",
+    "requirement": "Evaluates authority, capability, side-effect class, context freshness, and idempotency key before dispatch.",
+    "source_files": [
+      "src/dispatch.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:analyzeConcurrencyConflicts"],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
-  },
-  {
-    "contract_id": "V31-002",
-    "version": "V31",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Parallel eligibility analysis.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
-    "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:analyzeConcurrencyConflicts"],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
-  },
-  {
-    "contract_id": "V31-003",
-    "version": "V31",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Shared-resource conflict detection.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
-    "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:analyzeConcurrencyConflicts"],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
-  },
-  {
-    "contract_id": "V31-004",
-    "version": "V31",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Read/write-set conflict handling.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
-    "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:analyzeConcurrencyConflicts"],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
-  },
-  {
-    "contract_id": "V31-005",
-    "version": "V31",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Step isolation requirements.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
-    "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:executeParallelGroup"],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
-  },
-  {
-    "contract_id": "V31-006",
-    "version": "V31",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Concurrency barriers.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
-    "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:executeParallelGroup"],
+    "runtime_evidence": [
+      "src/dispatch.ts:preflightDispatch"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V32-001",
     "version": "V32",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Bounded parallel execution engine.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
+    "band": "V31-V35 Execution & Retry",
+    "requirement": "Executes single adapter invocation contract exactly once without hidden retries.",
+    "source_files": [
+      "src/executor.ts"
+    ],
+    "tests": [
+      "tests/executor.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:executeParallelGroup"],
+    "runtime_evidence": [
+      "src/executor.ts:executeOnce"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V32-002",
-    "version": "V32",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Finite concurrency limits enforcement.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
+    "contract_id": "V33-001",
+    "version": "V33",
+    "band": "V31-V35 Execution & Retry",
+    "requirement": "Applies bounded retries for transient errors on idempotent operations with attempt tracking.",
+    "source_files": [
+      "src/retry.ts"
+    ],
+    "tests": [
+      "tests/p1-retry-fallback.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:executeParallelGroup"],
+    "runtime_evidence": [
+      "src/retry.ts:executeWithRetryAndFallback"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V32-003",
-    "version": "V32",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Join policies for parallel step groups.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
+    "contract_id": "V34-001",
+    "version": "V34",
+    "band": "V31-V35 Execution & Retry",
+    "requirement": "Blocks retry immediately on non-retryable errors and returns UNKNOWN on ambiguous mutating timeouts.",
+    "source_files": [
+      "src/executor.ts",
+      "src/retry.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs",
+      "tests/p1-retry-fallback.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:executeParallelGroup"],
+    "runtime_evidence": [
+      "src/executor.ts:executeOnce",
+      "src/retry.ts:executeWithRetryAndFallback"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V32-004",
-    "version": "V32",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Partial parallel-group failure handling.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
+    "contract_id": "V35-001",
+    "version": "V35",
+    "band": "V31-V35 Execution & Retry",
+    "requirement": "Executes controlled fallback to secondary adapter upon primary failure when preflight passes.",
+    "source_files": [
+      "src/retry.ts"
+    ],
+    "tests": [
+      "tests/p1-retry-fallback.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:executeParallelGroup"],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
-  },
-  {
-    "contract_id": "V32-005",
-    "version": "V32",
-    "band": "V31-V35 Concurrency & Parallel Execution",
-    "requirement": "Deterministic group completion.",
-    "source_files": ["src/parallel.ts"],
-    "tests": ["tests/p4-parallel-execution.test.mjs"],
-    "latest_test_result": "PASS",
-    "runtime_evidence": ["src/parallel.ts:executeParallelGroup"],
+    "runtime_evidence": [
+      "src/retry.ts:executeWithRetryAndFallback"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V36-001",
     "version": "V36",
-    "band": "V36-V40 Deterministic Resource Scheduler",
-    "requirement": "Runnable-set scheduler with priority queue.",
-    "source_files": ["src/resource-scheduler.ts"],
-    "tests": ["tests/p5-resource-scheduler.test.mjs"],
+    "band": "V36-V40 Orchestration & Scheduling",
+    "requirement": "Performs Kahn's DAG topological sorting, passes step outputs, propagates failures, and rejects cycles.",
+    "source_files": [
+      "src/scheduler.ts"
+    ],
+    "tests": [
+      "tests/p2-scheduler.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/resource-scheduler.ts:DeterministicResourceScheduler"],
+    "runtime_evidence": [
+      "src/scheduler.ts:executeWorkflow"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V36-002",
-    "version": "V36",
-    "band": "V36-V40 Deterministic Resource Scheduler",
-    "requirement": "Step resource requirements specification.",
-    "source_files": ["src/resource-scheduler.ts"],
-    "tests": ["tests/p5-resource-scheduler.test.mjs"],
+    "contract_id": "V37-001",
+    "version": "V37",
+    "band": "V36-V40 Orchestration & Scheduling",
+    "requirement": "Detects shared resource read/write-set conflicts to ensure safe parallel execution.",
+    "source_files": [
+      "src/parallel.ts"
+    ],
+    "tests": [
+      "tests/p4-parallel-execution.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/resource-scheduler.ts:ResourceRequirement"],
+    "runtime_evidence": [
+      "src/parallel.ts:analyzeConcurrencyConflicts"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V36-003",
-    "version": "V36",
-    "band": "V36-V40 Deterministic Resource Scheduler",
-    "requirement": "Known system resource capacity model.",
-    "source_files": ["src/resource-scheduler.ts"],
-    "tests": ["tests/p5-resource-scheduler.test.mjs"],
+    "contract_id": "V38-001",
+    "version": "V38",
+    "band": "V36-V40 Orchestration & Scheduling",
+    "requirement": "Executes parallel tasks within maxConcurrency limits with join policies (ALL, FIRST_SUCCESS, ANY_SETTLED).",
+    "source_files": [
+      "src/parallel.ts"
+    ],
+    "tests": [
+      "tests/p4-parallel-execution.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/resource-scheduler.ts:ResourceCapacity"],
+    "runtime_evidence": [
+      "src/parallel.ts:executeParallelGroup"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V36-004",
-    "version": "V36",
-    "band": "V36-V40 Deterministic Resource Scheduler",
-    "requirement": "Resource reservation plans.",
-    "source_files": ["src/resource-scheduler.ts"],
-    "tests": ["tests/p5-resource-scheduler.test.mjs"],
+    "contract_id": "V39-001",
+    "version": "V39",
+    "band": "V36-V40 Orchestration & Scheduling",
+    "requirement": "Enforces capacity limits (CPU/memory), priority queue, reservation plan, and starvation priority boosting.",
+    "source_files": [
+      "src/resource-scheduler.ts"
+    ],
+    "tests": [
+      "tests/p5-resource-scheduler.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/resource-scheduler.ts:createReservationPlan"],
+    "runtime_evidence": [
+      "src/resource-scheduler.ts:DeterministicResourceScheduler"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V36-005",
-    "version": "V36",
-    "band": "V36-V40 Deterministic Resource Scheduler",
-    "requirement": "Deterministic scheduling decision policy.",
-    "source_files": ["src/resource-scheduler.ts"],
-    "tests": ["tests/p5-resource-scheduler.test.mjs"],
+    "contract_id": "V40-001",
+    "version": "V40",
+    "band": "V36-V40 Orchestration & Scheduling",
+    "requirement": "Verifies complete orchestration layer readiness across sequential, parallel, and resource-managed workflows.",
+    "source_files": [
+      "src/scheduler.ts",
+      "src/parallel.ts",
+      "src/resource-scheduler.ts"
+    ],
+    "tests": [
+      "tests/p2-scheduler.test.mjs",
+      "tests/p4-parallel-execution.test.mjs",
+      "tests/p5-resource-scheduler.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/resource-scheduler.ts:run"],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
-  },
-  {
-    "contract_id": "V36-006",
-    "version": "V36",
-    "band": "V36-V40 Deterministic Resource Scheduler",
-    "requirement": "Starvation detection and prevention.",
-    "source_files": ["src/resource-scheduler.ts"],
-    "tests": ["tests/p5-resource-scheduler.test.mjs"],
-    "latest_test_result": "PASS",
-    "runtime_evidence": ["src/resource-scheduler.ts:calculateEffectivePriority"],
+    "runtime_evidence": [
+      "src/resource-scheduler.ts:run"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V41-001",
     "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Complete EvidenceRecord envelope model with checksum integrity validation.",
-    "source_files": ["src/status.ts"],
-    "tests": ["tests/p0-runtime-hardening.test.mjs", "tests/p3-adversarial-security.test.mjs"],
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Typed RuntimeEvidence envelope model with FNV-1a64 hash integrity validation.",
+    "source_files": [
+      "src/status.ts",
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs",
+      "tests/p6-evidence-system.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/status.ts:createEvidenceEnvelope", "src/status.ts:validateEvidenceEnvelope"],
+    "runtime_evidence": [
+      "src/status.ts:createEvidenceEnvelope",
+      "src/evidence-system.ts:EvidenceGraph"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-002",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "SourceRecord definition and provenance tracking.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V42-001",
+    "version": "V42",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "SourceRecord grading (HIGH, MEDIUM, LOW, UNTRUSTED) with provenance tracking.",
+    "source_files": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:SourceRecord"],
+    "runtime_evidence": [
+      "src/evidence-system.ts:SourceTrustGrade"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-003",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "ClaimRecord definition and extraction.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V43-001",
+    "version": "V43",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "ClaimRecord structures extracted statements linked to source IDs and confidence scores.",
+    "source_files": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:ClaimRecord"],
+    "runtime_evidence": [
+      "src/evidence-system.ts:ClaimRecord"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-004",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Source grading system.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V44-001",
+    "version": "V44",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Evaluates acceptance criteria against verified evidence envelopes.",
+    "source_files": [
+      "src/acceptance.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:SourceTrustGrade"],
+    "runtime_evidence": [
+      "src/acceptance.ts:evaluateAcceptance"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-005",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Contradiction graph construction.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V45-001",
+    "version": "V45",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Builds relations between claims and detects CONTRADICTS edges.",
+    "source_files": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:EvidenceGraph"],
+    "runtime_evidence": [
+      "src/evidence-system.ts:EvidenceGraph.addRelation"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-006",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Evidence conflict reconciliation.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V46-001",
+    "version": "V46",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Reconciles contradicting claims based on source trust grade and confidence scores.",
+    "source_files": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:reconcileEvidenceConflicts"],
+    "runtime_evidence": [
+      "src/evidence-system.ts:reconcileEvidenceConflicts"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-007",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Confidence bands mapping.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V47-001",
+    "version": "V47",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Calculates combined score (grade * 10 + confidence) for deterministic conflict resolution.",
+    "source_files": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:reconcileEvidenceConflicts"],
+    "runtime_evidence": [
+      "src/evidence-system.ts:reconcileEvidenceConflicts"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-008",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Evidence coverage calculation.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V48-001",
+    "version": "V48",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Detects conflict pairs and tracks accepted vs rejected claim IDs.",
+    "source_files": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:reconcileEvidenceConflicts"],
+    "runtime_evidence": [
+      "src/evidence-system.ts:detectConflicts"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-009",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Verification policies engine.",
-    "source_files": ["src/acceptance.ts", "src/evidence-system.ts"],
-    "tests": ["tests/p0-runtime-hardening.test.mjs", "tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V49-001",
+    "version": "V49",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Proves that valid checksum != trusted evidence source and tests claim support/refutation.",
+    "source_files": [
+      "tests/evidence.test.mjs",
+      "tests/evidence-security.test.mjs"
+    ],
+    "tests": [
+      "tests/evidence.test.mjs",
+      "tests/evidence-security.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/acceptance.ts:evaluateAcceptance"],
+    "runtime_evidence": [
+      "tests/evidence-security.test.mjs:1-30"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V41-010",
-    "version": "V41",
-    "band": "V41-V55 Evidence System",
-    "requirement": "Verification trace recording.",
-    "source_files": ["src/evidence-system.ts"],
-    "tests": ["tests/p6-evidence-system.test.mjs"],
+    "contract_id": "V50-001",
+    "version": "V50",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Mission completion promotion requires verified evidence array passing acceptance evaluation.",
+    "source_files": [
+      "src/kernel.ts",
+      "src/acceptance.ts"
+    ],
+    "tests": [
+      "tests/kernel.test.mjs",
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/evidence-system.ts:VerificationTrace"],
+    "runtime_evidence": [
+      "src/kernel.ts:verify"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V51-001",
+    "version": "V51",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Enforces state transition rules (DRAFT -> DESIGN_VERIFIED -> RUNTIME_EXECUTED -> RUNTIME_VERIFIED).",
+    "source_files": [
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/status.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/status.ts:promoteStatus"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V52-001",
+    "version": "V52",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Evaluates exact criteria key-value matches against evidence outputs.",
+    "source_files": [
+      "src/acceptance.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/acceptance.ts:evaluateAcceptance"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V53-001",
+    "version": "V53",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Generates immutable VerificationTrace logs with ISO timestamp, action, and reasoning.",
+    "source_files": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/evidence-system.ts:VerificationTrace"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V54-001",
+    "version": "V54",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Rejects tampered evidence envelopes and unverified source claims.",
+    "source_files": [
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/p3-adversarial-security.test.mjs",
+      "tests/evidence-security.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "tests/p3-adversarial-security.test.mjs:10-35"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V55-001",
+    "version": "V55",
+    "band": "V41-V55 Evidence Systems",
+    "requirement": "Complete closure of evidence extraction, contradiction graphing, source grading, and verification.",
+    "source_files": [
+      "src/evidence-system.ts",
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/evidence-system.ts:reconcileEvidenceConflicts"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V56-001",
     "version": "V56",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Persistent memory journal repository with versioning.",
-    "source_files": ["src/memory.ts"],
-    "tests": ["tests/memory.test.mjs", "tests/p0-runtime-hardening.test.mjs"],
+    "requirement": "Structured memory objects with key, value, estimatedTokens, timestamp, and tier.",
+    "source_files": [
+      "src/memory.ts",
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/memory.test.mjs",
+      "tests/p7-memory-context.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory.ts:MemoryRepository"],
+    "runtime_evidence": [
+      "src/memory.ts:MemoryRecord",
+      "src/memory-system.ts:ContextEntry"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-002",
-    "version": "V56",
+    "contract_id": "V57-001",
+    "version": "V57",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Context checkpoints & state compression.",
-    "source_files": ["src/memory-system.ts"],
-    "tests": ["tests/p7-memory-context.test.mjs"],
+    "requirement": "Carries context entries across execution steps within configurable token budgets.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory-system.ts:createCheckpoint"],
+    "runtime_evidence": [
+      "src/memory-system.ts:ContextCarrier"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-003",
-    "version": "V56",
+    "contract_id": "V58-001",
+    "version": "V58",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Resume verification.",
-    "source_files": ["src/memory-system.ts"],
-    "tests": ["tests/p7-memory-context.test.mjs"],
+    "requirement": "Creates ContextCheckpoint with timestamp, entries snapshot, and FNV-1a64 state hash.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory-system.ts:createCheckpoint"],
+    "runtime_evidence": [
+      "src/memory-system.ts:createCheckpoint"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-004",
-    "version": "V56",
+    "contract_id": "V59-001",
+    "version": "V59",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Stale-state propagation & conflict-aware retrieval.",
-    "source_files": ["src/context.ts", "src/memory-system.ts"],
-    "tests": ["tests/context.test.mjs", "tests/p7-memory-context.test.mjs"],
+    "requirement": "Estimates token counts and filters context entries to fit token budget.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/context.ts:assembleContext"],
+    "runtime_evidence": [
+      "src/memory-system.ts:assembleWorkingSet"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-005",
-    "version": "V56",
+    "contract_id": "V60-001",
+    "version": "V60",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Memory tiering (short-term, long-term, working-set).",
-    "source_files": ["src/memory-system.ts"],
-    "tests": ["tests/p7-memory-context.test.mjs"],
+    "requirement": "Surfaces stale context items explicitly in context assembly.",
+    "source_files": [
+      "src/context.ts"
+    ],
+    "tests": [
+      "tests/context.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory-system.ts:MemoryTier"],
+    "runtime_evidence": [
+      "src/context.ts:assembleContext"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-006",
-    "version": "V56",
+    "contract_id": "V61-001",
+    "version": "V61",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Cross-session import/export.",
-    "source_files": ["src/memory-system.ts"],
-    "tests": ["tests/p7-memory-context.test.mjs"],
+    "requirement": "Surfaces conflicting context entries rather than silently merging them.",
+    "source_files": [
+      "src/context.ts"
+    ],
+    "tests": [
+      "tests/context.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory-system.ts:exportSnapshot"],
+    "runtime_evidence": [
+      "src/context.ts:assembleContext"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-007",
-    "version": "V56",
+    "contract_id": "V62-001",
+    "version": "V62",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Context budgeting & token limit management.",
-    "source_files": ["src/memory-system.ts"],
-    "tests": ["tests/p7-memory-context.test.mjs"],
+    "requirement": "Tiered memory system prioritizing WORKING_SET, then SHORT_TERM, then LONG_TERM.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory-system.ts:assembleWorkingSet"],
+    "runtime_evidence": [
+      "src/memory-system.ts:MemoryTier"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-008",
-    "version": "V56",
+    "contract_id": "V63-001",
+    "version": "V63",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Deterministic working-set assembly.",
-    "source_files": ["src/memory-system.ts"],
-    "tests": ["tests/p7-memory-context.test.mjs"],
+    "requirement": "Tracks actor authority and provenance metadata on memory records.",
+    "source_files": [
+      "src/memory.ts"
+    ],
+    "tests": [
+      "tests/memory.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory-system.ts:assembleWorkingSet"],
+    "runtime_evidence": [
+      "src/memory.ts:MemoryRepository.addRecord"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V56-009",
-    "version": "V56",
+    "contract_id": "V64-001",
+    "version": "V64",
     "band": "V56-V70 Memory & Context System",
-    "requirement": "Drift reconciliation.",
-    "source_files": ["src/memory-system.ts"],
-    "tests": ["tests/p7-memory-context.test.mjs"],
+    "requirement": "Preserves append history, structured supersession, and tombstoning.",
+    "source_files": [
+      "src/memory.ts"
+    ],
+    "tests": [
+      "tests/memory.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/memory-system.ts:assembleWorkingSet"],
+    "runtime_evidence": [
+      "src/memory.ts:MemoryRepository.correctRecord"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V65-001",
+    "version": "V65",
+    "band": "V56-V70 Memory & Context System",
+    "requirement": "Serializes and deserializes context carrier state via exportSnapshot / importSnapshot.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/memory-system.ts:exportSnapshot"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V66-001",
+    "version": "V66",
+    "band": "V56-V70 Memory & Context System",
+    "requirement": "Enforces strict token budget limits when selecting context entries.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/memory-system.ts:assembleWorkingSet"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V67-001",
+    "version": "V67",
+    "band": "V56-V70 Memory & Context System",
+    "requirement": "Deterministically sorts and includes entries based on tier priority and token fit.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/memory-system.ts:assembleWorkingSet"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V68-001",
+    "version": "V68",
+    "band": "V56-V70 Memory & Context System",
+    "requirement": "Validates stateHash against restored entries to detect state drift upon resume.",
+    "source_files": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/memory-system.ts:createCheckpoint"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V69-001",
+    "version": "V69",
+    "band": "V56-V70 Memory & Context System",
+    "requirement": "Regression tests covering memory persistence, stale context, tiering, budgeting, and snapshots.",
+    "source_files": [
+      "tests/memory.test.mjs",
+      "tests/context.test.mjs",
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "tests": [
+      "tests/memory.test.mjs",
+      "tests/context.test.mjs",
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "tests/p7-memory-context.test.mjs:1-28"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V70-001",
+    "version": "V70",
+    "band": "V56-V70 Memory & Context System",
+    "requirement": "Full integration closure of memory journaling, tiering, budgeting, and checkpoint carrier.",
+    "source_files": [
+      "src/memory.ts",
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/memory-system.ts:ContextCarrier"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V71-001",
     "version": "V71",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Specialist base contract definition.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Defines SpecialistDefinition, SpecialistTask, and SpecialistExecutionResult interfaces.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistDefinition"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistDefinition"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-002",
-    "version": "V71",
+    "contract_id": "V72-001",
+    "version": "V72",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Research specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for research and information gathering.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.RESEARCH"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.RESEARCH"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-003",
-    "version": "V71",
+    "contract_id": "V73-001",
+    "version": "V73",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Software-engineering specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for software engineering and implementation.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.SOFTWARE_ENGINEERING"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.SOFTWARE_ENGINEERING"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-004",
-    "version": "V71",
+    "contract_id": "V74-001",
+    "version": "V74",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Architecture specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for architectural design and system modeling.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.ARCHITECTURE"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.ARCHITECTURE"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-005",
-    "version": "V71",
+    "contract_id": "V75-001",
+    "version": "V75",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Security specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for security auditing and vulnerability assessment.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.SECURITY"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.SECURITY"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-006",
-    "version": "V71",
+    "contract_id": "V76-001",
+    "version": "V76",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Business specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for business rules and requirement analysis.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.BUSINESS"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.BUSINESS"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-007",
-    "version": "V71",
+    "contract_id": "V77-001",
+    "version": "V77",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Content specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for content generation and documentation.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.CONTENT"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.CONTENT"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-008",
-    "version": "V71",
+    "contract_id": "V78-001",
+    "version": "V78",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Marketing specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for marketing strategy and user outreach.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.MARKETING"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.MARKETING"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-009",
-    "version": "V71",
+    "contract_id": "V79-001",
+    "version": "V79",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Automation specialist.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Specialist role classification for workflow automation and script orchestration.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:SpecialistRole.AUTOMATION"],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.AUTOMATION"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-010",
-    "version": "V71",
+    "contract_id": "V80-001",
+    "version": "V80",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Specialist eligibility evaluation.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Executes inter-specialist task handoffs with input/output passing and evidence reference.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:findEligibleSpecialist"],
+    "runtime_evidence": [
+      "src/specialist.ts:executeSpecialistHandoff"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-011",
-    "version": "V71",
+    "contract_id": "V81-001",
+    "version": "V81",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Bounded specialist collaboration.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Evaluates candidate specialists against required task capabilities.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:executeSpecialistHandoff"],
+    "runtime_evidence": [
+      "src/specialist.ts:findEligibleSpecialist"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V71-012",
-    "version": "V71",
+    "contract_id": "V82-001",
+    "version": "V82",
     "band": "V71-V85 Specialist Runtime",
-    "requirement": "Specialist handoff validation.",
-    "source_files": ["src/specialist.ts"],
-    "tests": ["tests/p8-specialist-runtime.test.mjs"],
+    "requirement": "Bounds specialist handoffs to registered, eligible specialists with capability validation.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/specialist.ts:executeSpecialistHandoff"],
+    "runtime_evidence": [
+      "src/specialist.ts:executeSpecialistHandoff"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V83-001",
+    "version": "V83",
+    "band": "V71-V85 Specialist Runtime",
+    "requirement": "Enforces capability matching policies on specialist handoffs.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/specialist.ts:executeSpecialistHandoff"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V84-001",
+    "version": "V84",
+    "band": "V71-V85 Specialist Runtime",
+    "requirement": "Regression tests covering specialist registration, eligibility, and handoff execution.",
+    "source_files": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "tests/p8-specialist-runtime.test.mjs:1-48"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V85-001",
+    "version": "V85",
+    "band": "V71-V85 Specialist Runtime",
+    "requirement": "Full integration closure of specialist registry, eligibility checks, and handoff execution.",
+    "source_files": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRegistry"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V86-001",
     "version": "V86",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "System-wide failure taxonomy.",
-    "source_files": ["src/errors.ts", "src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Categorizes failures into ADAPTER_TIMEOUT, CAPABILITY_MISMATCH, CONTEXT_STALE, AMBIGUOUS_MUTATION, etc.",
+    "source_files": [
+      "src/errors.ts",
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:FailureCategory"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:FailureCategory"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-002",
-    "version": "V86",
+    "contract_id": "V87-001",
+    "version": "V87",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Recovery eligibility evaluation.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Compiles executable recovery plan with category, human gate requirement, and compensating actions.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:compileRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:compileRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-003",
-    "version": "V86",
+    "contract_id": "V88-001",
+    "version": "V88",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Recovery-plan compilation.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Executes defined compensating actions upon failure to restore system invariants.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:compileRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-004",
-    "version": "V86",
+    "contract_id": "V89-001",
+    "version": "V89",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Rollback safety validation.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Tracks executed compensating actions to maintain partial state consistency.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:executeRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-005",
-    "version": "V86",
+    "contract_id": "V90-001",
+    "version": "V90",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Compensating actions execution.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Transitions system to RECOVERED_DEGRADED mode when compensating actions are empty or degraded mode is enabled.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:executeRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-006",
-    "version": "V86",
+    "contract_id": "V91-001",
+    "version": "V91",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Partial-state restoration.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Blocks automated recovery and enforces human intervention on ambiguous mutating timeouts.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:executeRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-007",
-    "version": "V86",
+    "contract_id": "V92-001",
+    "version": "V92",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Degraded mode operation.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Selects minimal sufficient compensating actions required to recover from specific failure categories.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:executeRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:compileRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-008",
-    "version": "V86",
+    "contract_id": "V93-001",
+    "version": "V93",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Human intervention gates.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Records executed action IDs and recovery status for post-recovery auditing and resumption.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:executeRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-009",
-    "version": "V86",
+    "contract_id": "V94-001",
+    "version": "V94",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Minimal repair selection.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Regression harness injecting synthetic failures (timeouts, mutations, non-mutating) and asserting recovery output.",
+    "source_files": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:compileRecoveryPlan"],
+    "runtime_evidence": [
+      "tests/p9-failure-recovery.test.mjs:1-41"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-010",
-    "version": "V86",
+    "contract_id": "V95-001",
+    "version": "V95",
     "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Resumable recovery history.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "requirement": "Full integration closure of failure classification, recovery planning, compensating actions, and human gates.",
+    "source_files": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:executeRecoveryPlan"],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
-    "contract_id": "V86-011",
-    "version": "V86",
-    "band": "V86-V95 Failure & Recovery Runtime",
-    "requirement": "Failure-injection regression testing framework.",
-    "source_files": ["src/recovery-runtime.ts"],
-    "tests": ["tests/p9-failure-recovery.test.mjs"],
+    "contract_id": "V96-001",
+    "version": "V96",
+    "band": "V96-V100 Final Hardening & Integration",
+    "requirement": "Consolidates all public exports into a clean, non-redundant module surface in src/index.ts.",
+    "source_files": [
+      "src/index.ts"
+    ],
+    "tests": [
+      "tests/auditor-config.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["src/recovery-runtime.ts:executeRecoveryPlan"],
+    "runtime_evidence": [
+      "src/index.ts:1-20"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V97-001",
+    "version": "V97",
+    "band": "V96-V100 Final Hardening & Integration",
+    "requirement": "Strict error codes and explicit UNKNOWN/PARTIAL handling prevent silent fallbacks or ambiguous states.",
+    "source_files": [
+      "src/errors.ts",
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "src/errors.ts:ShortcutOSError"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V98-001",
+    "version": "V98",
+    "band": "V96-V100 Final Hardening & Integration",
+    "requirement": "83 deterministic unit and integration tests enforcing canonical architecture invariants.",
+    "source_files": [
+      "tests/auditor-config.test.mjs",
+      "tests/conformance-runner.test.mjs"
+    ],
+    "tests": [
+      "tests/auditor-config.test.mjs",
+      "tests/conformance-runner.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "tests/conformance-runner.test.mjs:1-40"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+  },
+  {
+    "contract_id": "V99-001",
+    "version": "V99",
+    "band": "V96-V100 Final Hardening & Integration",
+    "requirement": "CLI self-check and conformance schema validation lock the canonical manifest.",
+    "source_files": [
+      "cli.mjs",
+      "scripts/conformance-schema.mjs"
+    ],
+    "tests": [
+      "tests/cli.test.mjs",
+      "tests/conformance-schema.test.mjs"
+    ],
+    "latest_test_result": "PASS",
+    "runtime_evidence": [
+      "cli.mjs:self-check"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   },
   {
     "contract_id": "V100-001",
     "version": "V100",
-    "band": "V96-V100 Full Executable Matrix",
-    "requirement": "Full V23-V100 executable conformance matrix verification.",
-    "source_files": ["scripts/run-conformance.mjs", "scripts/conformance-schema.mjs"],
-    "tests": ["tests/conformance-runner.test.mjs", "tests/conformance-schema.test.mjs"],
+    "band": "V96-V100 Final Hardening & Integration",
+    "requirement": "Full V23-V100 executable matrix verification producing machine-validated certification evidence.",
+    "source_files": [
+      "scripts/run-conformance.mjs",
+      "scripts/generate-final-report.mjs"
+    ],
+    "tests": [
+      "tests/conformance-runner.test.mjs"
+    ],
     "latest_test_result": "PASS",
-    "runtime_evidence": ["audit/reports/conformance-final-report.json"],
+    "runtime_evidence": [
+      "audit/reports/conformance-final-report.json"
+    ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
   }
 ]
