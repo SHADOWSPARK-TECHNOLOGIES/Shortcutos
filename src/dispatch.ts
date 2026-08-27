@@ -88,7 +88,13 @@ export function preflightDispatch(input: DispatchPreflightInput): DispatchPrefli
 
 export function createDispatch(
   input: DispatchInput,
-  adapters?: ToolAdapterRegistry
+  adapters?: ToolAdapterRegistry,
+  options?: {
+    actorAuthority?: AuthorityLevel;
+    contextFreshness?: ContextFreshness;
+    hasConflicts?: boolean;
+    idempotencyKey?: string | null;
+  }
 ): DispatchRequest {
   if (!adapters) {
     return {
@@ -120,6 +126,23 @@ export function createDispatch(
       ...input,
       status: DispatchStatus.BLOCKED,
       blockReason: `DISPATCH_ADAPTER_${adapter.availability}`
+    };
+  }
+
+  const preflight = preflightDispatch({
+    dispatch: input,
+    adapters,
+    actorAuthority: options?.actorAuthority,
+    contextFreshness: options?.contextFreshness,
+    hasConflicts: options?.hasConflicts,
+    idempotencyKey: options?.idempotencyKey
+  });
+
+  if (!preflight.eligible) {
+    return {
+      ...input,
+      status: DispatchStatus.BLOCKED,
+      blockReason: preflight.reasons.join('; ')
     };
   }
 

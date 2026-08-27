@@ -6,7 +6,7 @@
     "requirement": "System, developer, tool/runtime, and user authority cannot be overridden by ShortcutOS.",
     "source_files": [
       "src/authority.ts",
-      "src/types.ts",
+      "src/status.ts",
       "src/errors.ts"
     ],
     "tests": [
@@ -25,7 +25,7 @@
     "band": "V23-V25 Core Architecture",
     "requirement": "Manifest declares core capabilities and guarantees portable non-host-integrated runtime.",
     "source_files": [
-      "src/types.ts",
+      "src/status.ts",
       "cli.mjs"
     ],
     "tests": [
@@ -45,7 +45,7 @@
     "band": "V23-V25 Core Architecture",
     "requirement": "Core profile frozen and verified ready for multi-layer orchestration.",
     "source_files": [
-      "src/types.ts",
+      "src/status.ts",
       "src/authority.ts"
     ],
     "tests": [

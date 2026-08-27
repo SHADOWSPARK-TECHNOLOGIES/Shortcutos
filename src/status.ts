@@ -151,7 +151,8 @@ export function classifyEvidenceAuthenticity(
 export function promoteStatus(
   current: VerificationStatus,
   target: VerificationStatus,
-  evidence: RuntimeEvidence[]
+  evidence: RuntimeEvidence[],
+  trustedSources?: string[]
 ): VerificationStatus {
   if (target === VerificationStatus.RUNTIME_EXECUTED && evidence.length === 0) {
     throw new Error('RUNTIME_EVIDENCE_REQUIRED');
@@ -164,6 +165,13 @@ export function promoteStatus(
     const val = validateEvidenceEnvelope(item);
     if (!val.valid) {
       throw new Error(`INVALID_EVIDENCE_ENVELOPE: ${val.error}`);
+    }
+
+    if (target === VerificationStatus.RUNTIME_VERIFIED) {
+      const auth = classifyEvidenceAuthenticity(item, trustedSources);
+      if (auth.status !== AuthenticityClassification.AUTHENTICITY_VERIFIED) {
+        throw new Error('UNTRUSTED_EVIDENCE_PROVENANCE: Runtime verification requires verified evidence authenticity from a trusted source.');
+      }
     }
   }
 

@@ -1,5 +1,5 @@
-﻿import type { RuntimeEvidence } from './status.js';
-import { validateEvidenceEnvelope } from './status.js';
+import type { RuntimeEvidence } from './status.js';
+import { validateEvidenceEnvelope, classifyEvidenceAuthenticity, AuthenticityClassification } from './status.js';
 
 export type AcceptanceEvaluationResult = {
   passed: boolean;
@@ -9,7 +9,8 @@ export type AcceptanceEvaluationResult = {
 
 export function evaluateAcceptance(
   criteria: string[],
-  evidence: RuntimeEvidence[]
+  evidence: RuntimeEvidence[],
+  trustedSources?: string[]
 ): AcceptanceEvaluationResult {
   if (criteria.length === 0) {
     return { passed: true, unmetCriteria: [], mappedEvidence: [] };
@@ -20,11 +21,19 @@ export function evaluateAcceptance(
   }
 
   const validEvidence = evidence.filter((env) => {
-    // If envelope has integrity, ensure it is valid
-    if (env.integrity) {
-      return validateEvidenceEnvelope(env).valid;
+    // Envelope MUST have full envelope metadata and pass integrity validation
+    const val = validateEvidenceEnvelope(env);
+    if (!val.valid) {
+      return false;
     }
-    return Boolean(env.kind && env.ref);
+    // If trustedSources provided, envelope MUST be AUTHENTICITY_VERIFIED
+    if (trustedSources) {
+      const auth = classifyEvidenceAuthenticity(env, trustedSources);
+      if (auth.status !== AuthenticityClassification.AUTHENTICITY_VERIFIED) {
+        return false;
+      }
+    }
+    return true;
   });
 
   const unmetCriteria: string[] = [];

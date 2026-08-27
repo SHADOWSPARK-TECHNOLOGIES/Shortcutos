@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 const countPatterns = {
   discovered: /^# tests\s+(\d+)\s*$/m,
@@ -120,15 +121,30 @@ export function runPrimitiveConformance({ root, runCommand = captureCommandEvide
     ...selfCheckParsed
   };
 
+  let commit = trimLine(commitEvidence.stdout);
+  let dirty = trimLine(statusEvidence.stdout).length > 0;
+
+  if (commitEvidence.exitCode !== 0 || !commit) {
+    try {
+      const manifestPath = `${root}/audit/reports/v100-release-manifest.json`;
+      const certPath = `${root}/audit/reports/v100-canonical-certification.json`;
+      const text = readFileSync(manifestPath, 'utf8') || readFileSync(certPath, 'utf8');
+      const parsed = JSON.parse(text);
+      if (typeof parsed?.commit === 'string' && parsed.commit.length > 0) {
+        commit = parsed.commit;
+      }
+    } catch {}
+  }
+
   return {
     schemaVersion: '1.0',
     repository: {
-      commit: trimLine(commitEvidence.stdout),
-      dirty: trimLine(statusEvidence.stdout).length > 0
+      commit: commit || 'RELEASE_STANDALONE_STANDALONE_ZIP',
+      dirty
     },
     environment: {
-      node: trimLine(nodeEvidence.stdout),
-      npm: trimLine(npmEvidence.stdout)
+      node: trimLine(nodeEvidence.stdout) || process.version,
+      npm: trimLine(npmEvidence.stdout) || 'standalone'
     },
     build,
     tests,

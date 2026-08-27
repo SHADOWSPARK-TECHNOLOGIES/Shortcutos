@@ -7,7 +7,7 @@
     ],
     "implementation": [
       "src/authority.ts",
-      "src/types.ts",
+      "src/status.ts",
       "src/errors.ts"
     ],
     "tests": [
@@ -27,7 +27,7 @@
       "V24-001"
     ],
     "implementation": [
-      "src/types.ts",
+      "src/status.ts",
       "cli.mjs"
     ],
     "tests": [
@@ -48,7 +48,7 @@
       "V25-001"
     ],
     "implementation": [
-      "src/types.ts",
+      "src/status.ts",
       "src/authority.ts"
     ],
     "tests": [

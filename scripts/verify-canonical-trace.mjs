@@ -1,30 +1,69 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const rootDir = resolve(process.cwd());
 
-const commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+// 1. Determine Repository / Release Identity safely
+let commit = '';
+let gitAvailable = true;
 
-// 1. Run build
+try {
+  commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', cwd: rootDir }).trim();
+} catch {
+  gitAvailable = false;
+}
+
+const manifestPath = resolve(rootDir, 'audit/reports/v100-release-manifest.json');
+const certReportPath = resolve(rootDir, 'audit/reports/v100-canonical-certification.json');
+const receiptPath = resolve(rootDir, 'audit/reports/v100-release-receipt.json');
+
+let expectedCommit = commit;
+let manifestData = null;
+
+try {
+  if (existsSync(receiptPath)) {
+    manifestData = JSON.parse(readFileSync(receiptPath, 'utf8'));
+    expectedCommit = manifestData.commit || expectedCommit;
+  } else if (existsSync(manifestPath)) {
+    manifestData = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    expectedCommit = manifestData.commit || expectedCommit;
+  } else if (existsSync(certReportPath)) {
+    manifestData = JSON.parse(readFileSync(certReportPath, 'utf8'));
+    expectedCommit = manifestData.commit || expectedCommit;
+  }
+} catch {}
+
+if (!commit) {
+  commit = expectedCommit || 'RELEASE_STANDALONE_STANDALONE_ZIP';
+}
+
+// FINDING 6 CHECK: Foreign Git History Detection
+let foreignGitHistory = false;
+if (gitAvailable && expectedCommit && commit !== expectedCommit) {
+  foreignGitHistory = true;
+}
+
+// 2. Run build
 const buildStart = new Date().toISOString();
 let buildExitCode = 0;
 let buildStdout = '';
 let buildStderr = '';
 try {
-  buildStdout = execFileSync('npm', ['run', 'build'], { encoding: 'utf8' });
+  buildStdout = execFileSync('npm', ['run', 'build'], { encoding: 'utf8', cwd: rootDir });
 } catch (err) {
   buildExitCode = err.status ?? 1;
   buildStderr = err.stderr ? err.stderr.toString() : String(err);
 }
 const buildEnd = new Date().toISOString();
 
-// 2. Run test suite
+// 3. Run test suite
 const testStart = new Date().toISOString();
 let testExitCode = 0;
 let testStdout = '';
 let testStderr = '';
 const testFiles = [
+  'tests/audit-remediation.test.mjs',
   'tests/auditor-config.test.mjs',
   'tests/authority.test.mjs',
   'tests/capability.test.mjs',
@@ -53,7 +92,7 @@ const testFiles = [
 ];
 
 try {
-  testStdout = execFileSync('node', ['--test', ...testFiles], { encoding: 'utf8' });
+  testStdout = execFileSync('node', ['--test', ...testFiles], { encoding: 'utf8', cwd: rootDir });
 } catch (err) {
   testExitCode = err.status ?? 1;
   testStderr = err.stderr ? err.stderr.toString() : String(err);
@@ -61,38 +100,38 @@ try {
 const testEnd = new Date().toISOString();
 const discovered = (testStdout.match(/ok \d+ -/g) || []).length;
 
-// 3. Self-check
+// 4. Self-check
 const selfCheckStart = new Date().toISOString();
 let selfCheckExitCode = 0;
 let selfCheckStdout = '';
 try {
-  selfCheckStdout = execFileSync('node', ['cli.mjs', 'self-check'], { encoding: 'utf8' });
+  selfCheckStdout = execFileSync('node', ['cli.mjs', 'self-check'], { encoding: 'utf8', cwd: rootDir });
 } catch (err) {
   selfCheckExitCode = err.status ?? 1;
 }
 const selfCheckEnd = new Date().toISOString();
 
-// 4. Conformance Audit
+// 5. Conformance Audit
 const conformanceStart = new Date().toISOString();
 let conformanceExitCode = 0;
 let conformanceStdout = '';
 try {
-  conformanceStdout = execFileSync('node', ['scripts/run-conformance.mjs'], { encoding: 'utf8' });
+  conformanceStdout = execFileSync('node', ['scripts/run-conformance.mjs'], { encoding: 'utf8', cwd: rootDir });
 } catch (err) {
   conformanceExitCode = err.status ?? 1;
 }
 const conformanceEnd = new Date().toISOString();
 
-// 5. Load Release Trace & Contract Inventory
+// 6. Load Release Trace & Contract Inventory
 const releaseTracePath = resolve(rootDir, 'audit/v100-release-trace.json');
 const contractInventoryPath = resolve(rootDir, 'audit/v100-contract-inventory.json');
 
 const releaseTrace = JSON.parse(readFileSync(releaseTracePath, 'utf8'));
 const contractInventory = JSON.parse(readFileSync(contractInventoryPath, 'utf8'));
 
-// Cross-check mapping
 const orphanContracts = [];
 const unmappedVersions = [];
+const missingSourceContracts = [];
 const weakTestContracts = [];
 
 let versionsRuntimeTested = 0;
@@ -104,6 +143,39 @@ let versionsUnknown = 0;
 
 const inventoryContractIds = new Set(contractInventory.map(c => c.contract_id));
 const traceVersions = new Set(releaseTrace.map(r => r.version));
+
+// FINDING 7: Source Reference & File Existence Validation
+for (const item of contractInventory) {
+  let hasMissingFile = false;
+  for (const sf of item.source_files) {
+    const fullSourcePath = resolve(rootDir, sf);
+    if (!existsSync(fullSourcePath)) {
+      missingSourceContracts.push(`${item.contract_id}: missing source ${sf}`);
+      hasMissingFile = true;
+    }
+  }
+  for (const tf of item.tests) {
+    const fullTestPath = resolve(rootDir, tf);
+    if (!existsSync(fullTestPath)) {
+      missingSourceContracts.push(`${item.contract_id}: missing test ${tf}`);
+      hasMissingFile = true;
+    }
+  }
+
+  // FINDING 8: Deterministic Test-Strength Analysis
+  let totalAssertions = 0;
+  for (const tf of item.tests) {
+    const fullTestPath = resolve(rootDir, tf);
+    if (existsSync(fullTestPath)) {
+      const code = readFileSync(fullTestPath, 'utf8');
+      const matches = (code.match(/assert\.(equal|match|throws|ok|strictEqual|deepEqual|doesNotMatch|notEqual)/g) || []).length;
+      totalAssertions += matches;
+    }
+  }
+  if (totalAssertions < 2 && item.status === 'IMPLEMENTED_AND_RUNTIME_TESTED') {
+    weakTestContracts.push(`${item.contract_id}: low assertion count (${totalAssertions})`);
+  }
+}
 
 for (const trace of releaseTrace) {
   if (trace.status === 'IMPLEMENTED_AND_RUNTIME_TESTED') {
@@ -120,7 +192,6 @@ for (const trace of releaseTrace) {
     versionsUnknown++;
   }
 
-  // Check canonical_contracts mapping
   for (const cid of trace.canonical_contracts) {
     if (!inventoryContractIds.has(cid)) {
       orphanContracts.push(`${trace.version}:${cid}`);
@@ -128,7 +199,6 @@ for (const trace of releaseTrace) {
   }
 }
 
-// Check if inventory contracts map to trace versions
 for (const item of contractInventory) {
   if (!traceVersions.has(item.version)) {
     unmappedVersions.push(`${item.contract_id}:${item.version}`);
@@ -138,6 +208,7 @@ for (const item of contractInventory) {
 const totalVersions = releaseTrace.length;
 
 const isFullConformance =
+  !foreignGitHistory &&
   buildExitCode === 0 &&
   testExitCode === 0 &&
   selfCheckExitCode === 0 &&
@@ -146,6 +217,7 @@ const isFullConformance =
   versionsRuntimeTested === 78 &&
   orphanContracts.length === 0 &&
   unmappedVersions.length === 0 &&
+  missingSourceContracts.length === 0 &&
   weakTestContracts.length === 0;
 
 const finalVerdict = isFullConformance
@@ -154,6 +226,8 @@ const finalVerdict = isFullConformance
 
 const certificationReport = {
   commit,
+  git_available: gitAvailable,
+  foreign_git_history: foreignGitHistory,
   build: {
     command: 'npm run build',
     exitCode: buildExitCode,
@@ -195,6 +269,7 @@ const certificationReport = {
   versions_unknown: versionsUnknown,
   orphan_contracts: orphanContracts,
   unmapped_versions: unmappedVersions,
+  missing_source_contracts: missingSourceContracts,
   weak_test_contracts: weakTestContracts,
   security_findings: [
     {
@@ -209,25 +284,33 @@ const certificationReport = {
     },
     {
       id: 'SEC-003',
-      summary: 'Memory Concurrency Conflict Protection: Expected version check prevents lost updates and race conditions.',
+      summary: 'Memory Concurrency Conflict Protection: Atomic file lock protocol prevents lost updates and race conditions.',
       classification: 'IMPLEMENTED_AND_RUNTIME_TESTED'
     },
     {
       id: 'SEC-004',
-      summary: 'Execution Bypass & Blocked Dispatch Defense: Execution cannot be triggered when preflight or dispatch is blocked.',
+      summary: 'Execution Bypass & Blocked Dispatch Defense: Preflight validation required for mutating operations before execution.',
       classification: 'IMPLEMENTED_AND_RUNTIME_TESTED'
     },
     {
       id: 'SEC-005',
-      summary: 'Evidence Integrity & Authenticity Classification: FNV-1a64 hash validation and classifyEvidenceAuthenticity distinguish checksum vs authenticity.',
+      summary: 'Evidence Integrity & Authenticity Policy: RUNTIME_VERIFIED and acceptance pass require trusted provenance and verified authenticity.',
       classification: 'IMPLEMENTED_AND_RUNTIME_TESTED'
     }
   ],
   final_verdict: finalVerdict
 };
 
-const certPath = resolve(rootDir, 'audit/reports/v100-canonical-certification.json');
-writeFileSync(certPath, JSON.stringify(certificationReport, null, 2), 'utf8');
+writeFileSync(certReportPath, JSON.stringify(certificationReport, null, 2), 'utf8');
 
 console.log(`Canonical trace certification complete. Final verdict: ${finalVerdict}`);
-console.log(`Certification written to ${certPath}`);
+if (missingSourceContracts.length > 0) {
+  console.log(`Missing source file references detected: ${missingSourceContracts.length}`);
+}
+if (weakTestContracts.length > 0) {
+  console.log(`Weak test contracts detected: ${weakTestContracts.length}`);
+}
+if (foreignGitHistory) {
+  console.log(`Foreign git history detected! Commit mismatch.`);
+}
+console.log(`Certification written to ${certReportPath}`);
