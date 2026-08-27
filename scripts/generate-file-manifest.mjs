@@ -44,9 +44,14 @@ const manifest = {
 for (const relPath of fileList) {
   const fullPath = resolve(rootDir, relPath);
   const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
-  const buffer = readFileSync(fullPath);
-  const content = isText ? buffer.toString('utf8').replace(/\r\n/g, '\n') : buffer;
-  const hash = createHash('sha256').update(content).digest('hex');
+  let hash = '';
+  if (isText) {
+    const text = readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');
+    hash = createHash('sha256').update(text, 'utf8').digest('hex');
+  } else {
+    const buf = readFileSync(fullPath);
+    hash = createHash('sha256').update(buf).digest('hex');
+  }
   manifest.files[relPath] = hash;
 }
 

@@ -93,9 +93,14 @@ if (existsSync(fileManifestPath)) {
         break;
       }
       const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
-      const fileBuffer = readFileSync(fullPath);
-      const content = isText ? fileBuffer.toString('utf8').replace(/\r\n/g, '\n') : fileBuffer;
-      const actualHash = createHash('sha256').update(content).digest('hex');
+      let actualHash = '';
+      if (isText) {
+        const text = readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');
+        actualHash = createHash('sha256').update(text, 'utf8').digest('hex');
+      } else {
+        const buf = readFileSync(fullPath);
+        actualHash = createHash('sha256').update(buf).digest('hex');
+      }
       if (actualHash !== expectedHash) {
         console.error(`File hash mismatch for ${relPath}: expected ${expectedHash}, got ${actualHash}`);
         fileManifestTampered = true;
