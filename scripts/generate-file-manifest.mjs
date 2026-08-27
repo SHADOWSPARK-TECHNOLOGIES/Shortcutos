@@ -12,7 +12,7 @@ const skipFiles = new Set([
   'shortcutos-v100-runtime-final.zip'
 ]);
 
-const skipDirs = new Set(['.git', 'node_modules', 'dist']);
+const skipDirs = new Set(['.git', 'node_modules', 'dist', 'scratch']);
 
 function walk(dir) {
   const files = [];
