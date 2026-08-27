@@ -1,70 +1,46 @@
-import type { RuntimeEvidence } from './status.js';
-import { validateEvidenceEnvelope, classifyEvidenceAuthenticity, AuthenticityClassification } from './status.js';
+import { EvidenceTrustPolicy, validateEvidenceEnvelope, type RuntimeEvidence } from './status.js';
 
-export type AcceptanceEvaluationResult = {
+export type AcceptanceEvaluation = {
   passed: boolean;
   unmetCriteria: string[];
-  mappedEvidence: RuntimeEvidence[];
 };
 
 export function evaluateAcceptance(
-  criteria: string[],
-  evidence: RuntimeEvidence[],
-  trustedSources?: string[]
-): AcceptanceEvaluationResult {
+  criteria: string[] = [],
+  evidence: RuntimeEvidence[] = [],
+  trustPolicy?: EvidenceTrustPolicy
+): AcceptanceEvaluation {
   if (criteria.length === 0) {
-    return { passed: true, unmetCriteria: [], mappedEvidence: [] };
+    return { passed: true, unmetCriteria: [] };
   }
 
-  if (evidence.length === 0) {
-    return { passed: false, unmetCriteria: [...criteria], mappedEvidence: [] };
+  if (!(trustPolicy instanceof EvidenceTrustPolicy)) {
+    return { passed: false, unmetCriteria: [...criteria] };
   }
 
-  const validEvidence = evidence.filter((env) => {
-    // Envelope MUST have full envelope metadata and pass integrity validation
-    const val = validateEvidenceEnvelope(env);
-    if (!val.valid) {
-      return false;
-    }
-    // If trustedSources provided, envelope MUST be AUTHENTICITY_VERIFIED
-    if (trustedSources) {
-      const auth = classifyEvidenceAuthenticity(env, trustedSources);
-      if (auth.status !== AuthenticityClassification.AUTHENTICITY_VERIFIED) {
-        return false;
-      }
-    }
-    return true;
-  });
+  const met = new Set<string>();
 
-  const unmetCriteria: string[] = [];
-  const mappedEvidence: RuntimeEvidence[] = [];
+  for (const item of evidence) {
+    const val = validateEvidenceEnvelope(item);
+    if (!val.valid) continue;
+    if (!trustPolicy.isSourceTrusted(item.source ?? '')) continue;
 
-  for (const criterion of criteria) {
-    const norm = criterion.toLowerCase().trim();
-    const matched = validEvidence.find((env) => {
-      if (typeof env.payload === 'object' && env.payload !== null) {
-        const p = env.payload as Record<string, unknown>;
-        if (typeof p.criteria === 'string' && p.criteria.toLowerCase().trim() === norm) {
-          return p.satisfied !== false;
+    const payload = item.payload;
+    if (payload && typeof payload === 'object' && payload !== null) {
+      const satisfiedCriteria = (payload as Record<string, unknown>).criteria;
+      if (typeof satisfiedCriteria === 'string') {
+        met.add(satisfiedCriteria);
+      } else if (Array.isArray(satisfiedCriteria)) {
+        for (const c of satisfiedCriteria) {
+          if (typeof c === 'string') met.add(c);
         }
       }
-      const refMatch = env.ref.toLowerCase().includes(norm) || norm.includes(env.ref.toLowerCase());
-      const kindMatch = env.kind.toLowerCase().includes(norm) || norm.includes(env.kind.toLowerCase());
-      return refMatch || kindMatch;
-    });
-
-    if (matched) {
-      if (!mappedEvidence.includes(matched)) {
-        mappedEvidence.push(matched);
-      }
-    } else {
-      unmetCriteria.push(criterion);
     }
   }
 
+  const unmetCriteria = criteria.filter((c) => !met.has(c));
   return {
-    passed: unmetCriteria.length === 0 && mappedEvidence.length > 0,
-    unmetCriteria,
-    mappedEvidence
+    passed: unmetCriteria.length === 0,
+    unmetCriteria
   };
 }

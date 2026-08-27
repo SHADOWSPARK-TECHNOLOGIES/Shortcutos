@@ -1,0 +1,76 @@
+{
+  "commit": "ead093811308edfd9ece1eb141c9d0f0aa9fdb51",
+  "git_available": true,
+  "foreign_git_history": false,
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "status": "PASS",
+    "startedAt": "2026-08-27T10:33:03.004Z",
+    "finishedAt": "2026-08-27T10:33:04.666Z"
+  },
+  "tests": {
+    "command": "node --test tests/audit-remediation.test.mjs tests/auditor-config.test.mjs tests/authority.test.mjs tests/capability.test.mjs tests/cli.test.mjs tests/conformance-runner.test.mjs tests/conformance-schema.test.mjs tests/context.test.mjs tests/evidence.test.mjs tests/evidence-security.test.mjs tests/executor.test.mjs tests/kernel.test.mjs tests/memory.test.mjs tests/node-adapters.test.mjs tests/p0-runtime-hardening.test.mjs tests/p1-retry-fallback.test.mjs tests/p2-scheduler.test.mjs tests/p3-adversarial-security.test.mjs tests/p4-parallel-execution.test.mjs tests/p5-resource-scheduler.test.mjs tests/p6-evidence-system.test.mjs tests/p7-memory-context.test.mjs tests/p8-specialist-runtime.test.mjs tests/p9-failure-recovery.test.mjs tests/registry.test.mjs tests/status.test.mjs",
+    "exitCode": 0,
+    "discovered": 87,
+    "passed": 87,
+    "failed": 0,
+    "status": "PASS",
+    "startedAt": "2026-08-27T10:33:04.666Z",
+    "finishedAt": "2026-08-27T10:33:19.641Z"
+  },
+  "self_check": {
+    "command": "node cli.mjs self-check",
+    "exitCode": 0,
+    "status": "PASS",
+    "hostIntegrated": false,
+    "startedAt": "2026-08-27T10:33:19.641Z",
+    "finishedAt": "2026-08-27T10:33:22.962Z"
+  },
+  "conformance": {
+    "command": "node scripts/run-conformance.mjs",
+    "exitCode": 0,
+    "status": "PASS",
+    "startedAt": "2026-08-27T10:33:22.962Z",
+    "finishedAt": "2026-08-27T10:33:43.295Z"
+  },
+  "canonical_versions_total": 78,
+  "versions_runtime_tested": 78,
+  "versions_partial": 0,
+  "versions_design_only": 0,
+  "versions_not_applicable": 0,
+  "versions_blocked": 0,
+  "versions_unknown": 0,
+  "orphan_contracts": [],
+  "unmapped_versions": [],
+  "missing_source_contracts": [],
+  "weak_test_contracts": [],
+  "security_findings": [
+    {
+      "id": "SEC-001",
+      "summary": "Path Traversal & Symlink Escape Protection: Resolved realpath comparison and pre-resolution relative check prevent directory escape.",
+      "classification": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    },
+    {
+      "id": "SEC-002",
+      "summary": "Registry Poisoning & Alias Chaining Defense: Duplicate IDs, low-authority overwrites, and multi-hop alias chains are explicitly rejected.",
+      "classification": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    },
+    {
+      "id": "SEC-003",
+      "summary": "Memory Concurrency Conflict Protection: Atomic file lock protocol prevents lost updates and race conditions.",
+      "classification": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    },
+    {
+      "id": "SEC-004",
+      "summary": "Execution Bypass & Blocked Dispatch Defense: Preflight validation required for mutating operations before execution.",
+      "classification": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    },
+    {
+      "id": "SEC-005",
+      "summary": "Evidence Integrity & Authenticity Policy: RUNTIME_VERIFIED and acceptance pass require trusted provenance and verified authenticity.",
+      "classification": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    }
+  ],
+  "final_verdict": "PORTABLE_V100_RUNTIME = 100/100 VERIFIED_LOCAL_CANONICAL_CONFORMANCE"
+}

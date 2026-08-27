@@ -1,0 +1,1457 @@
+[
+  {
+    "version": "V23",
+    "canonical_purpose": "Typed Command, Module & Interface Contracts",
+    "canonical_contracts": [
+      "V23-001"
+    ],
+    "implementation": [
+      "src/authority.ts",
+      "src/status.ts",
+      "src/errors.ts"
+    ],
+    "tests": [
+      "tests/authority.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/authority.ts:canOverride",
+      "tests/authority.test.mjs:1-18"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Authority hierarchy prevents ShortcutOS from overriding higher authorities."
+  },
+  {
+    "version": "V24",
+    "canonical_purpose": "Canonical Manifest & Compatibility Closure",
+    "canonical_contracts": [
+      "V24-001"
+    ],
+    "implementation": [
+      "src/status.ts",
+      "cli.mjs"
+    ],
+    "tests": [
+      "tests/cli.test.mjs",
+      "tests/auditor-config.test.mjs"
+    ],
+    "runtime_evidence": [
+      "cli.mjs:self-check",
+      "tests/cli.test.mjs:1-35"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Manifest locked and validated."
+  },
+  {
+    "version": "V25",
+    "canonical_purpose": "Consolidation Freeze / Core Profile / Orchestration Readiness",
+    "canonical_contracts": [
+      "V25-001"
+    ],
+    "implementation": [
+      "src/status.ts",
+      "src/authority.ts"
+    ],
+    "tests": [
+      "tests/authority.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/authority.ts:AuthorityLevel",
+      "tests/authority.test.mjs:1-18"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Core profile frozen and orchestration ready."
+  },
+  {
+    "version": "V26",
+    "canonical_purpose": "Mission Graph IR",
+    "canonical_contracts": [
+      "V26-001"
+    ],
+    "implementation": [
+      "src/kernel.ts"
+    ],
+    "tests": [
+      "tests/kernel.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/kernel.ts:ShortcutRun",
+      "tests/kernel.test.mjs:1-25"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Lifecycle state model implemented."
+  },
+  {
+    "version": "V27",
+    "canonical_purpose": "Execution Plan Compiler / Command-to-Task Binding",
+    "canonical_contracts": [
+      "V27-001"
+    ],
+    "implementation": [
+      "src/kernel.ts",
+      "src/dispatch.ts"
+    ],
+    "tests": [
+      "tests/kernel.test.mjs",
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/kernel.ts:markPlanned",
+      "tests/kernel.test.mjs:7-25"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Planning precondition enforced."
+  },
+  {
+    "version": "V28",
+    "canonical_purpose": "Capability Resolver / Tool Adapter Registry",
+    "canonical_contracts": [
+      "V28-001"
+    ],
+    "implementation": [
+      "src/capability.ts",
+      "src/adapter.ts",
+      "src/registry.ts"
+    ],
+    "tests": [
+      "tests/capability.test.mjs",
+      "tests/registry.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/capability.ts:CapabilityResolver",
+      "src/adapter.ts:ToolAdapterRegistry"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Registry and capability resolver implemented."
+  },
+  {
+    "version": "V29",
+    "canonical_purpose": "Execution Target Eligibility",
+    "canonical_contracts": [
+      "V29-001"
+    ],
+    "implementation": [
+      "src/dispatch.ts",
+      "src/adapter.ts"
+    ],
+    "tests": [
+      "tests/capability.test.mjs",
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/dispatch.ts:preflightDispatch"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Preflight eligibility checks active."
+  },
+  {
+    "version": "V30",
+    "canonical_purpose": "Deterministic Task Router",
+    "canonical_contracts": [
+      "V30-001"
+    ],
+    "implementation": [
+      "src/dispatch.ts",
+      "src/registry.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs",
+      "tests/registry.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/dispatch.ts:preflightDispatch"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Deterministic routing active."
+  },
+  {
+    "version": "V31",
+    "canonical_purpose": "Dispatch Contract / Assignment / Pre-Execution Gate",
+    "canonical_contracts": [
+      "V31-001"
+    ],
+    "implementation": [
+      "src/dispatch.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/dispatch.ts:preflightDispatch"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Dispatch gate active."
+  },
+  {
+    "version": "V32",
+    "canonical_purpose": "Single-Task Execution Adapter",
+    "canonical_contracts": [
+      "V32-001"
+    ],
+    "implementation": [
+      "src/executor.ts"
+    ],
+    "tests": [
+      "tests/executor.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/executor.ts:executeOnce"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Single attempt execution contract active."
+  },
+  {
+    "version": "V33",
+    "canonical_purpose": "Controlled Retry",
+    "canonical_contracts": [
+      "V33-001"
+    ],
+    "implementation": [
+      "src/retry.ts"
+    ],
+    "tests": [
+      "tests/p1-retry-fallback.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/retry.ts:executeWithRetryAndFallback"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Bounded retry policy active."
+  },
+  {
+    "version": "V34",
+    "canonical_purpose": "Retry Safety / Unknown Outcome Resolution",
+    "canonical_contracts": [
+      "V34-001"
+    ],
+    "implementation": [
+      "src/executor.ts",
+      "src/retry.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs",
+      "tests/p1-retry-fallback.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/executor.ts:executeOnce",
+      "src/retry.ts:executeWithRetryAndFallback"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Non-retryable mutation safety active."
+  },
+  {
+    "version": "V35",
+    "canonical_purpose": "Controlled Provider Fallback",
+    "canonical_contracts": [
+      "V35-001"
+    ],
+    "implementation": [
+      "src/retry.ts"
+    ],
+    "tests": [
+      "tests/p1-retry-fallback.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/retry.ts:executeWithRetryAndFallback"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Controlled fallback active."
+  },
+  {
+    "version": "V36",
+    "canonical_purpose": "Dependency-Aware Sequential Execution",
+    "canonical_contracts": [
+      "V36-001"
+    ],
+    "implementation": [
+      "src/scheduler.ts"
+    ],
+    "tests": [
+      "tests/p2-scheduler.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/scheduler.ts:executeWorkflow"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Sequential workflow engine active."
+  },
+  {
+    "version": "V37",
+    "canonical_purpose": "Concurrency Safety / Parallelizability / Resource Conflict Model",
+    "canonical_contracts": [
+      "V37-001"
+    ],
+    "implementation": [
+      "src/parallel.ts"
+    ],
+    "tests": [
+      "tests/p4-parallel-execution.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/parallel.ts:analyzeConcurrencyConflicts"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Concurrency conflict analysis active."
+  },
+  {
+    "version": "V38",
+    "canonical_purpose": "Bounded Parallel Execution",
+    "canonical_contracts": [
+      "V38-001"
+    ],
+    "implementation": [
+      "src/parallel.ts"
+    ],
+    "tests": [
+      "tests/p4-parallel-execution.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/parallel.ts:executeParallelGroup"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Bounded parallel execution engine active."
+  },
+  {
+    "version": "V39",
+    "canonical_purpose": "Deterministic Dependency & Resource Scheduler",
+    "canonical_contracts": [
+      "V39-001"
+    ],
+    "implementation": [
+      "src/resource-scheduler.ts"
+    ],
+    "tests": [
+      "tests/p5-resource-scheduler.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/resource-scheduler.ts:DeterministicResourceScheduler"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Deterministic resource scheduler active."
+  },
+  {
+    "version": "V40",
+    "canonical_purpose": "Orchestration Closure / Regression / Readiness",
+    "canonical_contracts": [
+      "V40-001"
+    ],
+    "implementation": [
+      "src/scheduler.ts",
+      "src/parallel.ts",
+      "src/resource-scheduler.ts"
+    ],
+    "tests": [
+      "tests/p2-scheduler.test.mjs",
+      "tests/p4-parallel-execution.test.mjs",
+      "tests/p5-resource-scheduler.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/resource-scheduler.ts:run"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Orchestration band closure verified."
+  },
+  {
+    "version": "V41",
+    "canonical_purpose": "Evidence IR / Claim-Evidence Graph",
+    "canonical_contracts": [
+      "V41-001"
+    ],
+    "implementation": [
+      "src/status.ts",
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs",
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/status.ts:createEvidenceEnvelope",
+      "src/evidence-system.ts:EvidenceGraph"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Evidence IR model active."
+  },
+  {
+    "version": "V42",
+    "canonical_purpose": "Source Quality / Authority / Freshness (Source Grading)",
+    "canonical_contracts": [
+      "V42-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:SourceTrustGrade"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Source grading active."
+  },
+  {
+    "version": "V43",
+    "canonical_purpose": "Claim Extraction / Canonicalization / Scope",
+    "canonical_contracts": [
+      "V43-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:ClaimRecord"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Claim extraction model active."
+  },
+  {
+    "version": "V44",
+    "canonical_purpose": "Claim Verification / Sufficiency",
+    "canonical_contracts": [
+      "V44-001"
+    ],
+    "implementation": [
+      "src/acceptance.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/acceptance.ts:evaluateAcceptance"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Claim sufficiency verification active."
+  },
+  {
+    "version": "V45",
+    "canonical_purpose": "Contradiction Graph Construction",
+    "canonical_contracts": [
+      "V45-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:EvidenceGraph.addRelation"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Contradiction graph active."
+  },
+  {
+    "version": "V46",
+    "canonical_purpose": "Evidence Conflict Reconciliation",
+    "canonical_contracts": [
+      "V46-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:reconcileEvidenceConflicts"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Conflict reconciliation active."
+  },
+  {
+    "version": "V47",
+    "canonical_purpose": "Confidence Calibration & Scoring",
+    "canonical_contracts": [
+      "V47-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:reconcileEvidenceConflicts"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Confidence calibration active."
+  },
+  {
+    "version": "V48",
+    "canonical_purpose": "Coverage Gaps & Conflict Tracking",
+    "canonical_contracts": [
+      "V48-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:detectConflicts"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Conflict tracking active."
+  },
+  {
+    "version": "V49",
+    "canonical_purpose": "Verification Regression Harness",
+    "canonical_contracts": [
+      "V49-001"
+    ],
+    "implementation": [
+      "tests/evidence.test.mjs",
+      "tests/evidence-security.test.mjs"
+    ],
+    "tests": [
+      "tests/evidence.test.mjs",
+      "tests/evidence-security.test.mjs"
+    ],
+    "runtime_evidence": [
+      "tests/evidence-security.test.mjs:1-30"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Verification regression harness active."
+  },
+  {
+    "version": "V50",
+    "canonical_purpose": "Evidence-Aware Mission Acceptance",
+    "canonical_contracts": [
+      "V50-001"
+    ],
+    "implementation": [
+      "src/kernel.ts",
+      "src/acceptance.ts"
+    ],
+    "tests": [
+      "tests/kernel.test.mjs",
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/kernel.ts:verify"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Evidence-aware mission acceptance active."
+  },
+  {
+    "version": "V51",
+    "canonical_purpose": "Verification Policy Profiles",
+    "canonical_contracts": [
+      "V51-001"
+    ],
+    "implementation": [
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/status.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/status.ts:promoteStatus"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Verification policy profile active."
+  },
+  {
+    "version": "V52",
+    "canonical_purpose": "Evidence-Aware Decision Thresholds",
+    "canonical_contracts": [
+      "V52-001"
+    ],
+    "implementation": [
+      "src/acceptance.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/acceptance.ts:evaluateAcceptance"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Decision thresholds active."
+  },
+  {
+    "version": "V53",
+    "canonical_purpose": "Audit & Explainability Tracing",
+    "canonical_contracts": [
+      "V53-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:VerificationTrace"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Explainability trace active."
+  },
+  {
+    "version": "V54",
+    "canonical_purpose": "Adversarial Evidence Testing",
+    "canonical_contracts": [
+      "V54-001"
+    ],
+    "implementation": [
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/p3-adversarial-security.test.mjs",
+      "tests/evidence-security.test.mjs"
+    ],
+    "runtime_evidence": [
+      "tests/p3-adversarial-security.test.mjs:10-35"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Adversarial evidence testing active."
+  },
+  {
+    "version": "V55",
+    "canonical_purpose": "Evidence-Band Closure",
+    "canonical_contracts": [
+      "V55-001"
+    ],
+    "implementation": [
+      "src/evidence-system.ts",
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/p6-evidence-system.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/evidence-system.ts:reconcileEvidenceConflicts"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Evidence band closure active."
+  },
+  {
+    "version": "V56",
+    "canonical_purpose": "Typed Memory Objects",
+    "canonical_contracts": [
+      "V56-001"
+    ],
+    "implementation": [
+      "src/memory.ts",
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/memory.test.mjs",
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory.ts:MemoryRecord",
+      "src/memory-system.ts:ContextEntry"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Typed memory objects active."
+  },
+  {
+    "version": "V57",
+    "canonical_purpose": "Context Carrier",
+    "canonical_contracts": [
+      "V57-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:ContextCarrier"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Context carrier active."
+  },
+  {
+    "version": "V58",
+    "canonical_purpose": "Checkpoint & Resume",
+    "canonical_contracts": [
+      "V58-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:createCheckpoint"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Checkpoint & resume active."
+  },
+  {
+    "version": "V59",
+    "canonical_purpose": "Context Compression",
+    "canonical_contracts": [
+      "V59-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:assembleWorkingSet"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Context compression active."
+  },
+  {
+    "version": "V60",
+    "canonical_purpose": "Stale-State Detection",
+    "canonical_contracts": [
+      "V60-001"
+    ],
+    "implementation": [
+      "src/context.ts"
+    ],
+    "tests": [
+      "tests/context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/context.ts:assembleContext"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Stale state detection active."
+  },
+  {
+    "version": "V61",
+    "canonical_purpose": "Conflict-Aware Context Retrieval",
+    "canonical_contracts": [
+      "V61-001"
+    ],
+    "implementation": [
+      "src/context.ts"
+    ],
+    "tests": [
+      "tests/context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/context.ts:assembleContext"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Conflict aware retrieval active."
+  },
+  {
+    "version": "V62",
+    "canonical_purpose": "Memory Tiers (Short-Term, Working-Set, Long-Term)",
+    "canonical_contracts": [
+      "V62-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:MemoryTier"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Memory tiering active."
+  },
+  {
+    "version": "V63",
+    "canonical_purpose": "Memory Provenance Tracking",
+    "canonical_contracts": [
+      "V63-001"
+    ],
+    "implementation": [
+      "src/memory.ts"
+    ],
+    "tests": [
+      "tests/memory.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory.ts:MemoryRepository.addRecord"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Memory provenance active."
+  },
+  {
+    "version": "V64",
+    "canonical_purpose": "Memory Corrections & Tombstones",
+    "canonical_contracts": [
+      "V64-001"
+    ],
+    "implementation": [
+      "src/memory.ts"
+    ],
+    "tests": [
+      "tests/memory.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory.ts:MemoryRepository.correctRecord"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Corrections & tombstones active."
+  },
+  {
+    "version": "V65",
+    "canonical_purpose": "Cross-Chat & Import-Export Migration",
+    "canonical_contracts": [
+      "V65-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:exportSnapshot"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Cross-session migration active."
+  },
+  {
+    "version": "V66",
+    "canonical_purpose": "Context Budgeting & Token Limits",
+    "canonical_contracts": [
+      "V66-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:assembleWorkingSet"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Context budgeting active."
+  },
+  {
+    "version": "V67",
+    "canonical_purpose": "Deterministic Working-Set Assembly",
+    "canonical_contracts": [
+      "V67-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:assembleWorkingSet"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Deterministic working set active."
+  },
+  {
+    "version": "V68",
+    "canonical_purpose": "Resume Drift Reconciliation",
+    "canonical_contracts": [
+      "V68-001"
+    ],
+    "implementation": [
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:createCheckpoint"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Resume drift reconciliation active."
+  },
+  {
+    "version": "V69",
+    "canonical_purpose": "Memory Regression Harness",
+    "canonical_contracts": [
+      "V69-001"
+    ],
+    "implementation": [
+      "tests/memory.test.mjs",
+      "tests/context.test.mjs",
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "tests": [
+      "tests/memory.test.mjs",
+      "tests/context.test.mjs",
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "tests/p7-memory-context.test.mjs:1-28"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Memory regression harness active."
+  },
+  {
+    "version": "V70",
+    "canonical_purpose": "Memory-Band Closure",
+    "canonical_contracts": [
+      "V70-001"
+    ],
+    "implementation": [
+      "src/memory.ts",
+      "src/memory-system.ts"
+    ],
+    "tests": [
+      "tests/p7-memory-context.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/memory-system.ts:ContextCarrier"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Memory band closure active."
+  },
+  {
+    "version": "V71",
+    "canonical_purpose": "Base Specialist Framework",
+    "canonical_contracts": [
+      "V71-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistDefinition"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Base specialist framework active."
+  },
+  {
+    "version": "V72",
+    "canonical_purpose": "Research Specialist Role",
+    "canonical_contracts": [
+      "V72-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.RESEARCH"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Research specialist active."
+  },
+  {
+    "version": "V73",
+    "canonical_purpose": "Software Engineering Specialist Role",
+    "canonical_contracts": [
+      "V73-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.SOFTWARE_ENGINEERING"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Software engineering specialist active."
+  },
+  {
+    "version": "V74",
+    "canonical_purpose": "Architecture Specialist Role",
+    "canonical_contracts": [
+      "V74-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.ARCHITECTURE"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Architecture specialist active."
+  },
+  {
+    "version": "V75",
+    "canonical_purpose": "Security Specialist Role",
+    "canonical_contracts": [
+      "V75-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.SECURITY"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Security specialist active."
+  },
+  {
+    "version": "V76",
+    "canonical_purpose": "Business Specialist Role",
+    "canonical_contracts": [
+      "V76-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.BUSINESS"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Business specialist active."
+  },
+  {
+    "version": "V77",
+    "canonical_purpose": "Content Specialist Role",
+    "canonical_contracts": [
+      "V77-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.CONTENT"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Content specialist active."
+  },
+  {
+    "version": "V78",
+    "canonical_purpose": "Marketing Specialist Role",
+    "canonical_contracts": [
+      "V78-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.MARKETING"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Marketing specialist active."
+  },
+  {
+    "version": "V79",
+    "canonical_purpose": "Automation Specialist Role",
+    "canonical_contracts": [
+      "V79-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRole.AUTOMATION"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Automation specialist active."
+  },
+  {
+    "version": "V80",
+    "canonical_purpose": "Specialist Handoffs",
+    "canonical_contracts": [
+      "V80-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:executeSpecialistHandoff"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Specialist handoffs active."
+  },
+  {
+    "version": "V81",
+    "canonical_purpose": "Specialist Capability Eligibility",
+    "canonical_contracts": [
+      "V81-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:findEligibleSpecialist"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Specialist capability eligibility active."
+  },
+  {
+    "version": "V82",
+    "canonical_purpose": "Bounded Specialist Collaboration",
+    "canonical_contracts": [
+      "V82-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:executeSpecialistHandoff"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Bounded specialist collaboration active."
+  },
+  {
+    "version": "V83",
+    "canonical_purpose": "Specialist Domain Policies",
+    "canonical_contracts": [
+      "V83-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:executeSpecialistHandoff"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Domain policies active."
+  },
+  {
+    "version": "V84",
+    "canonical_purpose": "Specialist Regression Harness",
+    "canonical_contracts": [
+      "V84-001"
+    ],
+    "implementation": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "tests/p8-specialist-runtime.test.mjs:1-48"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Specialist regression harness active."
+  },
+  {
+    "version": "V85",
+    "canonical_purpose": "Specialist-Band Closure",
+    "canonical_contracts": [
+      "V85-001"
+    ],
+    "implementation": [
+      "src/specialist.ts"
+    ],
+    "tests": [
+      "tests/p8-specialist-runtime.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/specialist.ts:SpecialistRegistry"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Specialist band closure active."
+  },
+  {
+    "version": "V86",
+    "canonical_purpose": "System-Wide Failure Classification",
+    "canonical_contracts": [
+      "V86-001"
+    ],
+    "implementation": [
+      "src/errors.ts",
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:FailureCategory"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Failure classification active."
+  },
+  {
+    "version": "V87",
+    "canonical_purpose": "Recovery-Plan Compilation",
+    "canonical_contracts": [
+      "V87-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:compileRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Recovery plan compilation active."
+  },
+  {
+    "version": "V88",
+    "canonical_purpose": "Rollback & Compensating Actions",
+    "canonical_contracts": [
+      "V88-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Compensating actions active."
+  },
+  {
+    "version": "V89",
+    "canonical_purpose": "Partial-State Restoration",
+    "canonical_contracts": [
+      "V89-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Partial state restoration active."
+  },
+  {
+    "version": "V90",
+    "canonical_purpose": "Dependency Failure & Degraded Mode Operation",
+    "canonical_contracts": [
+      "V90-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Degraded mode operation active."
+  },
+  {
+    "version": "V91",
+    "canonical_purpose": "Human Intervention Gates",
+    "canonical_contracts": [
+      "V91-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Human intervention gates active."
+  },
+  {
+    "version": "V92",
+    "canonical_purpose": "Minimal Repair Selection",
+    "canonical_contracts": [
+      "V92-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:compileRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Minimal repair selection active."
+  },
+  {
+    "version": "V93",
+    "canonical_purpose": "Resumable Recovery History",
+    "canonical_contracts": [
+      "V93-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Resumable recovery history active."
+  },
+  {
+    "version": "V94",
+    "canonical_purpose": "Failure-Injection Regression Testing",
+    "canonical_contracts": [
+      "V94-001"
+    ],
+    "implementation": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "tests/p9-failure-recovery.test.mjs:1-41"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Failure injection testing active."
+  },
+  {
+    "version": "V95",
+    "canonical_purpose": "Recovery-Band Closure",
+    "canonical_contracts": [
+      "V95-001"
+    ],
+    "implementation": [
+      "src/recovery-runtime.ts"
+    ],
+    "tests": [
+      "tests/p9-failure-recovery.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/recovery-runtime.ts:executeRecoveryPlan"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Recovery band closure active."
+  },
+  {
+    "version": "V96",
+    "canonical_purpose": "Global Deduplication & Surface Minimization",
+    "canonical_contracts": [
+      "V96-001"
+    ],
+    "implementation": [
+      "src/index.ts"
+    ],
+    "tests": [
+      "tests/auditor-config.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/index.ts:1-20"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Surface minimization active."
+  },
+  {
+    "version": "V97",
+    "canonical_purpose": "Compatibility & Ambiguity Hardening",
+    "canonical_contracts": [
+      "V97-001"
+    ],
+    "implementation": [
+      "src/errors.ts",
+      "src/status.ts"
+    ],
+    "tests": [
+      "tests/p0-runtime-hardening.test.mjs"
+    ],
+    "runtime_evidence": [
+      "src/errors.ts:ShortcutOSError"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Ambiguity hardening active."
+  },
+  {
+    "version": "V98",
+    "canonical_purpose": "Whole-System Regression & Invariant Closure",
+    "canonical_contracts": [
+      "V98-001"
+    ],
+    "implementation": [
+      "tests/auditor-config.test.mjs",
+      "tests/conformance-runner.test.mjs"
+    ],
+    "tests": [
+      "tests/auditor-config.test.mjs",
+      "tests/conformance-runner.test.mjs"
+    ],
+    "runtime_evidence": [
+      "tests/conformance-runner.test.mjs:1-40"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Whole system invariant closure active."
+  },
+  {
+    "version": "V99",
+    "canonical_purpose": "Canonical Manifest Lock & Readiness",
+    "canonical_contracts": [
+      "V99-001"
+    ],
+    "implementation": [
+      "cli.mjs",
+      "scripts/conformance-schema.mjs"
+    ],
+    "tests": [
+      "tests/cli.test.mjs",
+      "tests/conformance-schema.test.mjs"
+    ],
+    "runtime_evidence": [
+      "cli.mjs:self-check"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Canonical manifest lock active."
+  },
+  {
+    "version": "V100",
+    "canonical_purpose": "Canonical Integration & Release Certification",
+    "canonical_contracts": [
+      "V100-001"
+    ],
+    "implementation": [
+      "scripts/run-conformance.mjs",
+      "scripts/generate-final-report.mjs"
+    ],
+    "tests": [
+      "tests/conformance-runner.test.mjs"
+    ],
+    "runtime_evidence": [
+      "audit/reports/conformance-final-report.json"
+    ],
+    "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "notes": "Canonical integration certification active."
+  }
+]

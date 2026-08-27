@@ -4,7 +4,8 @@ import {
   promoteStatus,
   createEvidenceEnvelope,
   VerificationStatus,
-  ShortcutOSKernel
+  ShortcutOSKernel,
+  EvidenceTrustPolicy
 } from '../dist/index.js';
 import { createLocalFileReadAdapter } from '../node-adapters.mjs';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -12,6 +13,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 test('P3 Security: Tampered evidence envelope is rejected by promoteStatus and kernel', () => {
+  const policy = new EvidenceTrustPolicy({ trustedSources: ['trusted-source'] });
   const validEnvelope = createEvidenceEnvelope({
     kind: 'test-evidence',
     ref: 'ref-1',
@@ -26,26 +28,21 @@ test('P3 Security: Tampered evidence envelope is rejected by promoteStatus and k
 
   assert.throws(
     () => {
-      promoteStatus(VerificationStatus.RUNTIME_EXECUTED, VerificationStatus.RUNTIME_VERIFIED, [tamperedEnvelope], ['trusted-source']);
+      promoteStatus(VerificationStatus.RUNTIME_EXECUTED, VerificationStatus.RUNTIME_VERIFIED, [tamperedEnvelope], policy);
     },
     (err) => {
-      return err instanceof Error && (err.message.includes('INVALID_EVIDENCE_ENVELOPE') || err.message.includes('INTEGRITY_MISMATCH'));
+      return err instanceof Error && (err.message.includes('invalid') || err.message.includes('INTEGRITY_MISMATCH'));
     }
   );
 
-  const kernel = new ShortcutOSKernel();
+  const kernel = new ShortcutOSKernel({ trustPolicy: policy });
   const run = kernel.createRun({ goal: 'g', acceptanceCriteria: ['c'] });
   kernel.markPlanned(run.id);
   kernel.markExecuted(run.id, validEnvelope);
 
-  assert.throws(
-    () => {
-      kernel.verify(run.id, [tamperedEnvelope], true, ['trusted-source']);
-    },
-    (err) => {
-      return err instanceof Error && (err.message.includes('INVALID_EVIDENCE_ENVELOPE') || err.message.includes('INTEGRITY_MISMATCH'));
-    }
-  );
+  const res = kernel.verify(run.id, [tamperedEnvelope]);
+  assert.equal(res.completed, false);
+  assert.equal(res.acceptancePassed, false);
 });
 
 test('P3 Security: Local file adapter handles non-existent paths outside root safely', async () => {

@@ -384,7 +384,7 @@
     "runtime_evidence": [
       "src/evidence-system.ts:ClaimRecord"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V44-001",
@@ -648,7 +648,7 @@
     "runtime_evidence": [
       "src/memory-system.ts:createCheckpoint"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V59-001",
@@ -665,7 +665,7 @@
     "runtime_evidence": [
       "src/memory-system.ts:assembleWorkingSet"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V60-001",
@@ -818,7 +818,7 @@
     "runtime_evidence": [
       "src/memory-system.ts:createCheckpoint"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V69-001",
@@ -891,7 +891,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.RESEARCH"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V73-001",
@@ -908,7 +908,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.SOFTWARE_ENGINEERING"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V74-001",
@@ -925,7 +925,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.ARCHITECTURE"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V75-001",
@@ -942,7 +942,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.SECURITY"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V76-001",
@@ -959,7 +959,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.BUSINESS"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V77-001",
@@ -976,7 +976,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.CONTENT"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V78-001",
@@ -993,7 +993,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.MARKETING"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V79-001",
@@ -1010,7 +1010,7 @@
     "runtime_evidence": [
       "src/specialist.ts:SpecialistRole.AUTOMATION"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V80-001",
@@ -1078,7 +1078,7 @@
     "runtime_evidence": [
       "src/specialist.ts:executeSpecialistHandoff"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V84-001",
@@ -1181,7 +1181,7 @@
     "runtime_evidence": [
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V90-001",
@@ -1232,7 +1232,7 @@
     "runtime_evidence": [
       "src/recovery-runtime.ts:compileRecoveryPlan"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V93-001",
@@ -1249,7 +1249,7 @@
     "runtime_evidence": [
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V94-001",
@@ -1300,7 +1300,7 @@
     "runtime_evidence": [
       "src/index.ts:1-20"
     ],
-    "status": "IMPLEMENTED_AND_RUNTIME_TESTED"
+    "status": "PARTIALLY_IMPLEMENTED"
   },
   {
     "contract_id": "V97-001",

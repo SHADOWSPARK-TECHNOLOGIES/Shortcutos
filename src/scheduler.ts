@@ -9,7 +9,7 @@ import { createDispatch } from './dispatch.js';
 import { executeWithRetryAndFallback, type RetryPolicy } from './retry.js';
 import type { ExecutionError } from './executor.js';
 import type { RuntimeEvidence } from './status.js';
-import type { ContextFreshness } from './context.js';
+import { ContextFreshness } from './context.js';
 
 export type WorkflowStep = {
   id: string;
@@ -175,7 +175,9 @@ export async function executeWorkflow(
       },
       adapters,
       {
-        actorAuthority: AuthorityLevel.USER,
+        actorAuthority: options?.actorAuthority ?? AuthorityLevel.USER,
+        contextFreshness: options?.contextFreshness ?? ContextFreshness.FRESH,
+        hasConflicts: options?.hasConflicts ?? false,
         idempotencyKey: step.idempotencyKey ?? `idem-${stepId}`
       }
     );

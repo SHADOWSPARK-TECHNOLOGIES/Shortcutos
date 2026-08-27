@@ -56,12 +56,12 @@ export function preflightDispatch(input: DispatchPreflightInput): DispatchPrefli
     reasons.push(`PREFLIGHT_ADAPTER_${adapter.availability}`);
   }
 
-  if (
-    adapter.requiredAuthority !== undefined &&
-    input.actorAuthority !== undefined &&
-    input.actorAuthority > adapter.requiredAuthority
-  ) {
-    reasons.push('PREFLIGHT_AUTHORITY_INSUFFICIENT');
+  if (adapter.requiredAuthority !== undefined) {
+    if (input.actorAuthority === undefined) {
+      reasons.push('PREFLIGHT_AUTHORITY_UNKNOWN');
+    } else if (input.actorAuthority > adapter.requiredAuthority) {
+      reasons.push('PREFLIGHT_AUTHORITY_INSUFFICIENT');
+    }
   }
 
   const isMutation =
@@ -69,10 +69,17 @@ export function preflightDispatch(input: DispatchPreflightInput): DispatchPrefli
     adapter.sideEffectClass === SideEffectClass.IRREVERSIBLE;
 
   if (isMutation) {
-    if (input.contextFreshness === ContextFreshness.STALE) {
+    if (input.actorAuthority === undefined && !reasons.includes('PREFLIGHT_AUTHORITY_UNKNOWN')) {
+      reasons.push('PREFLIGHT_AUTHORITY_UNKNOWN');
+    }
+    if (input.contextFreshness === undefined) {
+      reasons.push('PREFLIGHT_FRESHNESS_UNKNOWN');
+    } else if (input.contextFreshness === ContextFreshness.STALE) {
       reasons.push('PREFLIGHT_CONTEXT_STALE');
     }
-    if (input.hasConflicts) {
+    if (input.hasConflicts === undefined) {
+      reasons.push('PREFLIGHT_CONFLICT_UNKNOWN');
+    } else if (input.hasConflicts) {
       reasons.push('PREFLIGHT_CONTEXT_CONFLICT');
     }
     if (!input.idempotencyKey) {
@@ -140,9 +147,12 @@ export function createDispatch(
 
   if (!preflight.eligible) {
     return {
-      ...input,
+      id: input.id,
+      capability: input.capability,
+      adapterId: input.adapterId,
+      input: input.input,
       status: DispatchStatus.BLOCKED,
-      blockReason: preflight.reasons.join('; ')
+      blockReason: preflight.reasons[0] ?? 'PREFLIGHT_BLOCKED'
     };
   }
 

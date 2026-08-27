@@ -148,35 +148,56 @@ export function classifyEvidenceAuthenticity(
   };
 }
 
+export type EvidenceTrustPolicyInput = {
+  trustedSources: string[];
+  requireAuthenticity?: boolean;
+};
+
+export class EvidenceTrustPolicy {
+  private readonly trustedSet: Set<string>;
+  readonly requireAuthenticity: boolean;
+
+  constructor(input: EvidenceTrustPolicyInput) {
+    if (!input || !Array.isArray(input.trustedSources)) {
+      throw new Error('EvidenceTrustPolicy requires a trustedSources array.');
+    }
+    this.trustedSet = new Set(input.trustedSources);
+    this.requireAuthenticity = input.requireAuthenticity ?? true;
+  }
+
+  isSourceTrusted(source: string | undefined): boolean {
+    return typeof source === 'string' && this.trustedSet.has(source);
+  }
+}
+
 export function promoteStatus(
   current: VerificationStatus,
   target: VerificationStatus,
-  evidence: RuntimeEvidence[],
-  trustedSources?: string[]
+  evidenceEnvelopes: RuntimeEvidence[] = [],
+  trustPolicy?: EvidenceTrustPolicy
 ): VerificationStatus {
-  if (target === VerificationStatus.RUNTIME_EXECUTED && evidence.length === 0) {
-    throw new Error('RUNTIME_EVIDENCE_REQUIRED');
-  }
-  if (target === VerificationStatus.RUNTIME_VERIFIED && evidence.length === 0) {
-    throw new Error('RUNTIME_EVIDENCE_REQUIRED');
-  }
+  if (current === target) return current;
 
-  for (const item of evidence) {
-    const val = validateEvidenceEnvelope(item);
-    if (!val.valid) {
-      throw new Error(`INVALID_EVIDENCE_ENVELOPE: ${val.error}`);
+  if (target === VerificationStatus.RUNTIME_VERIFIED) {
+    if (!(trustPolicy instanceof EvidenceTrustPolicy)) {
+      throw new Error('Runtime verification requires a valid EvidenceTrustPolicy.');
     }
 
-    if (target === VerificationStatus.RUNTIME_VERIFIED) {
-      const auth = classifyEvidenceAuthenticity(item, trustedSources);
-      if (auth.status !== AuthenticityClassification.AUTHENTICITY_VERIFIED) {
-        throw new Error('UNTRUSTED_EVIDENCE_PROVENANCE: Runtime verification requires verified evidence authenticity from a trusted source.');
+    if (evidenceEnvelopes.length === 0) {
+      throw new Error('Cannot promote status to RUNTIME_VERIFIED without evidence envelopes.');
+    }
+
+    for (const item of evidenceEnvelopes) {
+      const validation = validateEvidenceEnvelope(item);
+      if (!validation.valid) {
+        throw new Error(`Evidence envelope invalid: ${validation.error}`);
+      }
+
+      if (!trustPolicy.isSourceTrusted(item.source)) {
+        throw new Error(`Evidence source '${item.source}' is not trusted by system EvidenceTrustPolicy.`);
       }
     }
   }
 
-  if (current === VerificationStatus.UNKNOWN && target === VerificationStatus.RUNTIME_VERIFIED && evidence.length === 0) {
-    return VerificationStatus.UNKNOWN;
-  }
   return target;
 }

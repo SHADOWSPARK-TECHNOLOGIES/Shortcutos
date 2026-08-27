@@ -18,7 +18,10 @@
       "tests/authority.test.mjs:1-18"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Authority hierarchy prevents ShortcutOS from overriding higher authorities."
+    "notes": "Authority hierarchy prevents ShortcutOS from overriding higher authorities.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V24",
@@ -39,7 +42,10 @@
       "tests/cli.test.mjs:1-35"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Manifest locked and validated."
+    "notes": "Manifest locked and validated.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V25",
@@ -59,7 +65,10 @@
       "tests/authority.test.mjs:1-18"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Core profile frozen and orchestration ready."
+    "notes": "Core profile frozen and orchestration ready.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V26",
@@ -78,7 +87,10 @@
       "tests/kernel.test.mjs:1-25"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Lifecycle state model implemented."
+    "notes": "Lifecycle state model implemented.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V27",
@@ -99,7 +111,10 @@
       "tests/kernel.test.mjs:7-25"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Planning precondition enforced."
+    "notes": "Planning precondition enforced.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V28",
@@ -121,7 +136,10 @@
       "src/adapter.ts:ToolAdapterRegistry"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Registry and capability resolver implemented."
+    "notes": "Registry and capability resolver implemented.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V29",
@@ -141,7 +159,10 @@
       "src/dispatch.ts:preflightDispatch"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Preflight eligibility checks active."
+    "notes": "Preflight eligibility checks active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V30",
@@ -161,7 +182,10 @@
       "src/dispatch.ts:preflightDispatch"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Deterministic routing active."
+    "notes": "Deterministic routing active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V31",
@@ -179,7 +203,10 @@
       "src/dispatch.ts:preflightDispatch"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Dispatch gate active."
+    "notes": "Dispatch gate active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V32",
@@ -197,7 +224,10 @@
       "src/executor.ts:executeOnce"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Single attempt execution contract active."
+    "notes": "Single attempt execution contract active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V33",
@@ -215,7 +245,10 @@
       "src/retry.ts:executeWithRetryAndFallback"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Bounded retry policy active."
+    "notes": "Bounded retry policy active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V34",
@@ -236,7 +269,10 @@
       "src/retry.ts:executeWithRetryAndFallback"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Non-retryable mutation safety active."
+    "notes": "Non-retryable mutation safety active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V35",
@@ -254,7 +290,10 @@
       "src/retry.ts:executeWithRetryAndFallback"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Controlled fallback active."
+    "notes": "Controlled fallback active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V36",
@@ -272,7 +311,10 @@
       "src/scheduler.ts:executeWorkflow"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Sequential workflow engine active."
+    "notes": "Sequential workflow engine active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V37",
@@ -290,7 +332,10 @@
       "src/parallel.ts:analyzeConcurrencyConflicts"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Concurrency conflict analysis active."
+    "notes": "Concurrency conflict analysis active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V38",
@@ -308,7 +353,10 @@
       "src/parallel.ts:executeParallelGroup"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Bounded parallel execution engine active."
+    "notes": "Bounded parallel execution engine active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V39",
@@ -326,7 +374,10 @@
       "src/resource-scheduler.ts:DeterministicResourceScheduler"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Deterministic resource scheduler active."
+    "notes": "Deterministic resource scheduler active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V40",
@@ -348,7 +399,10 @@
       "src/resource-scheduler.ts:run"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Orchestration band closure verified."
+    "notes": "Orchestration band closure verified.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V41",
@@ -369,7 +423,10 @@
       "src/evidence-system.ts:EvidenceGraph"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Evidence IR model active."
+    "notes": "Evidence IR model active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V42",
@@ -387,7 +444,10 @@
       "src/evidence-system.ts:SourceTrustGrade"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Source grading active."
+    "notes": "Source grading active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V43",
@@ -405,7 +465,10 @@
       "src/evidence-system.ts:ClaimRecord"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Claim extraction model active."
+    "notes": "Claim extraction model active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V44",
@@ -423,7 +486,10 @@
       "src/acceptance.ts:evaluateAcceptance"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Claim sufficiency verification active."
+    "notes": "Claim sufficiency verification active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V45",
@@ -441,7 +507,10 @@
       "src/evidence-system.ts:EvidenceGraph.addRelation"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Contradiction graph active."
+    "notes": "Contradiction graph active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V46",
@@ -459,7 +528,10 @@
       "src/evidence-system.ts:reconcileEvidenceConflicts"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Conflict reconciliation active."
+    "notes": "Conflict reconciliation active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V47",
@@ -477,7 +549,10 @@
       "src/evidence-system.ts:reconcileEvidenceConflicts"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Confidence calibration active."
+    "notes": "Confidence calibration active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V48",
@@ -495,7 +570,10 @@
       "src/evidence-system.ts:detectConflicts"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Conflict tracking active."
+    "notes": "Conflict tracking active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V49",
@@ -515,7 +593,10 @@
       "tests/evidence-security.test.mjs:1-30"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Verification regression harness active."
+    "notes": "Verification regression harness active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V50",
@@ -535,7 +616,10 @@
       "src/kernel.ts:verify"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Evidence-aware mission acceptance active."
+    "notes": "Evidence-aware mission acceptance active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V51",
@@ -553,7 +637,10 @@
       "src/status.ts:promoteStatus"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Verification policy profile active."
+    "notes": "Verification policy profile active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V52",
@@ -571,7 +658,10 @@
       "src/acceptance.ts:evaluateAcceptance"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Decision thresholds active."
+    "notes": "Decision thresholds active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V53",
@@ -589,7 +679,10 @@
       "src/evidence-system.ts:VerificationTrace"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Explainability trace active."
+    "notes": "Explainability trace active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V54",
@@ -608,7 +701,10 @@
       "tests/p3-adversarial-security.test.mjs:10-35"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Adversarial evidence testing active."
+    "notes": "Adversarial evidence testing active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V55",
@@ -627,7 +723,10 @@
       "src/evidence-system.ts:reconcileEvidenceConflicts"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Evidence band closure active."
+    "notes": "Evidence band closure active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V56",
@@ -648,7 +747,10 @@
       "src/memory-system.ts:ContextEntry"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Typed memory objects active."
+    "notes": "Typed memory objects active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V57",
@@ -666,7 +768,10 @@
       "src/memory-system.ts:ContextCarrier"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Context carrier active."
+    "notes": "Context carrier active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V58",
@@ -684,7 +789,10 @@
       "src/memory-system.ts:createCheckpoint"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Checkpoint & resume active."
+    "notes": "Checkpoint & resume active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V59",
@@ -702,7 +810,10 @@
       "src/memory-system.ts:assembleWorkingSet"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Context compression active."
+    "notes": "Context compression active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V60",
@@ -720,7 +831,10 @@
       "src/context.ts:assembleContext"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Stale state detection active."
+    "notes": "Stale state detection active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V61",
@@ -738,7 +852,10 @@
       "src/context.ts:assembleContext"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Conflict aware retrieval active."
+    "notes": "Conflict aware retrieval active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V62",
@@ -756,7 +873,10 @@
       "src/memory-system.ts:MemoryTier"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Memory tiering active."
+    "notes": "Memory tiering active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V63",
@@ -774,7 +894,10 @@
       "src/memory.ts:MemoryRepository.addRecord"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Memory provenance active."
+    "notes": "Memory provenance active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V64",
@@ -792,7 +915,10 @@
       "src/memory.ts:MemoryRepository.correctRecord"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Corrections & tombstones active."
+    "notes": "Corrections & tombstones active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V65",
@@ -810,7 +936,10 @@
       "src/memory-system.ts:exportSnapshot"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Cross-session migration active."
+    "notes": "Cross-session migration active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V66",
@@ -828,7 +957,10 @@
       "src/memory-system.ts:assembleWorkingSet"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Context budgeting active."
+    "notes": "Context budgeting active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V67",
@@ -846,7 +978,10 @@
       "src/memory-system.ts:assembleWorkingSet"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Deterministic working set active."
+    "notes": "Deterministic working set active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V68",
@@ -864,7 +999,10 @@
       "src/memory-system.ts:createCheckpoint"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Resume drift reconciliation active."
+    "notes": "Resume drift reconciliation active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V69",
@@ -886,7 +1024,10 @@
       "tests/p7-memory-context.test.mjs:1-28"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Memory regression harness active."
+    "notes": "Memory regression harness active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V70",
@@ -905,7 +1046,10 @@
       "src/memory-system.ts:ContextCarrier"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Memory band closure active."
+    "notes": "Memory band closure active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V71",
@@ -923,7 +1067,10 @@
       "src/specialist.ts:SpecialistDefinition"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Base specialist framework active."
+    "notes": "Base specialist framework active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V72",
@@ -941,7 +1088,10 @@
       "src/specialist.ts:SpecialistRole.RESEARCH"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Research specialist active."
+    "notes": "Research specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V73",
@@ -959,7 +1109,10 @@
       "src/specialist.ts:SpecialistRole.SOFTWARE_ENGINEERING"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Software engineering specialist active."
+    "notes": "Software engineering specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V74",
@@ -977,7 +1130,10 @@
       "src/specialist.ts:SpecialistRole.ARCHITECTURE"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Architecture specialist active."
+    "notes": "Architecture specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V75",
@@ -995,7 +1151,10 @@
       "src/specialist.ts:SpecialistRole.SECURITY"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Security specialist active."
+    "notes": "Security specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V76",
@@ -1013,7 +1172,10 @@
       "src/specialist.ts:SpecialistRole.BUSINESS"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Business specialist active."
+    "notes": "Business specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V77",
@@ -1031,7 +1193,10 @@
       "src/specialist.ts:SpecialistRole.CONTENT"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Content specialist active."
+    "notes": "Content specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V78",
@@ -1049,7 +1214,10 @@
       "src/specialist.ts:SpecialistRole.MARKETING"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Marketing specialist active."
+    "notes": "Marketing specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V79",
@@ -1067,7 +1235,10 @@
       "src/specialist.ts:SpecialistRole.AUTOMATION"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Automation specialist active."
+    "notes": "Automation specialist active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V80",
@@ -1085,7 +1256,10 @@
       "src/specialist.ts:executeSpecialistHandoff"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Specialist handoffs active."
+    "notes": "Specialist handoffs active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V81",
@@ -1103,7 +1277,10 @@
       "src/specialist.ts:findEligibleSpecialist"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Specialist capability eligibility active."
+    "notes": "Specialist capability eligibility active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V82",
@@ -1121,7 +1298,10 @@
       "src/specialist.ts:executeSpecialistHandoff"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Bounded specialist collaboration active."
+    "notes": "Bounded specialist collaboration active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V83",
@@ -1139,7 +1319,10 @@
       "src/specialist.ts:executeSpecialistHandoff"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Domain policies active."
+    "notes": "Domain policies active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V84",
@@ -1157,7 +1340,10 @@
       "tests/p8-specialist-runtime.test.mjs:1-48"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Specialist regression harness active."
+    "notes": "Specialist regression harness active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V85",
@@ -1175,7 +1361,10 @@
       "src/specialist.ts:SpecialistRegistry"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Specialist band closure active."
+    "notes": "Specialist band closure active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V86",
@@ -1194,7 +1383,10 @@
       "src/recovery-runtime.ts:FailureCategory"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Failure classification active."
+    "notes": "Failure classification active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V87",
@@ -1212,7 +1404,10 @@
       "src/recovery-runtime.ts:compileRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Recovery plan compilation active."
+    "notes": "Recovery plan compilation active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V88",
@@ -1230,7 +1425,10 @@
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Compensating actions active."
+    "notes": "Compensating actions active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V89",
@@ -1248,7 +1446,10 @@
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Partial state restoration active."
+    "notes": "Partial state restoration active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V90",
@@ -1266,7 +1467,10 @@
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Degraded mode operation active."
+    "notes": "Degraded mode operation active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V91",
@@ -1284,7 +1488,10 @@
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Human intervention gates active."
+    "notes": "Human intervention gates active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V92",
@@ -1302,7 +1509,10 @@
       "src/recovery-runtime.ts:compileRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Minimal repair selection active."
+    "notes": "Minimal repair selection active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V93",
@@ -1320,7 +1530,10 @@
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Resumable recovery history active."
+    "notes": "Resumable recovery history active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V94",
@@ -1338,7 +1551,10 @@
       "tests/p9-failure-recovery.test.mjs:1-41"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Failure injection testing active."
+    "notes": "Failure injection testing active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V95",
@@ -1356,7 +1572,10 @@
       "src/recovery-runtime.ts:executeRecoveryPlan"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Recovery band closure active."
+    "notes": "Recovery band closure active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V96",
@@ -1374,7 +1593,10 @@
       "src/index.ts:1-20"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Surface minimization active."
+    "notes": "Surface minimization active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V97",
@@ -1393,7 +1615,10 @@
       "src/errors.ts:ShortcutOSError"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Ambiguity hardening active."
+    "notes": "Ambiguity hardening active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V98",
@@ -1413,7 +1638,10 @@
       "tests/conformance-runner.test.mjs:1-40"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Whole system invariant closure active."
+    "notes": "Whole system invariant closure active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V99",
@@ -1433,7 +1661,10 @@
       "cli.mjs:self-check"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Canonical manifest lock active."
+    "notes": "Canonical manifest lock active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   },
   {
     "version": "V100",
@@ -1452,6 +1683,9 @@
       "audit/reports/conformance-final-report.json"
     ],
     "status": "IMPLEMENTED_AND_RUNTIME_TESTED",
-    "notes": "Canonical integration certification active."
+    "notes": "Canonical integration certification active.",
+    "implementation_status": "IMPLEMENTED_AND_RUNTIME_TESTED",
+    "source_files": [],
+    "test_files": []
   }
 ]

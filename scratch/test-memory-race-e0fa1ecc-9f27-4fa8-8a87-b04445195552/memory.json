@@ -1,0 +1,17 @@
+[
+  {
+    "eventId": "evt-1",
+    "type": "PUT",
+    "record": {
+      "id": "rec-1",
+      "key": "user.preference",
+      "value": "dark-mode",
+      "freshness": "FRESH",
+      "priority": 10,
+      "provenance": {
+        "kind": "user-input",
+        "ref": "ui-settings"
+      }
+    }
+  }
+]

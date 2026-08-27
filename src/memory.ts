@@ -54,7 +54,9 @@ export type MemoryJournalEvent =
 export type MemoryTextStore = {
   read(): Promise<string | null>;
   write(text: string): Promise<void>;
-  withLock?<T>(fn: () => Promise<T>): Promise<T>;
+  acquireLock?(options?: { ownerToken?: string; leaseMs?: number }): Promise<{ ownerToken: string; release: () => Promise<void> }>;
+  releaseLock?(ownerToken: string): Promise<void>;
+  withLock?<T>(fn: (transaction: { read(): Promise<string | null>; write(text: string): Promise<void> }) => Promise<T>, options?: { leaseMs?: number }): Promise<T>;
 };
 
 export class MemoryRepository {
@@ -66,7 +68,7 @@ export class MemoryRepository {
     return this.currentEvents.length;
   }
 
-  private async executeLocked<T>(fn: () => Promise<T>): Promise<T> {
+  private async executeLocked<T>(fn: (tx?: { read(): Promise<string | null>; write(text: string): Promise<void> }) => Promise<T>): Promise<T> {
     if (typeof this.store.withLock === 'function') {
       return this.store.withLock(fn);
     }
@@ -78,14 +80,14 @@ export class MemoryRepository {
     record: MemoryRecordInput;
     expectedVersion?: number;
   }): Promise<void> {
-    return this.executeLocked(async () => {
+    return this.executeLocked(async (tx) => {
       this.validateRecordInput(input.record, input.eventId);
-      const events = await this.loadEvents();
+      const events = await this.loadEvents(tx);
       this.checkConcurrency(events, input.expectedVersion, input.eventId);
       this.assertUniqueEvent(events, input.eventId);
       this.assertUniqueRecord(events, input.record.id);
       events.push({ eventId: input.eventId, type: MemoryEventType.PUT, record: structuredClone(input.record) });
-      await this.saveEvents(events);
+      await this.saveEvents(events, tx);
     });
   }
 
@@ -95,9 +97,9 @@ export class MemoryRepository {
     replacement: MemoryRecordInput;
     expectedVersion?: number;
   }): Promise<void> {
-    return this.executeLocked(async () => {
+    return this.executeLocked(async (tx) => {
       this.validateRecordInput(input.replacement, input.eventId);
-      const events = await this.loadEvents();
+      const events = await this.loadEvents(tx);
       this.checkConcurrency(events, input.expectedVersion, input.eventId);
       this.assertUniqueEvent(events, input.eventId);
       this.assertUniqueRecord(events, input.replacement.id);
@@ -117,7 +119,7 @@ export class MemoryRepository {
         targetId: input.targetId,
         replacement: structuredClone(input.replacement)
       });
-      await this.saveEvents(events);
+      await this.saveEvents(events, tx);
     });
   }
 
@@ -126,8 +128,8 @@ export class MemoryRepository {
     targetId: string;
     expectedVersion?: number;
   }): Promise<void> {
-    return this.executeLocked(async () => {
-      const events = await this.loadEvents();
+    return this.executeLocked(async (tx) => {
+      const events = await this.loadEvents(tx);
       this.checkConcurrency(events, input.expectedVersion, input.eventId);
       this.assertUniqueEvent(events, input.eventId);
       const state = this.replay(events);
@@ -141,7 +143,7 @@ export class MemoryRepository {
         );
       }
       events.push({ eventId: input.eventId, type: MemoryEventType.TOMBSTONE, targetId: input.targetId });
-      await this.saveEvents(events);
+      await this.saveEvents(events, tx);
     });
   }
 
@@ -151,6 +153,10 @@ export class MemoryRepository {
 
   async records(): Promise<MemoryRecordState[]> {
     return [...this.replay(await this.loadEvents()).values()].map((record) => structuredClone(record));
+  }
+
+  async getActiveRecords(): Promise<MemoryRecordState[]> {
+    return (await this.records()).filter((record) => record.status === MemoryRecordStatus.ACTIVE);
   }
 
   async activeContext(): Promise<ContextAssembly> {
@@ -179,8 +185,11 @@ export class MemoryRepository {
     if (!record.freshness || !Object.values(ContextFreshness).includes(record.freshness)) {
       throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record freshness must be a valid ContextFreshness enum value.', 'Provide a valid freshness value.');
     }
-    if (!record.provenance || typeof record.provenance !== 'object' || typeof record.provenance.kind !== 'string' || typeof record.provenance.ref !== 'string') {
-      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record provenance must contain kind and ref strings.', 'Provide valid provenance information.');
+    if (typeof record.priority !== 'number' || Number.isNaN(record.priority)) {
+      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record priority must be a number.', 'Provide a number for record priority.');
+    }
+    if (!record.provenance || typeof record.provenance !== 'object') {
+      throw this.memoryError('MEMORY_SCHEMA_INVALID', eventId, 'Memory record provenance is required.', 'Provide a provenance object.');
     }
   }
 
@@ -195,8 +204,8 @@ export class MemoryRepository {
     }
   }
 
-  private async loadEvents(): Promise<MemoryJournalEvent[]> {
-    const text = await this.store.read();
+  private async loadEvents(tx?: { read(): Promise<string | null>; write(text: string): Promise<void> }): Promise<MemoryJournalEvent[]> {
+    const text = tx ? await tx.read() : await this.store.read();
     if (text === null || text.trim() === '') {
       this.currentEvents = [];
       return [];
@@ -224,9 +233,14 @@ export class MemoryRepository {
     return this.currentEvents;
   }
 
-  private async saveEvents(events: MemoryJournalEvent[]): Promise<void> {
+  private async saveEvents(events: MemoryJournalEvent[], tx?: { read(): Promise<string | null>; write(text: string): Promise<void> }): Promise<void> {
     this.currentEvents = events;
-    await this.store.write(JSON.stringify(events, null, 2));
+    const content = JSON.stringify(events, null, 2);
+    if (tx) {
+      await tx.write(content);
+    } else {
+      await this.store.write(content);
+    }
   }
 
   private replay(events: MemoryJournalEvent[]): Map<string, MemoryRecordState> {

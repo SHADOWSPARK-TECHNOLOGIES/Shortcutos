@@ -7,7 +7,8 @@ import {
   VerificationStatus,
   createEvidenceEnvelope,
   classifyEvidenceAuthenticity,
-  promoteStatus
+  promoteStatus,
+  EvidenceTrustPolicy
 } from '../dist/status.js';
 import { evaluateAcceptance } from '../dist/acceptance.js';
 import { createDispatch, preflightDispatch, DispatchStatus } from '../dist/dispatch.js';
@@ -19,6 +20,7 @@ import { createNodeMemoryTextStore } from '../node-adapters.mjs';
 import { ContextFreshness } from '../dist/context.js';
 
 test('FINDING 1: Untrusted evidence envelope with valid checksum cannot promote to RUNTIME_VERIFIED', () => {
+  const policy = new EvidenceTrustPolicy({ trustedSources: ['trusted-ci-system'] });
   const attackerEnvelope = createEvidenceEnvelope({
     kind: 'security-scan',
     ref: 'repo-root',
@@ -31,15 +33,16 @@ test('FINDING 1: Untrusted evidence envelope with valid checksum cannot promote 
   assert.equal(auth.status, 'AUTHENTICITY_UNKNOWN');
 
   assert.throws(
-    () => promoteStatus(VerificationStatus.DRAFT, VerificationStatus.RUNTIME_VERIFIED, [attackerEnvelope], ['trusted-ci-system']),
-    /UNTRUSTED_EVIDENCE_PROVENANCE|AUTHENTICITY_VERIFICATION_REQUIRED/
+    () => promoteStatus(VerificationStatus.DRAFT, VerificationStatus.RUNTIME_VERIFIED, [attackerEnvelope], policy),
+    (err) => err instanceof Error && err.message.includes('not trusted')
   );
 });
 
 test('FINDING 1: Bare evidence without trusted provenance, ID, timestamp, and integrity cannot pass acceptance', () => {
+  const policy = new EvidenceTrustPolicy({ trustedSources: ['trusted-source'] });
   const bareEvidence = [{ kind: 'criterion', ref: 'build passed' }];
 
-  const result = evaluateAcceptance(['build passed'], bareEvidence, ['trusted-source']);
+  const result = evaluateAcceptance(['build passed'], bareEvidence, policy);
   assert.equal(result.passed, false, 'Bare evidence must not pass acceptance by default');
 });
 

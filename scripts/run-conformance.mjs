@@ -1,20 +1,28 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { runPrimitiveConformance } from './conformance-lib.mjs';
 
 function resolveRepositoryRoot(cwd) {
   try {
-    return execFileSync('git', ['rev-parse', '--show-toplevel'], {
+    const gitRoot = execFileSync('git', ['rev-parse', '--show-toplevel'], {
       cwd,
       encoding: 'utf8'
     }).trim();
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`CONFORMANCE_REPOSITORY_ROOT_UNAVAILABLE: ${message}`);
+    if (existsSync(resolve(gitRoot, 'package.json'))) {
+      return gitRoot;
+    }
+  } catch {}
+
+  const manifestPath = resolve(cwd, 'audit/reports/v100-file-manifest.json');
+  const pkgPath = resolve(cwd, 'package.json');
+  if (existsSync(pkgPath) || existsSync(manifestPath)) {
+    return cwd;
   }
+
+  throw new Error(`CONFORMANCE_REPOSITORY_ROOT_UNAVAILABLE: Directory ${cwd} does not contain ShortcutOS release markers.`);
 }
 
 function parseArgs(argv) {

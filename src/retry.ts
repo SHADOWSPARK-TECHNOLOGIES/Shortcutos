@@ -70,6 +70,13 @@ export async function executeWithRetryAndFallback(
 
   for (let attemptNumber = 1; attemptNumber <= maxAttempts; attemptNumber++) {
     const startTime = Date.now();
+    const preflightOpts = {
+      actorAuthority: options.actorAuthority ?? AuthorityLevel.USER,
+      contextFreshness: options.contextFreshness ?? ContextFreshness.FRESH,
+      hasConflicts: options.hasConflicts ?? false,
+      idempotencyKey: options.idempotencyKey ?? options.dispatch.id
+    };
+
     const currentDispatch = createDispatch(
       {
         id: options.dispatch.id,
@@ -78,21 +85,13 @@ export async function executeWithRetryAndFallback(
         input: options.dispatch.input
       },
       options.adapters,
-      {
-        actorAuthority: options.actorAuthority,
-        contextFreshness: options.contextFreshness,
-        hasConflicts: options.hasConflicts,
-        idempotencyKey: options.idempotencyKey
-      }
+      preflightOpts
     );
 
     const preflight = preflightDispatch({
       dispatch: currentDispatch,
-      actorAuthority: options.actorAuthority,
       adapters: options.adapters,
-      contextFreshness: options.contextFreshness,
-      hasConflicts: options.hasConflicts,
-      idempotencyKey: options.idempotencyKey
+      ...preflightOpts
     });
 
     if (!preflight.eligible) {

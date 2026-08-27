@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shadowspark-tech.org/schemas/shortcutos-v100-conformance-report.schema.json",
+  "title": "ShortcutOS V100 Conformance Review Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "repository_commit",
+    "environment",
+    "build_result",
+    "test_result",
+    "self_check_result",
+    "source_backed_findings",
+    "security_findings",
+    "conformance_coverage",
+    "test_coverage_gaps",
+    "runtime_overclaims",
+    "critical_blockers",
+    "smallest_safe_next_actions",
+    "production_readiness_verdict"
+  ],
+  "properties": {
+    "repository_commit": { "type": "string", "minLength": 1 },
+    "environment": { "type": "object" },
+    "build_result": { "type": "object" },
+    "test_result": { "type": "object" },
+    "self_check_result": { "type": "object" },
+    "source_backed_findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "security_findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "conformance_coverage": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/coverage" }
+    },
+    "test_coverage_gaps": { "type": "array" },
+    "runtime_overclaims": { "type": "array" },
+    "critical_blockers": { "type": "array" },
+    "smallest_safe_next_actions": { "type": "array" },
+    "production_readiness_verdict": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "implementationState": {
+      "type": "string",
+      "enum": [
+        "IMPLEMENTED_AND_RUNTIME_TESTED",
+        "IMPLEMENTED_BUT_UNTESTED",
+        "PARTIALLY_IMPLEMENTED",
+        "DESIGN_ONLY",
+        "NOT_IMPLEMENTED",
+        "BLOCKED",
+        "UNKNOWN"
+      ]
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "summary", "evidence"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "classification": { "$ref": "#/$defs/implementationState" }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "classification", "summary", "evidence"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "classification": { "$ref": "#/$defs/implementationState" },
+        "summary": { "type": "string", "minLength": 1 },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

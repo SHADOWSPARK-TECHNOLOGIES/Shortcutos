@@ -21,7 +21,8 @@ import {
   ContextFreshness,
   VerificationStatus,
   ShortcutOSError,
-  ShortcutOSKernel
+  ShortcutOSKernel,
+  EvidenceTrustPolicy
 } from '../dist/index.js';
 import { createNodeMemoryTextStore } from '../node-adapters.mjs';
 
@@ -56,6 +57,7 @@ test('P0: Trusted typed RuntimeEvidence envelope creation and integrity validati
 });
 
 test('P0: Real acceptance evaluator verifies criteria against validated evidence', () => {
+  const trustPolicy = new EvidenceTrustPolicy({ trustedSources: ['file-system'] });
   const criteria = [
     'file must exist on disk',
     'file size must be greater than zero'
@@ -78,18 +80,17 @@ test('P0: Real acceptance evaluator verifies criteria against validated evidence
     })
   ];
 
-  const evaluation = evaluateAcceptance(criteria, evidence);
+  const evaluation = evaluateAcceptance(criteria, evidence, trustPolicy);
   assert.equal(evaluation.passed, true);
   assert.equal(evaluation.unmetCriteria.length, 0);
-  assert.equal(evaluation.mappedEvidence.length, 2);
 
   // Partial evidence fails acceptance
-  const partialEval = evaluateAcceptance(criteria, [evidence[0]]);
+  const partialEval = evaluateAcceptance(criteria, [evidence[0]], trustPolicy);
   assert.equal(partialEval.passed, false);
   assert.deepEqual(partialEval.unmetCriteria, ['file size must be greater than zero']);
 
   // Empty evidence with non-empty criteria is always false
-  const emptyEval = evaluateAcceptance(criteria, []);
+  const emptyEval = evaluateAcceptance(criteria, [], trustPolicy);
   assert.equal(emptyEval.passed, false);
 });
 
@@ -256,7 +257,7 @@ test('P0: Explicit UNKNOWN-side-effect handling after ambiguous timeout on mutat
     capability: 'remote.transfer',
     adapterId: 'mutating-adapter',
     input: { amount: 100 }
-  }, adapters, { actorAuthority: AuthorityLevel.USER, idempotencyKey: 'idem-123' });
+  }, adapters, { actorAuthority: AuthorityLevel.USER, contextFreshness: ContextFreshness.FRESH, hasConflicts: false, idempotencyKey: 'idem-123' });
 
   const envelope = await executeOnce(dispatch, adapters, { timeoutMs: 40 });
   assert.equal(envelope.status, ExecutionResultStatus.UNKNOWN);

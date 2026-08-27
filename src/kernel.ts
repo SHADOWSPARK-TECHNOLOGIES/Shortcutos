@@ -1,4 +1,5 @@
-import { promoteStatus, type RuntimeEvidence, VerificationStatus } from './status.js';
+import { promoteStatus, type RuntimeEvidence, VerificationStatus, EvidenceTrustPolicy } from './status.js';
+import { evaluateAcceptance } from './acceptance.js';
 import { ShortcutOSError } from './errors.js';
 
 export type RunInput = {
@@ -19,7 +20,12 @@ export type ShortcutRun = {
 
 export class ShortcutOSKernel {
   private readonly runs = new Map<string, ShortcutRun>();
+  private readonly trustPolicy: EvidenceTrustPolicy;
   private sequence = 0;
+
+  constructor(options?: { trustPolicy?: EvidenceTrustPolicy }) {
+    this.trustPolicy = options?.trustPolicy ?? new EvidenceTrustPolicy({ trustedSources: ['system', 'kernel', 'ci-runner'] });
+  }
 
   createRun(input: RunInput): ShortcutRun {
     this.sequence += 1;
@@ -74,7 +80,7 @@ export class ShortcutOSKernel {
     return structuredClone(run);
   }
 
-  verify(runId: string, evidence: RuntimeEvidence[], acceptancePassed: boolean, trustedSources?: string[]): ShortcutRun {
+  verify(runId: string, evidence: RuntimeEvidence[] = []): ShortcutRun {
     const run = this.requireRun(runId);
     if (run.verificationStatus !== VerificationStatus.RUNTIME_EXECUTED) {
       throw new ShortcutOSError({
@@ -85,24 +91,30 @@ export class ShortcutOSKernel {
         safeNextAction: 'Record an actual execution before verifying the run.'
       });
     }
+
     run.evidence.push(...evidence);
-    run.acceptancePassed = acceptancePassed;
-    if (acceptancePassed) {
-      run.verificationStatus = promoteStatus(
-        run.verificationStatus,
-        VerificationStatus.RUNTIME_VERIFIED,
-        run.evidence,
-        trustedSources
-      );
-      run.completed = true;
+    const evaluation = evaluateAcceptance(run.acceptanceCriteria, run.evidence, this.trustPolicy);
+    run.acceptancePassed = evaluation.passed;
+
+    if (evaluation.passed) {
+      try {
+        run.verificationStatus = promoteStatus(
+          run.verificationStatus,
+          VerificationStatus.RUNTIME_VERIFIED,
+          run.evidence,
+          this.trustPolicy
+        );
+        run.completed = true;
+      } catch {
+        run.verificationStatus = VerificationStatus.RUNTIME_EXECUTED;
+        run.acceptancePassed = false;
+        run.completed = false;
+      }
     } else {
       run.completed = false;
     }
-    return structuredClone(run);
-  }
 
-  getRun(runId: string): ShortcutRun {
-    return structuredClone(this.requireRun(runId));
+    return structuredClone(run);
   }
 
   private requireRun(runId: string): ShortcutRun {
@@ -110,10 +122,10 @@ export class ShortcutOSKernel {
     if (!run) {
       throw new ShortcutOSError({
         code: 'RUN_NOT_FOUND',
-        message: `No run exists with id ${runId}.`,
+        message: `Run '${runId}' does not exist.`,
         scope: runId,
         retryable: false,
-        safeNextAction: 'Create a run before operating on it.'
+        safeNextAction: 'Create a run before accessing it.'
       });
     }
     return run;
