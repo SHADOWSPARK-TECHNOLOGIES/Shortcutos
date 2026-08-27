@@ -53,9 +53,25 @@ export function createLocalFileReadAdapter({ id, root }) {
 
       const rootReal = await realpath(root);
       const requested = resolve(rootReal, input.path);
+
+      const relRequested = relative(rootReal, requested);
+      if (
+        relRequested === '..' ||
+        relRequested.startsWith('..\\') ||
+        relRequested.startsWith('../') ||
+        isAbsolute(relRequested)
+      ) {
+        throw new Error('Requested path resolves outside configured root.');
+      }
+
       const targetReal = await realpath(requested);
       const rel = relative(rootReal, targetReal);
-      if (rel === '..' || rel.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(rel)) {
+      if (
+        rel === '..' ||
+        rel.startsWith('..\\') ||
+        rel.startsWith('../') ||
+        isAbsolute(rel)
+      ) {
         throw new Error('Requested path resolves outside configured root.');
       }
 

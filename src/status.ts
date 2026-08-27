@@ -116,6 +116,14 @@ export function promoteStatus(
   if (target === VerificationStatus.RUNTIME_VERIFIED && evidence.length === 0) {
     throw new Error('RUNTIME_EVIDENCE_REQUIRED');
   }
+
+  for (const item of evidence) {
+    const val = validateEvidenceEnvelope(item);
+    if (!val.valid) {
+      throw new Error(`INVALID_EVIDENCE_ENVELOPE: ${val.error}`);
+    }
+  }
+
   if (current === VerificationStatus.UNKNOWN && target === VerificationStatus.RUNTIME_VERIFIED && evidence.length === 0) {
     return VerificationStatus.UNKNOWN;
   }
