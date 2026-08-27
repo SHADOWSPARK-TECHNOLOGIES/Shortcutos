@@ -1,4 +1,4 @@
-﻿import type { RuntimeEvidence } from './status.js';
+import type { RuntimeEvidence } from './status.js';
 import { AuthorityLevel, canOverride } from './authority.js';
 
 export enum AdapterAvailability {
@@ -23,8 +23,8 @@ export enum SideEffectClass {
 }
 
 export type ToolInvocationOptions = {
-  timeoutMs?: number;
-  abortSignal?: AbortSignal;
+  timeoutMs?: number | undefined;
+  abortSignal?: AbortSignal | undefined;
 };
 
 export type ToolInvocationResult = {

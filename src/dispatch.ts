@@ -1,4 +1,4 @@
-﻿import { AdapterAvailability, SideEffectClass, type ToolAdapterRegistry } from './adapter.js';
+import { AdapterAvailability, SideEffectClass, type ToolAdapterRegistry } from './adapter.js';
 import { AuthorityLevel } from './authority.js';
 import { ContextFreshness } from './context.js';
 
@@ -22,11 +22,11 @@ export type DispatchRequest = DispatchInput & {
 
 export type DispatchPreflightInput = {
   dispatch: DispatchInput;
-  actorAuthority?: AuthorityLevel;
-  adapters?: ToolAdapterRegistry;
-  contextFreshness?: ContextFreshness;
-  hasConflicts?: boolean;
-  idempotencyKey?: string | null;
+  actorAuthority?: AuthorityLevel | undefined;
+  adapters?: ToolAdapterRegistry | undefined;
+  contextFreshness?: ContextFreshness | undefined;
+  hasConflicts?: boolean | undefined;
+  idempotencyKey?: string | null | undefined;
 };
 
 export type DispatchPreflightResult = {
