@@ -12,7 +12,8 @@ export enum ExecutionResultStatus {
   SUCCEEDED = 'SUCCEEDED',
   FAILED = 'FAILED',
   UNKNOWN = 'UNKNOWN',
-  NOT_PERFORMED = 'NOT_PERFORMED'
+  NOT_PERFORMED = 'NOT_PERFORMED',
+  SKIPPED = 'SKIPPED'
 }
 
 export enum SideEffectClass {
