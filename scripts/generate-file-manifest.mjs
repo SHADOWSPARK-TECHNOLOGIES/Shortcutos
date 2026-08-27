@@ -43,8 +43,10 @@ const manifest = {
 
 for (const relPath of fileList) {
   const fullPath = resolve(rootDir, relPath);
-  const buf = readFileSync(fullPath);
-  const hash = createHash('sha256').update(buf).digest('hex');
+  const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
+  const buffer = readFileSync(fullPath);
+  const content = isText ? buffer.toString('utf8').replace(/\r\n/g, '\n') : buffer;
+  const hash = createHash('sha256').update(content).digest('hex');
   manifest.files[relPath] = hash;
 }
 
