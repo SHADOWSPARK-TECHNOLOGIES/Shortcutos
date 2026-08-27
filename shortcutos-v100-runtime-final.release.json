@@ -1,8 +1,8 @@
 {
   "version": "V100",
   "tag": "shortcutos-v100.0.0",
-  "commit": "1185434adc2077e13d578639021023b1cd2d7390",
-  "tag_commit": "1185434adc2077e13d578639021023b1cd2d7390",
+  "commit": "96df96cae364893431ce2234f4676131833dd420",
+  "tag_commit": "96df96cae364893431ce2234f4676131833dd420",
   "head_equals_tag": true,
   "build": "PASS",
   "self_check": "PASS",
@@ -10,9 +10,9 @@
   "canonical_trace": "PASS",
   "release_zip": {
     "filename": "shortcutos-v100-runtime-final.zip",
-    "size_bytes": 305079,
-    "sha256": "3e6554a53a2f7304ba19d84e0f484a86c2541377649e0decd47d65c624d234bc"
+    "size_bytes": 310715,
+    "sha256": "27cad3bcf8edfba34e58da24346d121c15bba511b5ecacd2f976ef79822a5d68"
   },
   "verdict": "FROZEN_VERIFIED_LOCAL_CANONICAL_RELEASE",
-  "generated_at": "2026-08-27T11:37:24.114Z"
+  "generated_at": "2026-08-27T11:38:03.388Z"
 }

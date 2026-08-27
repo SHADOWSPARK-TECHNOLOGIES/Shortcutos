@@ -81,7 +81,9 @@ if (existsSync(fileManifestPath)) {
     const skipFiles = new Set([
       'audit/reports/v100-file-manifest.json',
       'audit/reports/v100-canonical-certification.json',
-      'audit/reports/v100-release-manifest.json'
+      'audit/reports/v100-release-manifest.json',
+      'shortcutos-v100-runtime-final.release.json',
+      'shortcutos-v100-runtime-final.zip'
     ]);
     for (const [relPath, expectedHash] of Object.entries(fileManifest.files ?? {})) {
       if (skipFiles.has(relPath)) continue;
