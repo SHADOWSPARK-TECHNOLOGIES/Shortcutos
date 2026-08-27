@@ -13,15 +13,22 @@ export function createNodeMemoryTextStore(filePath) {
 
   const lockPath = `${filePath}.lock`;
 
-  async function acquireLock(maxRetries = 50, delayMs = 10) {
+  async function acquireLock(maxRetries = 200, delayMs = 10) {
     for (let i = 0; i < maxRetries; i++) {
       try {
         await mkdir(dirname(filePath), { recursive: true });
-        // Use wx flag (fail if exists) for atomic file creation
-        const handle = await writeFile(lockPath, String(process.pid), { flag: 'wx' });
+        await writeFile(lockPath, String(process.pid), { flag: 'wx' });
         return;
       } catch (err) {
         if (err && (err.code === 'EEXIST' || err.code === 'EPERM')) {
+          // Check for stale lock (> 3 seconds old)
+          try {
+            const { stat } = await import('node:fs/promises');
+            const s = await stat(lockPath);
+            if (Date.now() - s.mtimeMs > 3000) {
+              await rm(lockPath, { force: true });
+            }
+          } catch {}
           await new Promise((r) => setTimeout(r, delayMs));
           continue;
         }
@@ -63,6 +70,14 @@ export function createNodeMemoryTextStore(filePath) {
         const temporary = `${filePath}.tmp-${process.pid}-${randomUUID()}`;
         await writeFile(temporary, text, 'utf8');
         await rename(temporary, filePath);
+      } finally {
+        await releaseLock();
+      }
+    },
+    async withLock(fn) {
+      await acquireLock();
+      try {
+        return await fn();
       } finally {
         await releaseLock();
       }

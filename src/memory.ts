@@ -54,6 +54,7 @@ export type MemoryJournalEvent =
 export type MemoryTextStore = {
   read(): Promise<string | null>;
   write(text: string): Promise<void>;
+  withLock?<T>(fn: () => Promise<T>): Promise<T>;
 };
 
 export class MemoryRepository {
@@ -65,18 +66,27 @@ export class MemoryRepository {
     return this.currentEvents.length;
   }
 
+  private async executeLocked<T>(fn: () => Promise<T>): Promise<T> {
+    if (typeof this.store.withLock === 'function') {
+      return this.store.withLock(fn);
+    }
+    return fn();
+  }
+
   async put(input: {
     eventId: string;
     record: MemoryRecordInput;
     expectedVersion?: number;
   }): Promise<void> {
-    this.validateRecordInput(input.record, input.eventId);
-    const events = await this.loadEvents();
-    this.checkConcurrency(events, input.expectedVersion, input.eventId);
-    this.assertUniqueEvent(events, input.eventId);
-    this.assertUniqueRecord(events, input.record.id);
-    events.push({ eventId: input.eventId, type: MemoryEventType.PUT, record: structuredClone(input.record) });
-    await this.saveEvents(events);
+    return this.executeLocked(async () => {
+      this.validateRecordInput(input.record, input.eventId);
+      const events = await this.loadEvents();
+      this.checkConcurrency(events, input.expectedVersion, input.eventId);
+      this.assertUniqueEvent(events, input.eventId);
+      this.assertUniqueRecord(events, input.record.id);
+      events.push({ eventId: input.eventId, type: MemoryEventType.PUT, record: structuredClone(input.record) });
+      await this.saveEvents(events);
+    });
   }
 
   async correct(input: {
@@ -85,28 +95,30 @@ export class MemoryRepository {
     replacement: MemoryRecordInput;
     expectedVersion?: number;
   }): Promise<void> {
-    this.validateRecordInput(input.replacement, input.eventId);
-    const events = await this.loadEvents();
-    this.checkConcurrency(events, input.expectedVersion, input.eventId);
-    this.assertUniqueEvent(events, input.eventId);
-    this.assertUniqueRecord(events, input.replacement.id);
-    const state = this.replay(events);
-    const target = state.get(input.targetId);
-    if (!target || target.status !== MemoryRecordStatus.ACTIVE) {
-      throw this.memoryError(
-        'MEMORY_CORRECTION_TARGET_INVALID',
-        input.targetId,
-        'Only an active memory record can be corrected.',
-        'Select an active memory record before applying a correction.'
-      );
-    }
-    events.push({
-      eventId: input.eventId,
-      type: MemoryEventType.SUPERSEDE,
-      targetId: input.targetId,
-      replacement: structuredClone(input.replacement)
+    return this.executeLocked(async () => {
+      this.validateRecordInput(input.replacement, input.eventId);
+      const events = await this.loadEvents();
+      this.checkConcurrency(events, input.expectedVersion, input.eventId);
+      this.assertUniqueEvent(events, input.eventId);
+      this.assertUniqueRecord(events, input.replacement.id);
+      const state = this.replay(events);
+      const target = state.get(input.targetId);
+      if (!target || target.status !== MemoryRecordStatus.ACTIVE) {
+        throw this.memoryError(
+          'MEMORY_CORRECTION_TARGET_INVALID',
+          input.targetId,
+          'Only an active memory record can be corrected.',
+          'Select an active memory record before applying a correction.'
+        );
+      }
+      events.push({
+        eventId: input.eventId,
+        type: MemoryEventType.SUPERSEDE,
+        targetId: input.targetId,
+        replacement: structuredClone(input.replacement)
+      });
+      await this.saveEvents(events);
     });
-    await this.saveEvents(events);
   }
 
   async tombstone(input: {
@@ -114,21 +126,23 @@ export class MemoryRepository {
     targetId: string;
     expectedVersion?: number;
   }): Promise<void> {
-    const events = await this.loadEvents();
-    this.checkConcurrency(events, input.expectedVersion, input.eventId);
-    this.assertUniqueEvent(events, input.eventId);
-    const state = this.replay(events);
-    const target = state.get(input.targetId);
-    if (!target || target.status !== MemoryRecordStatus.ACTIVE) {
-      throw this.memoryError(
-        'MEMORY_TOMBSTONE_TARGET_INVALID',
-        input.targetId,
-        'Only an active memory record can be tombstoned.',
-        'Select an active memory record before tombstoning it.'
-      );
-    }
-    events.push({ eventId: input.eventId, type: MemoryEventType.TOMBSTONE, targetId: input.targetId });
-    await this.saveEvents(events);
+    return this.executeLocked(async () => {
+      const events = await this.loadEvents();
+      this.checkConcurrency(events, input.expectedVersion, input.eventId);
+      this.assertUniqueEvent(events, input.eventId);
+      const state = this.replay(events);
+      const target = state.get(input.targetId);
+      if (!target || target.status !== MemoryRecordStatus.ACTIVE) {
+        throw this.memoryError(
+          'MEMORY_TOMBSTONE_TARGET_INVALID',
+          input.targetId,
+          'Only an active memory record can be tombstoned.',
+          'Select an active memory record before tombstoning it.'
+        );
+      }
+      events.push({ eventId: input.eventId, type: MemoryEventType.TOMBSTONE, targetId: input.targetId });
+      await this.saveEvents(events);
+    });
   }
 
   async history(): Promise<MemoryJournalEvent[]> {
