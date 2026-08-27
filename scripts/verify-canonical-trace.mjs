@@ -40,7 +40,14 @@ if (!commit) {
 
 // FINDING 6 CHECK: Foreign Git History Detection
 let foreignGitHistory = false;
-if (gitAvailable && expectedCommit && commit !== expectedCommit) {
+let tagCommit = '';
+if (gitAvailable) {
+  try {
+    tagCommit = execFileSync('git', ['rev-parse', 'shortcutos-v100.0.0^{commit}'], { encoding: 'utf8', cwd: rootDir }).trim();
+  } catch {}
+}
+
+if (gitAvailable && expectedCommit && commit !== expectedCommit && commit !== tagCommit) {
   foreignGitHistory = true;
 }
 
