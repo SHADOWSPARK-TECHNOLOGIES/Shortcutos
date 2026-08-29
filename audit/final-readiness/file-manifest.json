@@ -1,6 +1,6 @@
 {
   "algorithm": "SHA-256",
-  "generated_at": "2026-08-29T18:45:43.912Z",
+  "generated_at": "2026-08-29T19:01:18.136Z",
   "total_files": 86,
   "files": {
     "package.json": "4efea46dc8012fc1bc34159bd7118370e29e59ab7372df37e06a4e71d63e6c1e",
@@ -66,7 +66,7 @@
     "tests/status.test.mjs": "14df4c6980ec5f87a1500056519e040ea2178abdab6c377bad7646304c5c3e75",
     "tests/v100-mandatory-gaps.test.mjs": "5ac542c3dfff5b2ac0dd97e3b4f3719dcbb3f0449ccb24d17b4ddab5909c28ff",
     "scripts/align-inventory-and-trace.mjs": "248d4c5a1fcf61d17ed11c4b4fd1cb90412dfc2baa20b36224d1cb047feb5a3f",
-    "scripts/build-release-zip.mjs": "4421fbbf2f33c8e49ae2c4ef7b12ad71fb618bb453460455cd4ed0b351c98c3f",
+    "scripts/build-release-zip.mjs": "c8b3156997ee53d7b8a66500c7c4e0fb69dc86e5d7eb19a6a60904a8b94b38bd",
     "scripts/conformance-lib.mjs": "8a108b64677821a91cc525d4a9405788f791263b7dbdc0a1492312edb18a09c9",
     "scripts/conformance-schema.mjs": "46820b69ffcf25b04fb1272bb65a80033d79619ffc1740507b6bc136a4c3c21a",
     "scripts/generate-file-manifest.mjs": "3d3c2c0ac47805edb5de66b862637ae0066ec6be8dd701cc92382cd174828142",
