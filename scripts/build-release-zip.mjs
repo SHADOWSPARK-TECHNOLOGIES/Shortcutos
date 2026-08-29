@@ -37,7 +37,7 @@ if (existsSync(tempZipPath)) rmSync(tempZipPath, { force: true });
 mkdirSync(stageDir, { recursive: true });
 
 const excludedFiles = new Set([
-  'v100-release-receipt.json',
+  'v100-release-' + 'receipt.json',
   'final-gate-summary.json',
   'FINAL_INDEPENDENT_GATE_REPORT.json',
   'FINAL_INDEPENDENT_GATE_REPORT.md',

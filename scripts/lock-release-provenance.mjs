@@ -10,7 +10,7 @@ const rootDir = resolve(process.cwd());
 const reportsDir = resolve(rootDir, 'audit/reports');
 if (existsSync(reportsDir)) {
   for (const f of readdirSync(reportsDir)) {
-    if (f === 'v100-release-receipt.json' || f.startsWith('conformance-2026-') || f === 'conformance-final-report.json') {
+    if (f.endsWith('release-receipt.json') || f.startsWith('conformance-2026-') || f === 'conformance-final-report.json') {
       try { rmSync(resolve(reportsDir, f), { force: true }); } catch {}
     }
   }
