@@ -36,18 +36,33 @@ if (existsSync(tempZipPath)) rmSync(tempZipPath, { force: true });
 
 mkdirSync(stageDir, { recursive: true });
 
+const excludedFiles = new Set([
+  'v100-release-receipt.json',
+  'final-gate-summary.json',
+  'FINAL_INDEPENDENT_GATE_REPORT.json',
+  'FINAL_INDEPENDENT_GATE_REPORT.md',
+  'FINAL_READINESS_SUMMARY.md',
+  'github-status.md',
+  'release-artifacts.md',
+  'standalone-extract-log.md',
+  'synthetic-git-rejection-log.md',
+  'verification-log.md',
+  'conformance-final-report.json'
+]);
+
 function copyFiltered(src, dest) {
   const stat = statSync(src);
   if (stat.isDirectory()) {
     mkdirSync(dest, { recursive: true });
     for (const child of readdirSync(src)) {
       if (child.endsWith('.log')) continue; // Skip live locked transcript logs
-      if (child === 'v100-release-receipt.json' || child.startsWith('conformance-2026-') || child === 'conformance-final-report.json') continue; // Skip stale/ephemeral files
+      if (child.startsWith('conformance-2026-')) continue; // Skip ephemeral conformance dumps
+      if (excludedFiles.has(child)) continue;
       copyFiltered(join(src, child), join(dest, child));
     }
   } else {
     const filename = src.split(/[\\/]/).pop();
-    if (!filename.endsWith('.log') && filename !== 'v100-release-receipt.json' && !filename.startsWith('conformance-2026-') && filename !== 'conformance-final-report.json') {
+    if (!filename.endsWith('.log') && !filename.startsWith('conformance-2026-') && !excludedFiles.has(filename)) {
       copyFileSync(src, dest);
     }
   }

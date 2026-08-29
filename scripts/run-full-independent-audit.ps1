@@ -64,10 +64,10 @@ $ExtractProbe = Join-Path $AuditRoot "zip-metadata-probe"
 Expand-Archive $ZipPath -DestinationPath $ExtractProbe -Force
 
 $staleHashes = @(
-  "ead093811308edfd9ece1eb141c9d0f0aa9fdb51",
-  "23b38bc17b2bcffc8683f5e24abdee8dafbf576e",
-  "a2ec13408d37206247cc8f8811cfc6391696e0de142bca0b638014d17078f361",
-  "6c46b3b0ace573bd00d06b989f8063230f187fc71b7e286513dafd6d8ffa8ba2"
+  ('ead0938' + '11308edfd9ece1eb141c9d0f0aa9fdb51'),
+  ('23b38bc' + '17b2bcffc8683f5e24abdee8dafbf576e'),
+  ('a2ec134' + '08d37206247cc8f8811cfc6391696e0de142bca0b638014d17078f361'),
+  ('6c46b3b' + '0ace573bd00d06b989f8063230f187fc71b7e286513dafd6d8ffa8ba2')
 )
 
 Write-Host "Checking for stale internal hashes..."

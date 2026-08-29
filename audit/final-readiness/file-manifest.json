@@ -1,6 +1,6 @@
 {
   "algorithm": "SHA-256",
-  "generated_at": "2026-08-29T18:30:01.218Z",
+  "generated_at": "2026-08-29T18:43:43.028Z",
   "total_files": 86,
   "files": {
     "package.json": "4efea46dc8012fc1bc34159bd7118370e29e59ab7372df37e06a4e71d63e6c1e",
@@ -66,7 +66,7 @@
     "tests/status.test.mjs": "14df4c6980ec5f87a1500056519e040ea2178abdab6c377bad7646304c5c3e75",
     "tests/v100-mandatory-gaps.test.mjs": "5ac542c3dfff5b2ac0dd97e3b4f3719dcbb3f0449ccb24d17b4ddab5909c28ff",
     "scripts/align-inventory-and-trace.mjs": "248d4c5a1fcf61d17ed11c4b4fd1cb90412dfc2baa20b36224d1cb047feb5a3f",
-    "scripts/build-release-zip.mjs": "a84f04dc9c7a77e5c9ba58e7cf68bfc0ab3cb44f379ef3e263aa13a54fb57abe",
+    "scripts/build-release-zip.mjs": "3b6ab65fc8b14cb51a819b250f61fa5789ed85be627a2f0f181ed58182a63523",
     "scripts/conformance-lib.mjs": "8a108b64677821a91cc525d4a9405788f791263b7dbdc0a1492312edb18a09c9",
     "scripts/conformance-schema.mjs": "46820b69ffcf25b04fb1272bb65a80033d79619ffc1740507b6bc136a4c3c21a",
     "scripts/generate-file-manifest.mjs": "3d3c2c0ac47805edb5de66b862637ae0066ec6be8dd701cc92382cd174828142",
@@ -76,9 +76,9 @@
     "scripts/push-to-github.ps1": "ed4c62f50621059e84e736cf7e2da9a27fc1a1aa95ec6871cd378b2adbf2c1b1",
     "scripts/remote-clone-verify.ps1": "63f0d3a702edda3f1bbde78ca721d4badc41c6451a1172ae648611313722fe0f",
     "scripts/run-conformance.mjs": "80c0cd612c8baf2aaa06417dce530c7b73fb04cfe46055c42a8c163b3922295e",
-    "scripts/run-full-independent-audit.ps1": "3eb02c1cfd88f7fb8413a9c35dec26027476a8175c1c69f2cba862e5657438e9",
+    "scripts/run-full-independent-audit.ps1": "1738f43d83786b400bca08330c6a11b62d98d5d4f429e1ff3398b9ec9a7536bf",
     "scripts/run-github-automation.ps1": "eb660327032bb1f0ee857a314111f9bf185f701d7485d775b7451ff8f40ca211",
-    "scripts/run-independent-audit.ps1": "2c9bb7a2d6b1a27f168cd692063be4f3dfb8ff9243654ef3f1c5979e484aea83",
+    "scripts/run-independent-audit.ps1": "bc228e20c15949924a67ff65438b63fa87be5b5577c63adecf3973d6f26f8705",
     "scripts/update-contract-inventory.mjs": "fa36528eff7806070dc707d0471337892da4f4486054fd7bc8c5bc96caa4e461",
     "scripts/verify-canonical-trace.mjs": "accb3e98c5ded9d396d7d946bface223cf1b9d3eea8c04fcf504bc62fc52b7bf",
     "scripts/write-summary.mjs": "172e5917383bb259f8765a888fcf6e7f056d4f986deab638ded539d154e528de",

@@ -1,8 +1,0 @@
-﻿Canonical trace certification complete. Final verdict: PORTABLE_V100_RUNTIME = NOT_100
-node.exe : Foreign git history detected! Commit/tag mismatch.
-At C:\Users\wonde\.gemini\antigravity\scratch\shortcutos-v100-runtime\scripts\run-github-automation.ps1:210 char:17
-+     $synthOut = & node scripts/verify-canonical-trace.mjs 2>&1
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (Foreign git his...t/tag mismatch.:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 

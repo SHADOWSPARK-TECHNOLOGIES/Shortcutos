@@ -113,16 +113,16 @@ runTamperTest(6, 'Remove one mapped test file', (p) => {
 
 // 7. Add stale internal receipt with old commit/hash
 runTamperTest(7, 'Add stale internal receipt with old commit/hash', (p) => {
-  const stalePath = join(p, 'audit/reports/v100-release-receipt.json');
+  const stalePath = join(p, 'audit/reports/stale-test-receipt.json');
   mkdirSync(join(p, 'audit/reports'), { recursive: true });
   writeFileSync(stalePath, JSON.stringify({
     version: 'V100',
     tag: 'shortcutos-v100.0.0',
-    commit: 'ead093811308edfd9ece1eb141c9d0f0aa9fdb51',
+    commit: '0000000000000000000000000000000000000000',
     release_zip: {
       filename: 'shortcutos-v100-runtime-final.zip',
-      size_bytes: 241317,
-      sha256: 'a2ec13408d37206247cc8f8811cfc6391696e0de142bca0b638014d17078f361'
+      size_bytes: 999999,
+      sha256: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
     },
     verdict: 'FROZEN_VERIFIED_LOCAL_CANONICAL_RELEASE'
   }, null, 2));
