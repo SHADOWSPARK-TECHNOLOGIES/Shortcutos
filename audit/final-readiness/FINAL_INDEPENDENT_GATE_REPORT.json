@@ -1,0 +1,48 @@
+﻿{
+    "release_zip":  {
+                        "size_bytes":  156676,
+                        "sha256":  "347bf78ae2a67683505f9eb231772b67fd1fa86e14ceea145cf7fcb341784991",
+                        "filename":  "shortcutos-v100-runtime-final.zip"
+                    },
+    "head_equals_tag":  true,
+    "canonical_claim":  "PORTABLE_V100_RUNTIME = 100/100 VERIFIED_LOCAL_CANONICAL_CONFORMANCE",
+    "remaining_blockers":  [
+
+                           ],
+    "clone_path":  "C:\\Users\\wonde\\AppData\\Local\\Temp\\shortcutos-v100-final-independent-audit-5483bdd772e7435fb9e4424f19a37d8f\\repo",
+    "gates":  {
+                  "synthetic_git_rejected":  "PASS",
+                  "npm_test":  "PASS (128/128)",
+                  "build":  "PASS",
+                  "canonical_trace":  "PASS (100/100)",
+                  "standalone_no_git_zip":  "PASS",
+                  "provenance_tamper":  "PASS (9/9 1-9)",
+                  "adversarial_probes":  "PASS (11/11 A-K)",
+                  "self_check":  "PASS",
+                  "conformance":  "PASS (128/128)"
+              },
+    "repository_url":  "https://github.com/SHADOWSPARK-TECHNOLOGIES/Shortcutos.git",
+    "tag_commit":  "f66a8c6b6369568e92f9d0fbe23809a18c78a598",
+    "internal_metadata_clean":  true,
+    "audit_timestamp":  "2026-08-29T17:14:38Z",
+    "external_receipt":  {
+                             "version":  "V100",
+                             "tag":  "shortcutos-v100.0.0",
+                             "commit":  "f66a8c6b6369568e92f9d0fbe23809a18c78a598",
+                             "tag_commit":  "f66a8c6b6369568e92f9d0fbe23809a18c78a598",
+                             "head_equals_tag":  true,
+                             "build":  "PASS",
+                             "self_check":  "PASS",
+                             "conformance":  "PASS",
+                             "canonical_trace":  "PASS",
+                             "release_zip":  {
+                                                 "filename":  "shortcutos-v100-runtime-final.zip",
+                                                 "size_bytes":  156676,
+                                                 "sha256":  "347bf78ae2a67683505f9eb231772b67fd1fa86e14ceea145cf7fcb341784991"
+                                             },
+                             "verdict":  "FROZEN_VERIFIED_LOCAL_CANONICAL_RELEASE",
+                             "generated_at":  "2026-08-29T16:14:49.930Z"
+                         },
+    "head_commit":  "f66a8c6b6369568e92f9d0fbe23809a18c78a598",
+    "final_verdict":  "FROZEN_VERIFIED_LOCAL_CANONICAL_RELEASE"
+}
