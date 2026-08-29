@@ -9,7 +9,8 @@ function resolveRepositoryRoot(cwd) {
   try {
     const gitRoot = execFileSync('git', ['rev-parse', '--show-toplevel'], {
       cwd,
-      encoding: 'utf8'
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore']
     }).trim();
     if (existsSync(resolve(gitRoot, 'package.json'))) {
       return gitRoot;

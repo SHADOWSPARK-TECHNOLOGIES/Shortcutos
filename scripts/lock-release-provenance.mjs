@@ -35,7 +35,10 @@ function runCmd(command, args) {
 }
 
 // Get current commit
-const currentCommit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', cwd: rootDir }).trim();
+let currentCommit = 'RELEASE_COMMIT';
+try {
+  currentCommit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', cwd: rootDir, stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+} catch {}
 const nodeVersion = process.version;
 const npmVersion = execFileSync('npm', ['--version'], { encoding: 'utf8', cwd: rootDir }).trim();
 

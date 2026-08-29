@@ -6,7 +6,7 @@ import { parseNodeTestSummary, classifyTestResult } from './conformance-lib.mjs'
 
 function resolveRoot(cwd) {
   try {
-    const gitRoot = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8' }).trim();
+    const gitRoot = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
     if (existsSync(resolve(gitRoot, 'package.json'))) {
       return gitRoot;
     }
@@ -28,7 +28,7 @@ let commit = '';
 let gitAvailable = true;
 
 try {
-  commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', cwd: rootDir }).trim();
+  commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', cwd: rootDir, stdio: ['pipe', 'pipe', 'ignore'] }).trim();
 } catch {
   gitAvailable = false;
 }
@@ -62,10 +62,13 @@ let foreignGitHistory = false;
 let tagCommit = '';
 if (gitAvailable) {
   try {
-    tagCommit = execFileSync('git', ['rev-parse', 'shortcutos-v100.0.0^{commit}'], { encoding: 'utf8', cwd: rootDir }).trim();
+    tagCommit = execFileSync('git', ['rev-parse', 'shortcutos-v100.0.0^{commit}'], { encoding: 'utf8', cwd: rootDir, stdio: ['pipe', 'pipe', 'ignore'] }).trim();
   } catch {}
 
   if (tagCommit && commit !== tagCommit) {
+    foreignGitHistory = true;
+  }
+  if (expectedCommit && expectedCommit !== 'RELEASE_STANDALONE_ZIP' && expectedCommit !== 'RELEASE_COMMIT' && commit !== expectedCommit) {
     foreignGitHistory = true;
   }
 }

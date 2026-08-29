@@ -1,13 +1,14 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync, writeFileSync, existsSync, rmSync, copyFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { resolve, relative, join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 const rootDir = resolve(process.cwd());
 const zipPath = resolve(rootDir, 'shortcutos-v100-runtime-final.zip');
 const receiptPath = resolve(rootDir, 'shortcutos-v100-runtime-final.release.json');
 
-const filesToInclude = [
+const topLevelItems = [
   'src',
   'tests',
   'scripts',
@@ -26,9 +27,55 @@ const filesToInclude = [
 ].filter(f => existsSync(resolve(rootDir, f)));
 
 console.log('Creating release ZIP archive via PowerShell Compress-Archive...');
-const psCommand = `Compress-Archive -Path ${filesToInclude.map(f => `'${f}'`).join(',')} -DestinationPath '${zipPath}' -Force`;
+
+const stageDir = resolve(tmpdir(), `shortcutos-stage-${Date.now()}`);
+const tempZipPath = resolve(tmpdir(), `shortcutos-v100-${Date.now()}.zip`);
+
+if (existsSync(stageDir)) rmSync(stageDir, { recursive: true, force: true });
+if (existsSync(tempZipPath)) rmSync(tempZipPath, { force: true });
+
+mkdirSync(stageDir, { recursive: true });
+
+function copyFiltered(src, dest) {
+  const stat = statSync(src);
+  if (stat.isDirectory()) {
+    mkdirSync(dest, { recursive: true });
+    for (const child of readdirSync(src)) {
+      if (child.endsWith('.log')) continue; // Skip live locked transcript logs
+      copyFiltered(join(src, child), join(dest, child));
+    }
+  } else {
+    if (!src.endsWith('.log')) {
+      copyFileSync(src, dest);
+    }
+  }
+}
+
+for (const item of topLevelItems) {
+  const srcPath = resolve(rootDir, item);
+  const destPath = resolve(stageDir, item);
+  copyFiltered(srcPath, destPath);
+}
+
+const psCommand = `Compress-Archive -Path '${join(stageDir, '*')}' -DestinationPath '${tempZipPath}' -Force`;
 
 execFileSync('powershell', ['-Command', psCommand], { encoding: 'utf8' });
+
+for (let attempt = 1; attempt <= 10; attempt++) {
+  try {
+    if (existsSync(zipPath)) {
+      rmSync(zipPath, { force: true });
+    }
+    copyFileSync(tempZipPath, zipPath);
+    break;
+  } catch (err) {
+    if (attempt === 10) throw err;
+    execFileSync('powershell', ['-Command', 'Start-Sleep -Milliseconds 500']);
+  }
+}
+
+rmSync(stageDir, { recursive: true, force: true });
+rmSync(tempZipPath, { force: true });
 
 const zipContent = readFileSync(zipPath);
 const zipSha256 = createHash('sha256').update(zipContent).digest('hex');
@@ -41,8 +88,8 @@ let commit = 'RELEASE_COMMIT';
 let tagCommit = 'TAG_COMMIT';
 
 try {
-  commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', cwd: rootDir }).trim();
-  tagCommit = execFileSync('git', ['rev-parse', 'shortcutos-v100.0.0^{commit}'], { encoding: 'utf8', cwd: rootDir }).trim();
+  commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8', cwd: rootDir, stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+  tagCommit = execFileSync('git', ['rev-parse', 'shortcutos-v100.0.0^{commit}'], { encoding: 'utf8', cwd: rootDir, stdio: ['pipe', 'pipe', 'ignore'] }).trim();
 } catch {}
 
 const externalReceipt = {
