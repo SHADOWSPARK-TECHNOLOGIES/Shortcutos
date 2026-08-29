@@ -104,6 +104,7 @@ $ZipExtract = Join-Path $AuditRoot "fresh-zip-extract-no-git"
 New-Item -ItemType Directory -Path $ZipExtract -Force | Out-Null
 Expand-Archive $ZipPath -DestinationPath $ZipExtract -Force
 Copy-Item $ReceiptPath -Destination $ZipExtract -Force
+Copy-Item $ZipPath -Destination $ZipExtract -Force
 Set-Location $ZipExtract
 
 $gitToplevel = ""

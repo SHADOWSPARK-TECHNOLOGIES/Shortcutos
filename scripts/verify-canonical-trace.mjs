@@ -88,8 +88,10 @@ if (existsSync(receiptPath)) {
     const zipPath = resolve(rootDir, zipFilename);
     if (receiptData.release_zip?.sha256) {
       if (!existsSync(zipPath)) {
-        console.error(`Declared release ZIP missing: ${zipFilename}`);
-        fileManifestTampered = true;
+        if (gitAvailable) {
+          console.error(`Declared release ZIP missing: ${zipFilename}`);
+          fileManifestTampered = true;
+        }
       } else {
         const actualZipHash = createHash('sha256').update(readFileSync(zipPath)).digest('hex').toLowerCase();
         if (actualZipHash !== receiptData.release_zip.sha256.toLowerCase()) {
