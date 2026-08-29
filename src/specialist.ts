@@ -11,11 +11,17 @@ export enum SpecialistRole {
   AUTOMATION = 'AUTOMATION'
 }
 
+export type DomainContract = {
+  kind: string;
+  requirements: string[];
+};
+
 export type DomainSpecialist = {
   role: SpecialistRole;
   requiredCapabilities: string[];
   capabilities: string[];
   minAuthorityLevel: AuthorityLevel;
+  domainContract: DomainContract;
 };
 
 const DOMAIN_CAPABILITIES: Record<SpecialistRole, string[]> = {
@@ -29,13 +35,29 @@ const DOMAIN_CAPABILITIES: Record<SpecialistRole, string[]> = {
   [SpecialistRole.AUTOMATION]: ['script.orchestrate', 'workflow.automate']
 };
 
+const DOMAIN_CONTRACT_KINDS: Record<SpecialistRole, string> = {
+  [SpecialistRole.RESEARCH]: 'ResearchTaskContract',
+  [SpecialistRole.SOFTWARE_ENGINEERING]: 'CodeContextContract',
+  [SpecialistRole.ARCHITECTURE]: 'ArchitectureDecision',
+  [SpecialistRole.SECURITY]: 'SecurityScope',
+  [SpecialistRole.BUSINESS]: 'BusinessObjective',
+  [SpecialistRole.CONTENT]: 'CreativeBrief',
+  [SpecialistRole.MARKETING]: 'AudienceModel',
+  [SpecialistRole.AUTOMATION]: 'WorkflowContract'
+};
+
 export function createSpecialist(role: SpecialistRole): DomainSpecialist {
   const caps = DOMAIN_CAPABILITIES[role] ?? ['generic.execute'];
+  const kind = DOMAIN_CONTRACT_KINDS[role] ?? 'GenericDomainContract';
   return {
     role,
     requiredCapabilities: [...caps],
     capabilities: [...caps],
-    minAuthorityLevel: AuthorityLevel.SHORTCUTOS
+    minAuthorityLevel: AuthorityLevel.SHORTCUTOS,
+    domainContract: {
+      kind,
+      requirements: [...caps]
+    }
   };
 }
 
@@ -104,6 +126,12 @@ export function executeSpecialistHandoff(
     const fromSpec = arg1 as DomainSpecialist;
     const toSpec = arg2 as DomainSpecialist;
     const payload = (arg3 ?? {}) as Record<string, unknown>;
+
+    if (payload.restrictedOperation || payload.sideEffectBoundary) {
+      if (payload.restrictedOperation === 'BYPASS_AUTH' || payload.sideEffectBoundary === 'READ_ONLY') {
+        throw new Error(`DOMAIN_POLICY_CONFLICT: Handing off restricted operation ${payload.restrictedOperation} violates domain policy boundary.`);
+      }
+    }
 
     const taskCap = typeof payload.task === 'string' && payload.task.includes('security') ? 'security.audit' : undefined;
     if (taskCap && !toSpec.capabilities.includes(taskCap)) {

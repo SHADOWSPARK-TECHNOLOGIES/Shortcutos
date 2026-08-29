@@ -8,6 +8,24 @@ export enum DispatchStatus {
   BLOCKED = 'BLOCKED'
 }
 
+export const PREFLIGHT_AUTH_SYMBOL = Symbol('PREFLIGHT_AUTH_SYMBOL');
+
+export type PreflightAuthorization = {
+  dispatchId: string;
+  timestamp: string;
+  signature: string;
+  [PREFLIGHT_AUTH_SYMBOL]: boolean;
+};
+
+export function createPreflightAuthorization(dispatchId: string): PreflightAuthorization {
+  return {
+    dispatchId,
+    timestamp: new Date().toISOString(),
+    signature: `auth-${dispatchId}-${Date.now()}`,
+    [PREFLIGHT_AUTH_SYMBOL]: true
+  };
+}
+
 export type DispatchInput = {
   id: string;
   capability: string;
@@ -18,6 +36,7 @@ export type DispatchInput = {
 export type DispatchRequest = DispatchInput & {
   status: DispatchStatus;
   blockReason: string | null;
+  authorization?: PreflightAuthorization | undefined;
 };
 
 export type DispatchPreflightInput = {
@@ -159,6 +178,7 @@ export function createDispatch(
   return {
     ...input,
     status: DispatchStatus.READY_FOR_EXECUTION,
-    blockReason: null
+    blockReason: null,
+    authorization: createPreflightAuthorization(input.id)
   };
 }

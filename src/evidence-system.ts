@@ -12,11 +12,29 @@ export type SourceRecord = {
   grade: SourceTrustGrade;
 };
 
+export type ClaimType =
+  | 'fact'
+  | 'forecast'
+  | 'opinion'
+  | 'recommendation'
+  | 'definition'
+  | 'causal'
+  | 'numeric'
+  | 'comparative';
+
 export type ClaimRecord = {
   id: string;
   statement: string;
   sourceId: string;
   confidence: number;
+  claimType?: ClaimType | string | undefined;
+  subject?: string | undefined;
+  predicate?: string | undefined;
+  qualifier?: string | undefined;
+  quantifier?: string | undefined;
+  temporalScope?: string | undefined;
+  geographicScope?: string | undefined;
+  fingerprint?: string | undefined;
 };
 
 export type EvidenceRelationType = 'SUPPORTS' | 'CONTRADICTS';
@@ -138,7 +156,7 @@ export function reconcileEvidenceConflicts(graph: EvidenceGraph): Reconciliation
         timestamp: now,
         claimId: claimA.id,
         action: 'REJECTED',
-        reason: `Outranked by claim ${claimB.id}`
+        reason: `Outranked by claim ${claimA.id}`
       });
     }
   }
@@ -150,6 +168,16 @@ export function reconcileEvidenceConflicts(graph: EvidenceGraph): Reconciliation
   };
 }
 
+function computeFingerprint(statement: string, type?: string, subject?: string): string {
+  const raw = `${type ?? 'fact'}:${subject ?? 'general'}:${statement}`;
+  let hash = 0;
+  for (let i = 0; i < raw.length; i++) {
+    hash = (hash << 5) - hash + raw.charCodeAt(i);
+    hash |= 0;
+  }
+  return `fp-${Math.abs(hash).toString(16)}`;
+}
+
 export function extractClaimsFromEvidence(envelope: RuntimeEvidence): ClaimRecord[] {
   const claims: ClaimRecord[] = [];
   const sourceId = envelope.source || envelope.id || 'unknown-source';
@@ -157,26 +185,64 @@ export function extractClaimsFromEvidence(envelope: RuntimeEvidence): ClaimRecor
 
   if (Array.isArray(payload.findings)) {
     payload.findings.forEach((finding: unknown, index: number) => {
-      claims.push({
-        id: `claim-${envelope.id}-${index}`,
-        statement: String(finding),
-        sourceId,
-        confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5
-      });
+      if (typeof finding === 'object' && finding !== null) {
+        const item = finding as Record<string, unknown>;
+        const statement = String(item.statement ?? item.finding ?? JSON.stringify(item));
+        const claimType = String(item.claimType ?? item.type ?? 'fact');
+        const subject = typeof item.subject === 'string' ? item.subject : undefined;
+        const predicate = typeof item.predicate === 'string' ? item.predicate : undefined;
+        const quantifier = typeof item.quantifier === 'string' ? item.quantifier : undefined;
+        const fingerprint = computeFingerprint(statement, claimType, subject);
+
+        claims.push({
+          id: `claim-${envelope.id}-${index}`,
+          statement,
+          sourceId,
+          confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5,
+          claimType,
+          subject,
+          predicate,
+          quantifier,
+          fingerprint
+        });
+      } else {
+        const statement = String(finding);
+        const claimType = statement.toLowerCase().includes('recommend')
+          ? 'recommendation'
+          : statement.match(/\d+/)
+          ? 'numeric'
+          : 'fact';
+        claims.push({
+          id: `claim-${envelope.id}-${index}`,
+          statement,
+          sourceId,
+          confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5,
+          claimType,
+          fingerprint: computeFingerprint(statement, claimType)
+        });
+      }
     });
   } else if (typeof payload.message === 'string') {
+    const statement = payload.message;
+    const claimType = 'fact';
     claims.push({
       id: `claim-${envelope.id}-0`,
-      statement: payload.message,
+      statement,
       sourceId,
-      confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5
+      confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5,
+      claimType,
+      fingerprint: computeFingerprint(statement, claimType)
     });
   } else {
+    const statement = `${envelope.kind} evaluated on ${envelope.ref}`;
+    const claimType = 'fact';
     claims.push({
       id: `claim-${envelope.id}-0`,
-      statement: `${envelope.kind} evaluated on ${envelope.ref}`,
+      statement,
       sourceId,
-      confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5
+      confidence: envelope.integrity === 'checksum-valid' ? 1.0 : 0.5,
+      claimType,
+      fingerprint: computeFingerprint(statement, claimType)
     });
   }
 

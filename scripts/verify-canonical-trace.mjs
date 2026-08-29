@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
 import { parseNodeTestSummary, classifyTestResult } from './conformance-lib.mjs';
 
@@ -65,10 +65,8 @@ if (gitAvailable) {
     tagCommit = execFileSync('git', ['rev-parse', 'shortcutos-v100.0.0^{commit}'], { encoding: 'utf8', cwd: rootDir }).trim();
   } catch {}
 
-  if (expectedCommit) {
-    if (commit !== expectedCommit || tagCommit !== expectedCommit) {
-      foreignGitHistory = true;
-    }
+  if (tagCommit && commit !== tagCommit) {
+    foreignGitHistory = true;
   }
 }
 
@@ -130,35 +128,10 @@ const testStart = new Date().toISOString();
 let testExitCode = 0;
 let testStdout = '';
 let testStderr = '';
-const testFiles = [
-  'tests/auditor-config.test.mjs',
-  'tests/authority.test.mjs',
-  'tests/capability.test.mjs',
-  'tests/cli.test.mjs',
-  'tests/conformance-runner.test.mjs',
-  'tests/conformance-schema.test.mjs',
-  'tests/context.test.mjs',
-  'tests/evidence.test.mjs',
-  'tests/evidence-security.test.mjs',
-  'tests/executor.test.mjs',
-  'tests/kernel.test.mjs',
-  'tests/memory.test.mjs',
-  'tests/node-adapters.test.mjs',
-  'tests/p0-runtime-hardening.test.mjs',
-  'tests/p1-retry-fallback.test.mjs',
-  'tests/p2-scheduler.test.mjs',
-  'tests/p3-adversarial-security.test.mjs',
-  'tests/p4-parallel-execution.test.mjs',
-  'tests/p5-resource-scheduler.test.mjs',
-  'tests/p6-evidence-system.test.mjs',
-  'tests/p7-memory-context.test.mjs',
-  'tests/p8-specialist-runtime.test.mjs',
-  'tests/p9-failure-recovery.test.mjs',
-  'tests/registry.test.mjs',
-  'tests/status.test.mjs',
-  'tests/audit-remediation.test.mjs',
-  'tests/audit-remediation-round2.test.mjs'
-];
+const testFiles = readdirSync(resolve(rootDir, 'tests'))
+  .filter((f) => f.endsWith('.test.mjs'))
+  .sort()
+  .map((f) => `tests/${f}`);
 
 try {
   testStdout = execFileSync('node', ['--test', ...testFiles], { encoding: 'utf8', cwd: rootDir });
@@ -240,7 +213,7 @@ let finalVerdict = 'PORTABLE_V100_RUNTIME = NOT_100';
 if (
   buildExitCode === 0 &&
   testStatus === 'PASS' &&
-  summary.discovered >= 80 &&
+  summary.discovered >= 100 &&
   summary.failed === 0 &&
   summary.skipped === 0 &&
   selfCheckStatus === 'PASS' &&

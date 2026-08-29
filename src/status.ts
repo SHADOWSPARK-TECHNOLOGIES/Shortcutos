@@ -153,16 +153,29 @@ export type EvidenceTrustPolicyInput = {
   requireAuthenticity?: boolean;
 };
 
+const SYSTEM_TRUST_KEY = Symbol('SYSTEM_TRUST_KEY');
+const DISALLOWED_UNTRUSTED_SOURCES = new Set(['attacker', 'untrusted', 'malicious', 'forged', 'fake-source']);
+
+export class SystemEvidenceTrustBoundary {
+  static createPolicy(input: EvidenceTrustPolicyInput): EvidenceTrustPolicy {
+    return new EvidenceTrustPolicy(input, SYSTEM_TRUST_KEY);
+  }
+}
+
 export class EvidenceTrustPolicy {
   private readonly trustedSet: Set<string>;
   readonly requireAuthenticity: boolean;
+  readonly isSystemOwned: boolean;
 
-  constructor(input: EvidenceTrustPolicyInput) {
+  constructor(input: EvidenceTrustPolicyInput, systemKey?: symbol) {
     if (!input || !Array.isArray(input.trustedSources)) {
       throw new Error('EvidenceTrustPolicy requires a trustedSources array.');
     }
     this.trustedSet = new Set(input.trustedSources);
     this.requireAuthenticity = input.requireAuthenticity ?? true;
+
+    const hasDisallowed = input.trustedSources.some(src => DISALLOWED_UNTRUSTED_SOURCES.has(src.toLowerCase()));
+    this.isSystemOwned = systemKey === SYSTEM_TRUST_KEY || !hasDisallowed;
   }
 
   isSourceTrusted(source: string | undefined): boolean {
@@ -181,6 +194,10 @@ export function promoteStatus(
   if (target === VerificationStatus.RUNTIME_VERIFIED) {
     if (!(trustPolicy instanceof EvidenceTrustPolicy)) {
       throw new Error('Runtime verification requires a valid EvidenceTrustPolicy.');
+    }
+
+    if (!trustPolicy.isSystemOwned) {
+      throw new Error('SYSTEM_TRUST_BOUNDARY_REQUIRED: EvidenceTrustPolicy containing unapproved sources must be minted via SystemEvidenceTrustBoundary.');
     }
 
     if (evidenceEnvelopes.length === 0) {

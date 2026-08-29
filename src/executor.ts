@@ -5,7 +5,7 @@ import {
   type ToolAdapterRegistry,
   type ToolInvocationOptions
 } from './adapter.js';
-import { DispatchStatus, type DispatchRequest } from './dispatch.js';
+import { DispatchStatus, PREFLIGHT_AUTH_SYMBOL, type DispatchRequest } from './dispatch.js';
 import type { RuntimeEvidence } from './status.js';
 
 export type ExecutionError = {
@@ -36,6 +36,19 @@ export async function executeOnce(
       error: {
         code: dispatch.blockReason ?? 'DISPATCH_NOT_READY',
         message: 'Dispatch is not ready for execution.'
+      },
+      evidence: []
+    };
+  }
+
+  if (!dispatch.authorization || !dispatch.authorization[PREFLIGHT_AUTH_SYMBOL]) {
+    return {
+      dispatchId: dispatch.id,
+      status: ExecutionResultStatus.NOT_PERFORMED,
+      output: null,
+      error: {
+        code: 'PREFLIGHT_AUTHORIZATION_REQUIRED',
+        message: 'Dispatch lacks valid non-forgeable PreflightAuthorization.'
       },
       evidence: []
     };

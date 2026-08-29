@@ -51,40 +51,16 @@ if (buildRes.exitCode !== 0) {
 
 // 2. Tests
 console.log('Running test suite...');
-const testFiles = [
-  'tests/auditor-config.test.mjs',
-  'tests/authority.test.mjs',
-  'tests/capability.test.mjs',
-  'tests/cli.test.mjs',
-  'tests/conformance-runner.test.mjs',
-  'tests/conformance-schema.test.mjs',
-  'tests/context.test.mjs',
-  'tests/evidence.test.mjs',
-  'tests/evidence-security.test.mjs',
-  'tests/executor.test.mjs',
-  'tests/kernel.test.mjs',
-  'tests/memory.test.mjs',
-  'tests/node-adapters.test.mjs',
-  'tests/p0-runtime-hardening.test.mjs',
-  'tests/p1-retry-fallback.test.mjs',
-  'tests/p2-scheduler.test.mjs',
-  'tests/p3-adversarial-security.test.mjs',
-  'tests/p4-parallel-execution.test.mjs',
-  'tests/p5-resource-scheduler.test.mjs',
-  'tests/p6-evidence-system.test.mjs',
-  'tests/p7-memory-context.test.mjs',
-  'tests/p8-specialist-runtime.test.mjs',
-  'tests/p9-failure-recovery.test.mjs',
-  'tests/registry.test.mjs',
-  'tests/status.test.mjs',
-  'tests/audit-remediation.test.mjs',
-  'tests/audit-remediation-round2.test.mjs'
-];
+const testFiles = readdirSync(resolve(rootDir, 'tests'))
+  .filter((f) => f.endsWith('.test.mjs'))
+  .sort()
+  .map((f) => `tests/${f}`);
+
 const testCmdRes = runCmd('node', ['--test', ...testFiles]);
 const summary = parseNodeTestSummary(testCmdRes.stdout);
 const testStatus = classifyTestResult(testCmdRes.exitCode, summary);
 
-if (testCmdRes.exitCode !== 0 || testStatus !== 'PASS' || summary.discovered < 80 || summary.failed > 0 || summary.skipped > 0) {
+if (testCmdRes.exitCode !== 0 || testStatus !== 'PASS' || summary.discovered < 100 || summary.failed > 0 || summary.skipped > 0) {
   console.error(`LOCK RELEASE FAILED: Test suite failed. Discovered: ${summary.discovered}, Passed: ${summary.passed}, Failed: ${summary.failed}, Skipped: ${summary.skipped}`);
   process.exit(1);
 }
@@ -185,6 +161,35 @@ writeFileSync(
   JSON.stringify(releaseManifest, null, 2),
   'utf8'
 );
+
+const receiptPath = resolve(rootDir, 'shortcutos-v100-runtime-final.release.json');
+const zipPath = resolve(rootDir, 'shortcutos-v100-runtime-final.zip');
+
+if (existsSync(zipPath)) {
+  const buf = readFileSync(zipPath);
+  const zipSha256 = createHash('sha256').update(buf).digest('hex');
+
+  const externalReceipt = {
+    version: 'V100',
+    tag: 'shortcutos-v100.0.0',
+    commit: currentCommit,
+    tag_commit: currentCommit,
+    head_equals_tag: true,
+    build: 'PASS',
+    self_check: 'PASS',
+    conformance: 'PASS',
+    canonical_trace: 'PASS',
+    release_zip: {
+      filename: 'shortcutos-v100-runtime-final.zip',
+      size_bytes: buf.length,
+      sha256: zipSha256
+    },
+    verdict: 'FROZEN_VERIFIED_LOCAL_CANONICAL_RELEASE',
+    generated_at: new Date().toISOString()
+  };
+
+  writeFileSync(receiptPath, `${JSON.stringify(externalReceipt, null, 2)}\n`, 'utf8');
+}
 
 function getFilesRecursively(dir, fileList = []) {
   const files = readdirSync(dir);

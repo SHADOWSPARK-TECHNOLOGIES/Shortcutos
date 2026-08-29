@@ -1,4 +1,4 @@
-import { promoteStatus, type RuntimeEvidence, VerificationStatus, EvidenceTrustPolicy } from './status.js';
+import { promoteStatus, type RuntimeEvidence, VerificationStatus, EvidenceTrustPolicy, SystemEvidenceTrustBoundary } from './status.js';
 import { evaluateAcceptance } from './acceptance.js';
 import { ShortcutOSError } from './errors.js';
 
@@ -24,7 +24,7 @@ export class ShortcutOSKernel {
   private sequence = 0;
 
   constructor(options?: { trustPolicy?: EvidenceTrustPolicy }) {
-    this.trustPolicy = options?.trustPolicy ?? new EvidenceTrustPolicy({ trustedSources: ['system', 'kernel', 'ci-runner'] });
+    this.trustPolicy = options?.trustPolicy ?? SystemEvidenceTrustBoundary.createPolicy({ trustedSources: ['system', 'kernel', 'ci-runner'] });
   }
 
   createRun(input: RunInput): ShortcutRun {

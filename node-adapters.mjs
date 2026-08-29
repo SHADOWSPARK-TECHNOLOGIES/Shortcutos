@@ -6,6 +6,8 @@ import {
   ExecutionResultStatus
 } from './dist/index.js';
 
+let globalFencingSequence = Date.now();
+
 export function createNodeMemoryTextStore(filePath) {
   if (typeof filePath !== 'string' || filePath.length === 0) {
     throw new TypeError('Memory file path must be a non-empty string.');
@@ -34,10 +36,9 @@ export function createNodeMemoryTextStore(filePath) {
       const existing = await readLockData();
       if (existing) {
         if (existing.ownerToken === ownerToken) {
-          return { ownerToken, release: () => releaseLock(ownerToken) };
+          return { ownerToken, fencingToken: existing.fencingToken, release: () => releaseLock(ownerToken) };
         }
         if (Date.now() > (existing.expiresAt ?? 0)) {
-          // Stale lease expired — clean up safely
           try {
             await rm(lockPath, { force: true });
           } catch {}
@@ -48,14 +49,16 @@ export function createNodeMemoryTextStore(filePath) {
       }
 
       try {
+        const fencingToken = ++globalFencingSequence;
         const payload = JSON.stringify({
           ownerToken,
+          fencingToken,
           pid: process.pid,
           createdAt: Date.now(),
           expiresAt: Date.now() + leaseMs
         });
         await writeFile(lockPath, payload, { flag: 'wx', encoding: 'utf8' });
-        return { ownerToken, release: () => releaseLock(ownerToken) };
+        return { ownerToken, fencingToken, release: () => releaseLock(ownerToken) };
       } catch (err) {
         if (err && (err.code === 'EEXIST' || err.code === 'EPERM')) {
           await new Promise((r) => setTimeout(r, delayMs));
@@ -99,10 +102,30 @@ export function createNodeMemoryTextStore(filePath) {
     }
   }
 
-  async function unlockedWrite(text) {
+  async function unlockedWrite(text, activeOwnerToken, activeFencingToken) {
     if (typeof text !== 'string') {
       throw new TypeError('Memory store writes must be strings.');
     }
+
+    if (activeOwnerToken !== undefined || activeFencingToken !== undefined) {
+      const existing = await readLockData();
+      if (!existing) {
+        const err = new Error(`LOCK_FENCING_STALE: Writer fencing token ${activeFencingToken} is no longer active because lock was released or expired.`);
+        err.code = 'LOCK_FENCING_STALE';
+        throw err;
+      }
+      if (activeFencingToken !== undefined && existing.fencingToken > activeFencingToken) {
+        const err = new Error(`LOCK_FENCING_STALE: Writer fencing token ${activeFencingToken} outranked by active lock fencing token ${existing.fencingToken}`);
+        err.code = 'LOCK_FENCING_STALE';
+        throw err;
+      }
+      if (activeOwnerToken !== undefined && existing.ownerToken !== activeOwnerToken) {
+        const err = new Error(`LOCK_FENCING_STALE: Writer owner token ${activeOwnerToken} no longer matches active lock owner ${existing.ownerToken}`);
+        err.code = 'LOCK_FENCING_STALE';
+        throw err;
+      }
+    }
+
     await mkdir(dirname(filePath), { recursive: true });
     const temporary = `${filePath}.tmp-${process.pid}-${randomUUID()}`;
     await writeFile(temporary, text, 'utf8');
@@ -113,29 +136,27 @@ export function createNodeMemoryTextStore(filePath) {
     acquireLock,
     releaseLock,
     async read() {
-      const token = randomUUID();
-      await acquireLock({ ownerToken: token });
+      const lock = await acquireLock();
       try {
         return await unlockedRead();
       } finally {
-        await releaseLock(token);
+        await releaseLock(lock.ownerToken);
       }
     },
     async write(text) {
-      const token = randomUUID();
-      await acquireLock({ ownerToken: token });
+      const lock = await acquireLock();
       try {
-        await unlockedWrite(text);
+        await unlockedWrite(text, lock.ownerToken, lock.fencingToken);
       } finally {
-        await releaseLock(token);
+        await releaseLock(lock.ownerToken);
       }
     },
     async withLock(fn, options = {}) {
       const ownerToken = options.ownerToken ?? randomUUID();
-      await acquireLock({ ownerToken, leaseMs: options.leaseMs });
+      const lock = await acquireLock({ ownerToken, leaseMs: options.leaseMs });
       const transaction = {
         read: unlockedRead,
-        write: unlockedWrite
+        write: (text) => unlockedWrite(text, lock.ownerToken, lock.fencingToken)
       };
       try {
         return await fn(transaction);
