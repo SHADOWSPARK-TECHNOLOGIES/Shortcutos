@@ -1,10 +1,20 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
 import { parseNodeTestSummary, classifyTestResult } from './conformance-lib.mjs';
 
 const rootDir = resolve(process.cwd());
+
+// Clean up any stale internal receipts or ephemeral conformance runs
+const reportsDir = resolve(rootDir, 'audit/reports');
+if (existsSync(reportsDir)) {
+  for (const f of readdirSync(reportsDir)) {
+    if (f === 'v100-release-receipt.json' || f.startsWith('conformance-2026-') || f === 'conformance-final-report.json') {
+      try { rmSync(resolve(reportsDir, f), { force: true }); } catch {}
+    }
+  }
+}
 
 function runCmd(command, args) {
   const startedAt = new Date().toISOString();

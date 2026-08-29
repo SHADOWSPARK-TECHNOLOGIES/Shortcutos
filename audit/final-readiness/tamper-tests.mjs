@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, statSync, readdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -10,13 +10,28 @@ const rootDir = process.cwd();
 const tamperDir = join(tmpdir(), 'shortcutos-tamper-tests-' + Date.now());
 mkdirSync(tamperDir, { recursive: true });
 
+function copyDir(src, dest) {
+  const stat = statSync(src);
+  if (stat.isDirectory()) {
+    mkdirSync(dest, { recursive: true });
+    for (const child of readdirSync(src)) {
+      if (child === '.git' || child === 'node_modules') continue;
+      copyDir(join(src, child), join(dest, child));
+    }
+  } else {
+    copyFileSync(src, dest);
+  }
+}
+
 function copyWorkspace(dest) {
   if (existsSync(dest)) rmSync(dest, { recursive: true, force: true });
   mkdirSync(dest, { recursive: true });
   execFileSync('git', ['clone', rootDir, dest], { stdio: 'ignore' });
-  copyFileSync(join(rootDir, 'shortcutos-v100-runtime-final.release.json'), join(dest, 'shortcutos-v100-runtime-final.release.json'));
-  if (existsSync(join(rootDir, 'shortcutos-v100-runtime-final.zip'))) {
-    copyFileSync(join(rootDir, 'shortcutos-v100-runtime-final.zip'), join(dest, 'shortcutos-v100-runtime-final.zip'));
+  const items = ['scripts', 'src', 'tests', 'audit', 'shortcutos-v100-runtime-final.release.json', 'shortcutos-v100-runtime-final.zip'];
+  for (const item of items) {
+    const srcPath = join(rootDir, item);
+    const destPath = join(dest, item);
+    if (existsSync(srcPath)) copyDir(srcPath, destPath);
   }
 }
 
@@ -98,11 +113,19 @@ runTamperTest(6, 'Remove one mapped test file', (p) => {
 
 // 7. Add stale internal receipt with old commit/hash
 runTamperTest(7, 'Add stale internal receipt with old commit/hash', (p) => {
-  const stalePath = join(p, 'audit/final-readiness/v100-stale-receipt.json');
-  writeFileSync(stalePath, JSON.stringify({ commit: 'c798538909b130e37edf3d8a85fd840a9c43918b', stale: true }));
-  // Modify src to tamper hash
-  const kernelFile = join(p, 'src/kernel.ts');
-  writeFileSync(kernelFile, readFileSync(kernelFile, 'utf8') + '\n// tamper\n');
+  const stalePath = join(p, 'audit/reports/v100-release-receipt.json');
+  mkdirSync(join(p, 'audit/reports'), { recursive: true });
+  writeFileSync(stalePath, JSON.stringify({
+    version: 'V100',
+    tag: 'shortcutos-v100.0.0',
+    commit: 'ead093811308edfd9ece1eb141c9d0f0aa9fdb51',
+    release_zip: {
+      filename: 'shortcutos-v100-runtime-final.zip',
+      size_bytes: 241317,
+      sha256: 'a2ec13408d37206247cc8f8811cfc6391696e0de142bca0b638014d17078f361'
+    },
+    verdict: 'FROZEN_VERIFIED_LOCAL_CANONICAL_RELEASE'
+  }, null, 2));
 });
 
 // 8. Change tag to foreign commit

@@ -225,7 +225,7 @@ $ReportMd = @"
 - **Clone Path**: `$RepoDir`
 - **HEAD Commit**: `$Head`
 - **Tag Target Commit**: `$TagCommit`
-- **HEAD Equals Tag**: `$HeadEqualsTag`
+- **HEAD Equals Tag**: $HeadEqualsTag
 - **Release ZIP**: `shortcutos-v100-runtime-final.zip` ($ActualZipSize bytes)
 - **Release ZIP SHA-256**: `$ActualZipHash`
 

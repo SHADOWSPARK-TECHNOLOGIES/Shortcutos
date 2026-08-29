@@ -60,7 +60,7 @@ const skipFiles = new Set([
 const fileList = [];
 for (const fp of allFilePaths) {
   const relPath = relative(rootDir, fp).replace(/\\/g, '/');
-  if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-')) continue;
+  if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/') || relPath.startsWith('audit/final-readiness/')) continue;
   fileList.push(relPath);
 }
 fileList.sort();
@@ -73,7 +73,7 @@ const manifest = {
 
 for (const relPath of fileList) {
   const fullPath = resolve(rootDir, relPath);
-  const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
+  const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt') || relPath.endsWith('.ps1') || relPath.endsWith('.yaml') || relPath.endsWith('.yml');
   let hash = '';
   if (isText) {
     const text = readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');

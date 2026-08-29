@@ -42,10 +42,12 @@ function copyFiltered(src, dest) {
     mkdirSync(dest, { recursive: true });
     for (const child of readdirSync(src)) {
       if (child.endsWith('.log')) continue; // Skip live locked transcript logs
+      if (child === 'v100-release-receipt.json' || child.startsWith('conformance-2026-') || child === 'conformance-final-report.json') continue; // Skip stale/ephemeral files
       copyFiltered(join(src, child), join(dest, child));
     }
   } else {
-    if (!src.endsWith('.log')) {
+    const filename = src.split(/[\\/]/).pop();
+    if (!filename.endsWith('.log') && filename !== 'v100-release-receipt.json' && !filename.startsWith('conformance-2026-') && filename !== 'conformance-final-report.json') {
       copyFileSync(src, dest);
     }
   }

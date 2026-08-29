@@ -77,15 +77,23 @@ if (gitAvailable) {
 
 // FINDING E & F CHECK: Validate File Manifest and Release Bundle Hashes against disk files
 let fileManifestTampered = false;
+let staleInternalProvenance = false;
+const staleProvenanceFiles = [];
+
 const fileManifestPath = existsSync(resolve(rootDir, 'audit/final-readiness/file-manifest.json'))
   ? resolve(rootDir, 'audit/final-readiness/file-manifest.json')
   : resolve(rootDir, 'audit/reports/v100-file-manifest.json');
+
+let expectedZipHash = '';
+let expectedZipSize = 0;
 
 if (existsSync(receiptPath)) {
   try {
     const receiptData = JSON.parse(readFileSync(receiptPath, 'utf8'));
     const zipFilename = receiptData.release_zip?.filename || 'shortcutos-v100-runtime-final.zip';
     const zipPath = resolve(rootDir, zipFilename);
+    expectedZipHash = receiptData.release_zip?.sha256 || '';
+    expectedZipSize = receiptData.release_zip?.size_bytes || 0;
     if (receiptData.release_zip?.sha256) {
       if (!existsSync(zipPath)) {
         if (gitAvailable) {
@@ -104,6 +112,57 @@ if (existsSync(receiptPath)) {
     fileManifestTampered = true;
   }
 }
+
+// CRITICAL PROVENANCE CHECK: Scan repository/artifact for any stale internal receipts or contradictory release identities
+function checkInternalProvenance(dir) {
+  let entries = [];
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return;
+  }
+  for (const entry of entries) {
+    const fullPath = resolve(dir, entry.name);
+    const relPath = relative(rootDir, fullPath).replace(/\\/g, '/');
+    if (entry.isDirectory()) {
+      if (['node_modules', '.git', 'dist', 'scratch'].includes(entry.name)) continue;
+      checkInternalProvenance(fullPath);
+    } else if (entry.isFile() && entry.name.endsWith('.json')) {
+      if (relPath === 'shortcutos-v100-runtime-final.release.json') continue;
+      if (relPath.startsWith('tests/')) continue; // Skip test mock fixtures
+      try {
+        const text = readFileSync(fullPath, 'utf8');
+        const data = JSON.parse(text);
+        if (data && typeof data === 'object') {
+          const isReleaseReceipt = data.verdict === 'FROZEN_VERIFIED_LOCAL_CANONICAL_RELEASE' ||
+            (data.version === 'V100' && (data.commit || data.tag_commit || data.release_zip));
+          
+          if (isReleaseReceipt) {
+            if (data.commit && expectedCommit && !['RELEASE_STANDALONE_ZIP', 'RELEASE_COMMIT'].includes(expectedCommit) && data.commit !== expectedCommit) {
+              console.error(`Stale commit in internal release receipt ${relPath}: expected ${expectedCommit}, got ${data.commit}`);
+              staleInternalProvenance = true;
+              staleProvenanceFiles.push(relPath);
+            }
+            if (data.tag_commit && tagCommit && data.tag_commit !== tagCommit) {
+              console.error(`Stale tag_commit in internal release receipt ${relPath}: expected ${tagCommit}, got ${data.tag_commit}`);
+              staleInternalProvenance = true;
+              staleProvenanceFiles.push(relPath);
+            }
+            if (data.release_zip && data.release_zip.sha256 && expectedZipHash) {
+              if (data.release_zip.sha256.toLowerCase() !== expectedZipHash.toLowerCase()) {
+                console.error(`Stale release_zip.sha256 in internal release receipt ${relPath}: expected ${expectedZipHash}, got ${data.release_zip.sha256}`);
+                staleInternalProvenance = true;
+                staleProvenanceFiles.push(relPath);
+              }
+            }
+          }
+        }
+      } catch {}
+    }
+  }
+}
+
+checkInternalProvenance(rootDir);
 
 if (existsSync(fileManifestPath)) {
   try {
@@ -253,6 +312,7 @@ if (
   !hostIntegrated &&
   !foreignGitHistory &&
   !fileManifestTampered &&
+  !staleInternalProvenance &&
   missingFiles.length === 0 &&
   weakTestContracts.length === 0 &&
   runtimeTested === 78 &&
@@ -309,6 +369,8 @@ const certificationOutput = {
   missing_source_files: missingFiles,
   foreign_git_history: foreignGitHistory,
   file_manifest_tampered: fileManifestTampered,
+  stale_internal_provenance: staleInternalProvenance,
+  stale_provenance_files: staleProvenanceFiles,
   final_verdict: finalVerdict
 };
 
@@ -322,6 +384,9 @@ if (foreignGitHistory) {
 if (fileManifestTampered) {
   console.error('File manifest hash mismatch detected!');
 }
+if (staleInternalProvenance) {
+  console.error(`Stale internal release metadata / receipt detected in: ${staleProvenanceFiles.join(', ')}`);
+}
 if (finalVerdict !== 'PORTABLE_V100_RUNTIME = 100/100 VERIFIED_LOCAL_CANONICAL_CONFORMANCE') {
-  process.exitCode = 1;
+  process.exit(1);
 }
