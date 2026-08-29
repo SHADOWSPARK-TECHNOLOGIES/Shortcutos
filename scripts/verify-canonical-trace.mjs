@@ -68,8 +68,10 @@ if (gitAvailable) {
   if (tagCommit && commit !== tagCommit) {
     foreignGitHistory = true;
   }
-  if (expectedCommit && expectedCommit !== 'RELEASE_STANDALONE_ZIP' && expectedCommit !== 'RELEASE_COMMIT' && commit !== expectedCommit) {
-    foreignGitHistory = true;
+  if (expectedCommit && !['RELEASE_STANDALONE_ZIP', 'RELEASE_COMMIT'].includes(expectedCommit)) {
+    if (tagCommit ? tagCommit !== expectedCommit : commit !== expectedCommit) {
+      foreignGitHistory = true;
+    }
   }
 }
 

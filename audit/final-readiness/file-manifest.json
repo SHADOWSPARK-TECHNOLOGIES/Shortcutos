@@ -1,6 +1,6 @@
 {
   "algorithm": "SHA-256",
-  "generated_at": "2026-08-29T15:37:19.948Z",
+  "generated_at": "2026-08-29T15:38:46.122Z",
   "total_files": 87,
   "files": {
     "package.json": "4efea46dc8012fc1bc34159bd7118370e29e59ab7372df37e06a4e71d63e6c1e",
@@ -78,7 +78,7 @@
     "scripts/run-conformance.mjs": "80c0cd612c8baf2aaa06417dce530c7b73fb04cfe46055c42a8c163b3922295e",
     "scripts/run-github-automation.ps1": "eb660327032bb1f0ee857a314111f9bf185f701d7485d775b7451ff8f40ca211",
     "scripts/update-contract-inventory.mjs": "fa36528eff7806070dc707d0471337892da4f4486054fd7bc8c5bc96caa4e461",
-    "scripts/verify-canonical-trace.mjs": "f8fb9eb88ff5b0c139316205aa66e339308cfbeaf5c9f659c20457166356cda0",
+    "scripts/verify-canonical-trace.mjs": "4fe179c49f93be125559f4c844321f1cff23b60ec49ca0c06ecdc76b22a8a616",
     "scripts/write-summary.mjs": "172e5917383bb259f8765a888fcf6e7f056d4f986deab638ded539d154e528de",
     "audit/fixtures/expected-invariants.json": "5dc3f254dcf978763bcf07f6871acc790e21c643155971704f3e623a2499acee",
     "audit/reports/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
