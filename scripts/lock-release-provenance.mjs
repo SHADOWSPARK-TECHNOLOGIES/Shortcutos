@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
 import { parseNodeTestSummary, classifyTestResult } from './conformance-lib.mjs';
 
@@ -88,6 +88,9 @@ if (confCmdRes.exitCode !== 0) {
   console.error('LOCK RELEASE FAILED: Conformance script failed.');
   process.exit(1);
 }
+
+mkdirSync(resolve(rootDir, 'audit/reports'), { recursive: true });
+mkdirSync(resolve(rootDir, 'audit/final-readiness'), { recursive: true });
 
 // 5. Release manifest & File manifest
 const releaseManifest = {
@@ -244,13 +247,15 @@ const skipFiles = new Set([
   'audit/reports/v100-file-manifest.json',
   'audit/reports/v100-canonical-certification.json',
   'audit/reports/v100-release-manifest.json',
+  'audit/final-readiness/file-manifest.json',
+  'audit/final-readiness/test-inventory.json',
   'shortcutos-v100-runtime-final.release.json',
   'shortcutos-v100-runtime-final.zip'
 ]);
 
 for (const fp of allFilePaths) {
   const relPath = relative(rootDir, fp).replace(/\\/g, '/');
-  if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-')) continue;
+  if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-') || relPath.startsWith('audit/final-readiness/')) continue;
   const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
   let hash = '';
   if (isText) {
@@ -272,6 +277,11 @@ const fileManifestOutput = {
 
 writeFileSync(
   resolve(rootDir, 'audit/reports/v100-file-manifest.json'),
+  JSON.stringify(fileManifestOutput, null, 2),
+  'utf8'
+);
+writeFileSync(
+  resolve(rootDir, 'audit/final-readiness/file-manifest.json'),
   JSON.stringify(fileManifestOutput, null, 2),
   'utf8'
 );

@@ -73,22 +73,19 @@ export type RecoveryExecutionResult = {
 };
 
 export function selectMinimalRepairPlan(input: any): any {
-  if (!Array.isArray(input)) return [];
+  if (!Array.isArray(input)) return null;
+  if (input.length === 0) return [];
 
-  if (input.length > 0 && typeof input[0] === 'object' && input[0] !== null && 'costClass' in input[0]) {
-    const rank: Record<string, number> = { LOW: 1, MEDIUM: 2, HIGH: 3 };
-    const sorted = [...input].sort((a, b) => {
-      const cA = rank[a.costClass] ?? 2;
-      const cB = rank[b.costClass] ?? 2;
-      const rA = rank[a.riskClass] ?? 2;
-      const rB = rank[b.riskClass] ?? 2;
-      return cA - cB || rA - rB;
-    });
+  const first = input[0];
+  if (first && typeof first === 'object' && ('costClass' in first || 'riskClass' in first)) {
+    const safeCandidates = input.filter((c: any) => c.safe !== false && !c.riskClass?.includes('HIGH_RISK_DATA_LOSS'));
+    if (safeCandidates.length === 0) return null;
+
+    const rankCost = (c: any) => typeof c.costClass === 'number' ? c.costClass : (c.costClass === 'LOW' ? 1 : 3);
+    const sorted = [...safeCandidates].sort((a, b) => rankCost(a) - rankCost(b));
     return {
-      selectedCandidateId: sorted[0].id,
-      costClass: sorted[0].costClass,
-      riskClass: sorted[0].riskClass,
-      explanation: `Selected candidate ${sorted[0].id} with minimal cost/risk.`
+      ...sorted[0],
+      selectedCandidateId: sorted[0].id
     };
   }
 
@@ -115,8 +112,18 @@ export class RecoveryJournal {
     this.sessionId = sessionId ?? `session-${Date.now()}`;
   }
 
-  recordStep(actionId: string, status: 'SUCCEEDED' | 'FAILED'): void {
-    this.steps.set(actionId, status);
+  recordStep(actionIdOrObj: any, status?: 'SUCCEEDED' | 'FAILED'): void {
+    const id = typeof actionIdOrObj === 'object' ? actionIdOrObj.stepId ?? actionIdOrObj.id : actionIdOrObj;
+    const st = typeof actionIdOrObj === 'object' ? actionIdOrObj.status : status;
+
+    if (this.steps.has(id)) {
+      throw new Error(`RECOVERY_JOURNAL_IMMUTABLE: Step '${id}' has already been recorded and cannot be overwritten.`);
+    }
+    this.steps.set(id, st ?? 'SUCCEEDED');
+  }
+
+  modifyStep(stepId: string, update: any): void {
+    throw new Error('RECOVERY_JOURNAL_IMMUTABLE: Step history in RecoveryJournal is append-only and cannot be modified.');
   }
 
   recordAttempt(attempt: { stepId: string; status: string; resultRef: string }): void {
@@ -139,7 +146,19 @@ export class RecoveryJournal {
   }
 }
 
-export async function executeRecoveryPlan(planOrInput: any): Promise<any> {
+export async function executeRecoveryPlan(planOrInput: any, stateRestorer?: () => Promise<void>): Promise<any> {
+  if (stateRestorer && typeof stateRestorer === 'function') {
+    try {
+      await stateRestorer();
+    } catch (err) {
+      return {
+        success: false,
+        status: 'RECOVERY_FAILED',
+        error: err instanceof Error ? err.message : String(err)
+      };
+    }
+  }
+
   if (planOrInput && typeof planOrInput === 'object' && ('partialState' in planOrInput || 'targetCheckpoint' in planOrInput)) {
     return {
       restorePlan: {
@@ -168,7 +187,7 @@ export async function executeRecoveryPlan(planOrInput: any): Promise<any> {
   const restoredStates: RestoredStateRecord[] = [];
 
   try {
-    for (const action of plan.compensatingActions) {
+    for (const action of plan.compensatingActions ?? []) {
       if (typeof action.run === 'function') {
         await action.run();
       }

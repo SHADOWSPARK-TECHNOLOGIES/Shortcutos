@@ -114,6 +114,11 @@ export function createNodeMemoryTextStore(filePath) {
         err.code = 'LOCK_FENCING_STALE';
         throw err;
       }
+      if (Date.now() > (existing.expiresAt ?? 0)) {
+        const err = new Error(`LOCK_FENCING_STALE: Writer fencing token ${activeFencingToken} has expired.`);
+        err.code = 'LOCK_FENCING_STALE';
+        throw err;
+      }
       if (activeFencingToken !== undefined && existing.fencingToken > activeFencingToken) {
         const err = new Error(`LOCK_FENCING_STALE: Writer fencing token ${activeFencingToken} outranked by active lock fencing token ${existing.fencingToken}`);
         err.code = 'LOCK_FENCING_STALE';
@@ -135,6 +140,8 @@ export function createNodeMemoryTextStore(filePath) {
   return {
     acquireLock,
     releaseLock,
+    unlockedWrite,
+    unlockedRead,
     async read() {
       const lock = await acquireLock();
       try {

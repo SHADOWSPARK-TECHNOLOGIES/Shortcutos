@@ -24,6 +24,9 @@ export class ShortcutOSKernel {
   private sequence = 0;
 
   constructor(options?: { trustPolicy?: EvidenceTrustPolicy }) {
+    if (options?.trustPolicy && !options.trustPolicy.isSystemOwned) {
+      throw new Error('SYSTEM_TRUST_BOUNDARY_REQUIRED: EvidenceTrustPolicy must be system-owned.');
+    }
     this.trustPolicy = options?.trustPolicy ?? SystemEvidenceTrustBoundary.createPolicy({ trustedSources: ['system', 'kernel', 'ci-runner'] });
   }
 

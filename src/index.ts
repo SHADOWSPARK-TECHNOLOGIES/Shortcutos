@@ -31,6 +31,7 @@ export * from './recovery-runtime.js';
 export function validateExportSurface(): {
   valid: boolean;
   duplicateExports: string[];
+  namespaceCollisionCount: number;
   totalExports: number;
   canonicalSurface: {
     globalCommandDedupe: boolean;
@@ -40,6 +41,7 @@ export function validateExportSurface(): {
     moduleConsolidation: boolean;
     errorCodeDedupe: boolean;
     surfaceBudget: number;
+    totalExports: number;
   };
 } {
   const exportNames = [
@@ -69,6 +71,7 @@ export function validateExportSurface(): {
   return {
     valid: duplicateExports.length === 0,
     duplicateExports,
+    namespaceCollisionCount: duplicateExports.length,
     totalExports: exportNames.length,
     canonicalSurface: {
       globalCommandDedupe: true,
@@ -77,7 +80,8 @@ export function validateExportSurface(): {
       stateDedupe: true,
       moduleConsolidation: true,
       errorCodeDedupe: true,
-      surfaceBudget: exportNames.length
+      surfaceBudget: exportNames.length,
+      totalExports: exportNames.length
     }
   };
 }

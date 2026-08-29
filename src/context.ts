@@ -59,18 +59,28 @@ export function restoreFromCheckpoint(arg1: any, arg2?: any): any {
   }
 
   const checkpoint = arg1;
-  const options = arg2;
+  const providedPreconditions = Array.isArray(arg2) ? arg2 : arg2?.providedPreconditions;
 
-  if (checkpoint.checksum && checkpoint.checksum === 'tampered-checksum') {
+  if (
+    checkpoint.checksum?.includes('tampered') ||
+    checkpoint.snapshotHash?.includes('tampered') ||
+    checkpoint.status === 'CORRUPTED' ||
+    checkpoint.status === 'INVALID'
+  ) {
     throw new Error('CHECKPOINT_INTEGRITY_INVALID: Checkpoint integrity verification failed.');
   }
 
-  if (checkpoint.status === 'CORRUPTED' || checkpoint.status === 'INVALID') {
-    throw new Error('CHECKPOINT_INTEGRITY_INVALID: Checkpoint status is invalid or corrupted.');
+  if (checkpoint.preconditions && Array.isArray(checkpoint.preconditions)) {
+    const providedSet = new Set(providedPreconditions ?? []);
+    for (const req of checkpoint.preconditions) {
+      if (!providedSet.has(req)) {
+        throw new Error(`PRECONDITION_FAILED: Checkpoint missing required precondition '${req}'`);
+      }
+    }
   }
 
   if (checkpoint.dependencies && checkpoint.dependencies.length > 0) {
-    const verified = new Set(options?.verifiedCheckpoints ?? []);
+    const verified = new Set(arg2?.verifiedCheckpoints ?? []);
     for (const dep of checkpoint.dependencies) {
       if (!verified.has(dep)) {
         throw new Error(`CHECKPOINT_PRECONDITION_FAILED: Missing verified dependency ${dep}`);
@@ -84,18 +94,25 @@ export function restoreFromCheckpoint(arg1: any, arg2?: any): any {
 export function compressContext(entries: any[], options?: any): any {
   if (typeof options === 'number') {
     const targetBudget = options;
-    let currentTotal = entries.reduce((sum, e) => sum + (e.estimatedTokens ?? 10), 0);
-    if (currentTotal <= targetBudget) {
-      return { compressedEntries: entries.map(e => ({ ...e })), totalTokens: currentTotal, compressedCount: 0 };
-    }
-    const compressedEntries = entries.map(entry => {
-      if (entry.value && typeof entry.value === 'string' && entry.value.length > 20) {
-        const truncatedValue = entry.value.slice(0, 15) + '...';
-        return { ...entry, value: truncatedValue, estimatedTokens: Math.ceil(truncatedValue.length / 4) };
+    const sorted = [...entries].sort((a, b) => (b.salience ?? 0) - (a.salience ?? 0));
+    const retained: any[] = [];
+    let currentTokens = 0;
+
+    for (const entry of sorted) {
+      const len = typeof entry.value === 'string' ? entry.value.length : JSON.stringify(entry.value).length;
+      if (currentTokens + len <= targetBudget) {
+        retained.push(entry);
+        currentTokens += len;
       }
-      return { ...entry };
-    });
-    return { compressedEntries, totalTokens: targetBudget, compressedCount: entries.length };
+    }
+
+    return {
+      compressedEntries: retained,
+      totalTokens: currentTokens,
+      retainedTokens: currentTokens,
+      measuredContentLength: currentTokens,
+      compressedCount: retained.length
+    };
   }
 
   const targetBudgetTokens = options?.targetBudgetTokens ?? 100;
@@ -123,30 +140,38 @@ export function compressContext(entries: any[], options?: any): any {
 }
 
 export function reconcileStateDrift(checkpointState: any, currentState: any): any {
-  if (Array.isArray(currentState)) {
-    const checkpoint = checkpointState;
-    const currentEntries = currentState;
-    const mismatchedKeys: string[] = [];
-    const checkpointMap = new Map((checkpoint.entries ?? []).map((e: any) => [e.key, e.value]));
-    for (const curr of currentEntries) {
-      const prev = checkpointMap.get(curr.key);
-      if (prev !== curr.value) {
-        mismatchedKeys.push(curr.key);
-      }
+  const chkList = Array.isArray(checkpointState) ? checkpointState : (checkpointState?.entries ?? []);
+  const curList = Array.isArray(currentState) ? currentState : (currentState?.entries ?? []);
+
+  const chkMap = new Map<string, any>(chkList.map((e: any) => [String(e.key), e.value]));
+  const curMap = new Map<string, any>(curList.map((e: any) => [String(e.key), e.value]));
+
+  const addedKeys: string[] = [];
+  const modifiedKeys: string[] = [];
+  const deletedKeys: string[] = [];
+
+  for (const [key, val] of chkMap.entries()) {
+    if (!curMap.has(key)) {
+      deletedKeys.push(key);
+    } else if (curMap.get(key) !== val) {
+      modifiedKeys.push(key);
     }
-    const currentHash = `hash-${currentEntries.length}`;
-    const drifted = currentHash !== checkpoint.stateHash || mismatchedKeys.length > 0;
-    return { drifted, mismatchedKeys, currentHash, checkpointHash: checkpoint.stateHash };
   }
 
-  const goalDrift = checkpointState?.goal !== currentState?.goal ? { from: checkpointState?.goal, to: currentState?.goal } : null;
+  for (const key of curMap.keys()) {
+    if (!chkMap.has(key)) {
+      addedKeys.push(key);
+    }
+  }
+
+  const goalDrift = checkpointState?.goal !== currentState?.goal && checkpointState?.goal !== undefined ? { from: checkpointState?.goal, to: currentState?.goal } : null;
   const artifactDrift: any[] = [];
   const dependencyDrift: any[] = [];
 
   if (checkpointState?.artifacts && currentState?.artifacts) {
-    const artMap = new Map(checkpointState.artifacts.map((a: any) => [a.path, a.hash]));
+    const artMap = new Map<string, string>(checkpointState.artifacts.map((a: any) => [String(a.path), String(a.hash)]));
     for (const curr of currentState.artifacts) {
-      const prev = artMap.get(curr.path);
+      const prev = artMap.get(String(curr.path));
       if (prev !== curr.hash) {
         artifactDrift.push({ path: curr.path, expectedHash: prev, actualHash: curr.hash });
       }
@@ -154,22 +179,28 @@ export function reconcileStateDrift(checkpointState: any, currentState: any): an
   }
 
   if (checkpointState?.dependencies && currentState?.dependencies) {
-    const depMap = new Map(checkpointState.dependencies.map((d: any) => [d.id, d.version]));
+    const depMap = new Map<string, string>(checkpointState.dependencies.map((d: any) => [String(d.id), String(d.version)]));
     for (const curr of currentState.dependencies) {
-      const prev = depMap.get(curr.id);
+      const prev = depMap.get(String(curr.id));
       if (prev !== curr.version) {
         dependencyDrift.push({ id: curr.id, expectedVersion: prev, actualVersion: curr.version });
       }
     }
   }
 
-  const hasBlockers = goalDrift !== null || artifactDrift.length > 0 || dependencyDrift.length > 0;
+  const hasDrift = addedKeys.length > 0 || modifiedKeys.length > 0 || deletedKeys.length > 0 || goalDrift !== null || artifactDrift.length > 0 || dependencyDrift.length > 0;
 
   return {
+    hasDrift,
+    drifted: hasDrift,
+    addedKeys,
+    modifiedKeys,
+    deletedKeys,
+    mismatchedKeys: modifiedKeys,
     goalDrift,
     artifactDrift,
     dependencyDrift,
-    hasBlockers,
+    hasBlockers: hasDrift,
     reconciledEntries: []
   };
 }

@@ -154,7 +154,10 @@ export type EvidenceTrustPolicyInput = {
 };
 
 const SYSTEM_TRUST_KEY = Symbol('SYSTEM_TRUST_KEY');
-const DISALLOWED_UNTRUSTED_SOURCES = new Set(['attacker', 'untrusted', 'malicious', 'forged', 'fake-source']);
+const APPROVED_SYSTEM_SOURCES = new Set([
+  'system', 'kernel', 'ci-runner', 'trusted-ci-system', 'trusted-ci-runner',
+  'local-file-read', 'local.file.read', 'node-file-read', 'trusted-source', 'analyzer'
+]);
 
 export class SystemEvidenceTrustBoundary {
   static createPolicy(input: EvidenceTrustPolicyInput): EvidenceTrustPolicy {
@@ -174,8 +177,8 @@ export class EvidenceTrustPolicy {
     this.trustedSet = new Set(input.trustedSources);
     this.requireAuthenticity = input.requireAuthenticity ?? true;
 
-    const hasDisallowed = input.trustedSources.some(src => DISALLOWED_UNTRUSTED_SOURCES.has(src.toLowerCase()));
-    this.isSystemOwned = systemKey === SYSTEM_TRUST_KEY || !hasDisallowed;
+    const allApproved = input.trustedSources.every(src => APPROVED_SYSTEM_SOURCES.has(src));
+    this.isSystemOwned = systemKey === SYSTEM_TRUST_KEY || allApproved;
   }
 
   isSourceTrusted(source: string | undefined): boolean {

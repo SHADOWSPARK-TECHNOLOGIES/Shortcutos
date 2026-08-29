@@ -1,0 +1,1447 @@
+[
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING A-1: Forged EvidenceTrustPolicy containing attacker sources is rejected",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING A-2: ShortcutOSKernel constructor rejects caller-owned trust policy containing unapproved origins",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING B-1: Manually constructed READY_FOR_EXECUTION dispatch without PreflightAuthorization token is rejected",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING C-1: Expired memory transaction cannot write after lease timeout",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING D-1: Checkpoint restore rejects tampered snapshot hash or broken preconditions",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING E-1: Context compression reported token count strictly equals actual measured content length",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING F-1: Drift reconciliation detects deleted keys between checkpoint and current state",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING G-1: Recovery plan fails when state restoration check fails",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING H-1: Minimal repair selection rejects unsafe repair candidates before minimization",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING I-1: RecoveryJournal throws RECOVERY_JOURNAL_IMMUTABLE on illegal step mutation",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-final117.test.mjs",
+    "test_name": "FINDING J-1: Export surface validator dynamically inspects symbols and fails on duplicate/alias fixtures",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round2.test.mjs",
+    "test_name": "FINDING A1: Single repository put succeeds quickly without self-deadlock",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round2.test.mjs",
+    "test_name": "FINDING A2: Sequential put and read operations succeed cleanly",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round2.test.mjs",
+    "test_name": "FINDING A3: Two repository instances with expectedVersion=0 yield 1 commit and 1 MEMORY_CONCURRENCY_CONFLICT",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round2.test.mjs",
+    "test_name": "FINDING A4: Non-owner cannot release another owner lock",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round2.test.mjs",
+    "test_name": "FINDING B: Caller passing [",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round2.test.mjs",
+    "test_name": "FINDING C: Kernel verify() ignores naked boolean and derives acceptance from criteria, evidence and EvidenceTrustPolicy",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round2.test.mjs",
+    "test_name": "FINDING D: Missing actorAuthority on mutating operation blocks dispatch with PREFLIGHT_AUTHORITY_UNKNOWN",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 1: Caller cannot forge EvidenceTrustPolicy with attacker sources without system authority boundary",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 2: Manually constructed READY_FOR_EXECUTION dispatch without preflight authorization is rejected by executeOnce()",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 3: Expired writer cannot commit after lease expiration and fencing outrank",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 4: Invalid V58 checkpoint integrity or missing precondition rejects restoration",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 5: V59 compression strictly respects token budget and preserves high-salience decisions",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 6: Canonical V43 extracts typed claims with statement classifications and fingerprints",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 7: Canonical V68 performs multi-dimensional drift analysis (goal, artifact, dependency)",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 8: Canonical V72-V79 specialists possess typed domain contracts",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 9: Canonical V83 evaluates domain policy profiles and side effect boundaries",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 10: Canonical V89 evaluates restore plans and checkpoint compatibility",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 11: Canonical V92 selects minimal repair candidate by cost and risk class",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 12: Canonical V93 RecoveryJournal maintains immutable resumable step history",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation-round3.test.mjs",
+    "test_name": "RED TEST 13: Canonical V96 performs whole-system surface analysis and namespace minimization",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation.test.mjs",
+    "test_name": "FINDING 1: Untrusted evidence envelope with valid checksum cannot promote to RUNTIME_VERIFIED",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation.test.mjs",
+    "test_name": "FINDING 1: Bare evidence without trusted provenance, ID, timestamp, and integrity cannot pass acceptance",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation.test.mjs",
+    "test_name": "FINDING 2: Non-idempotent mutating adapter dispatches without full preflight are rejected and not executed",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/audit-remediation.test.mjs",
+    "test_name": "FINDING 3: Simultaneous memory writers with expectedVersion=0 do not suffer lost updates",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/auditor-config.test.mjs",
+    "test_name": "expected invariant fixture contains exactly 18 evidence targets without pass states",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/auditor-config.test.mjs",
+    "test_name": "Antigravity auditor uses read-oriented tools and sandbox command policy",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/auditor-config.test.mjs",
+    "test_name": "conformance skill contains all nine phases and strict classifications",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/auditor-config.test.mjs",
+    "test_name": "audit rules prohibit fabricated state, hidden retries and unsupported conformance claims",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/auditor-config.test.mjs",
+    "test_name": "package exposes deterministic conformance audit script",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/authority.test.mjs",
+    "test_name": "higher authority can override lower authority",
+    "contract_ids": [
+      "V23-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/authority.test.mjs",
+    "test_name": "ShortcutOS cannot override higher authority",
+    "contract_ids": [
+      "V23-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/capability.test.mjs",
+    "test_name": "unknown capability availability never becomes bound",
+    "contract_ids": [
+      "V24-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/capability.test.mjs",
+    "test_name": "observed available provider can bind exact capability",
+    "contract_ids": [
+      "V24-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/capability.test.mjs",
+    "test_name": "missing capability is unavailable rather than invented",
+    "contract_ids": [
+      "V24-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/cli.test.mjs",
+    "test_name": "self-check reports PASS and never claims host integration",
+    "contract_ids": [
+      "V24-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "parses Node TAP summary counts",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "missing TAP summary fields remain zero rather than invented",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "zero discovered tests cannot be PASS even with exit zero",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "non-zero test exit is FAIL",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "non-zero discovery with zero failures is PASS",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "inconsistent zero-exit summary remains UNKNOWN",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "self-check parser preserves explicit hostIntegrated false",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "malformed self-check output remains UNKNOWN without invented host state",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "non-zero self-check exit is FAIL even if payload says PASS",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "command evidence invokes the command exactly once on failure",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "spawn errors are captured as structured command evidence",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "primitive report captures repository, environment, build, test and self-check facts",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "primitive report preserves verification failures instead of short-circuiting",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-runner.test.mjs",
+    "test_name": "CLI writes real primitive evidence with non-zero test discovery",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-schema.test.mjs",
+    "test_name": "canonical implementation state set is exact",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-schema.test.mjs",
+    "test_name": "valid final conformance report is accepted",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-schema.test.mjs",
+    "test_name": "missing required top-level field is rejected",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-schema.test.mjs",
+    "test_name": "unknown top-level field is rejected",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-schema.test.mjs",
+    "test_name": "invalid implementation classification is rejected",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/conformance-schema.test.mjs",
+    "test_name": "schema document declares strict top-level shape and canonical state enum",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/context.test.mjs",
+    "test_name": "stale context is surfaced",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/context.test.mjs",
+    "test_name": "conflicting context is surfaced instead of silently merged",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/evidence-security.test.mjs",
+    "test_name": "PHASE E: Valid checksum does not equal trusted evidence source (distinguishes checksum vs authenticity)",
+    "contract_ids": [
+      "V41-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/evidence.test.mjs",
+    "test_name": "source presence does not verify a claim",
+    "contract_ids": [
+      "V41-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/evidence.test.mjs",
+    "test_name": "verified supporting evidence supports a claim",
+    "contract_ids": [
+      "V41-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/evidence.test.mjs",
+    "test_name": "verified support and refutation remain contradicted",
+    "contract_ids": [
+      "V41-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/executor.test.mjs",
+    "test_name": "unavailable adapter is never invoked",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/executor.test.mjs",
+    "test_name": "available adapter executes exactly once and returns typed envelope",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/executor.test.mjs",
+    "test_name": "adapter failure is recorded and not retried",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/executor.test.mjs",
+    "test_name": "adapter capability mismatch blocks dispatch",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/kernel.test.mjs",
+    "test_name": "kernel does not claim completion when verification is missing",
+    "contract_ids": [
+      "V26-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/kernel.test.mjs",
+    "test_name": "kernel completes only after acceptance evidence is verified",
+    "contract_ids": [
+      "V26-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/memory.test.mjs",
+    "test_name": "memory journal persists records through a fresh repository instance",
+    "contract_ids": [
+      "V56-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/memory.test.mjs",
+    "test_name": "memory correction preserves history and supersedes the old record",
+    "contract_ids": [
+      "V56-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/memory.test.mjs",
+    "test_name": "tombstoned memory stays in history but is excluded from active context",
+    "contract_ids": [
+      "V56-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/node-adapters.test.mjs",
+    "test_name": "node memory store survives a fresh repository instance",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/node-adapters.test.mjs",
+    "test_name": "local file adapter performs one real root-confined file read",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/node-adapters.test.mjs",
+    "test_name": "local file adapter blocks path traversal outside its root",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0: Trusted typed RuntimeEvidence envelope creation and integrity validation",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0: Real acceptance evaluator verifies criteria against validated evidence",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0: Full dispatch preflight evaluates authority, capability, side-effect class, and freshness",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0: Timeout and AbortSignal execution semantics in executeOnce",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0: Explicit UNKNOWN-side-effect handling after ambiguous timeout on mutations",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0: Memory journal runtime schema validation and concurrency conflict protection",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0: Adapter registration provenance and trust validation",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0 Adversarial: Execution bypass and blocked dispatch cannot trigger adapter execution",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p0-runtime-hardening.test.mjs",
+    "test_name": "P0 Adversarial: UNKNOWN and PARTIAL verification states strictly reject completion promotion",
+    "contract_ids": [
+      "V23-001",
+      "V26-001",
+      "V27-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p1-retry-fallback.test.mjs",
+    "test_name": "P1: Bounded retry succeeds after transient failure on idempotent operation",
+    "contract_ids": [
+      "V31-001",
+      "V32-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p1-retry-fallback.test.mjs",
+    "test_name": "P1: Retry exhaustion after reaching maximum attempts",
+    "contract_ids": [
+      "V31-001",
+      "V32-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p1-retry-fallback.test.mjs",
+    "test_name": "P1: Non-retryable error (ambiguous side-effect) blocks retry immediately",
+    "contract_ids": [
+      "V31-001",
+      "V32-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p1-retry-fallback.test.mjs",
+    "test_name": "P1: Controlled fallback to secondary adapter on primary failure",
+    "contract_ids": [
+      "V31-001",
+      "V32-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p1-retry-fallback.test.mjs",
+    "test_name": "P1: Fallback adapter with capability mismatch is rejected and not executed",
+    "contract_ids": [
+      "V31-001",
+      "V32-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p2-scheduler.test.mjs",
+    "test_name": "P2: Sequential execution executes steps in dependency order and collects outputs",
+    "contract_ids": [
+      "V33-001",
+      "V34-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p2-scheduler.test.mjs",
+    "test_name": "P2: Step failure halts workflow execution and skips dependent steps",
+    "contract_ids": [
+      "V33-001",
+      "V34-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p2-scheduler.test.mjs",
+    "test_name": "P2: Ambiguous side-effect in step halts workflow with UNKNOWN status",
+    "contract_ids": [
+      "V33-001",
+      "V34-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p2-scheduler.test.mjs",
+    "test_name": "P2: Cyclic dependency in workflow is rejected before execution",
+    "contract_ids": [
+      "V33-001",
+      "V34-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p3-adversarial-security.test.mjs",
+    "test_name": "P3 Security: Tampered evidence envelope is rejected by promoteStatus and kernel",
+    "contract_ids": [
+      "V54-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p3-adversarial-security.test.mjs",
+    "test_name": "P3 Security: Local file adapter handles non-existent paths outside root safely",
+    "contract_ids": [
+      "V54-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p4-parallel-execution.test.mjs",
+    "test_name": "P4: Concurrency limit (maxConcurrency) bounds active parallel executions",
+    "contract_ids": [
+      "V31-001",
+      "V35-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p4-parallel-execution.test.mjs",
+    "test_name": "P4: Shared-resource conflict detection prevents concurrent write-lock conflicts",
+    "contract_ids": [
+      "V31-001",
+      "V35-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p4-parallel-execution.test.mjs",
+    "test_name": "P4: Join policy FIRST_SUCCESS returns immediately when one step succeeds",
+    "contract_ids": [
+      "V31-001",
+      "V35-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p5-resource-scheduler.test.mjs",
+    "test_name": "P5: Resource capacity bounds concurrent execution and holds over-capacity tasks",
+    "contract_ids": [
+      "V36-001",
+      "V40-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p5-resource-scheduler.test.mjs",
+    "test_name": "P5: Starvation prevention boosts priority of older runnable tasks",
+    "contract_ids": [
+      "V36-001",
+      "V40-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p6-evidence-system.test.mjs",
+    "test_name": "P6: Contradiction graph detects contradicting claims and resolves conflicts by source grade",
+    "contract_ids": [
+      "V41-001",
+      "V45-001",
+      "V46-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p7-memory-context.test.mjs",
+    "test_name": "P7: Context carrier creates verifiable checkpoints and compresses historical state",
+    "contract_ids": [
+      "V56-001",
+      "V57-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p8-specialist-runtime.test.mjs",
+    "test_name": "P8: Specialist registry manages specialist roles, eligibility, and validates handoffs",
+    "contract_ids": [
+      "V71-001",
+      "V83-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/p9-failure-recovery.test.mjs",
+    "test_name": "P9: Failure taxonomy categorizes failures and compiles executable recovery plans",
+    "contract_ids": [
+      "V86-001",
+      "V90-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/registry.test.mjs",
+    "test_name": "canonical registry rejects duplicate ids",
+    "contract_ids": [
+      "V96-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/registry.test.mjs",
+    "test_name": "direct alias resolves to canonical record",
+    "contract_ids": [
+      "V96-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/registry.test.mjs",
+    "test_name": "alias chains are rejected",
+    "contract_ids": [
+      "V96-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/status.test.mjs",
+    "test_name": "runtime verification requires runtime evidence and EvidenceTrustPolicy",
+    "contract_ids": [
+      "V23-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/status.test.mjs",
+    "test_name": "design verification can be represented without runtime verification",
+    "contract_ids": [
+      "V23-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V43-001 RED: extractClaimsFromEvidence extracts structured ClaimRecord objects from evidence envelopes",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V58-001 RED: restoreFromCheckpoint restores context entries from checkpoint snapshot",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V59-001 RED: compressContext condenses context entries to fit target token budget",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V68-001 RED: reconcileStateDrift detects state hash mismatch between checkpoint and current entries",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V72-V79 RED: createSpecialist instantiates 8 domain specialists with distinct domain policies and capabilities",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V83-001 RED: executeSpecialistHandoff evaluates domain capabilities and rejects invalid handoffs",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V89-001 GREEN: executeRecoveryPlan tracks partial state restoration records",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V92-001 RED: selectMinimalRepairPlan prunes redundant actions to produce minimal repair set",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V93-001 RED: RecoveryJournal records resumable recovery step history",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  },
+  {
+    "test_file": "tests/v100-mandatory-gaps.test.mjs",
+    "test_name": "V96-001 RED: validateExportSurface confirms clean non-redundant export surface in index.ts",
+    "contract_ids": [
+      "V100-001"
+    ],
+    "security_regression_ids": [],
+    "included_in_npm_test": true,
+    "included_in_conformance": true,
+    "status": "PASS"
+  }
+]

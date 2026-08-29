@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const rootDir = resolve(process.cwd());
@@ -112,7 +112,13 @@ for (const file of testFiles) {
   }
 }
 
-const outputPath = resolve(rootDir, 'audit/reports/v100-test-inventory.json');
-writeFileSync(outputPath, `${JSON.stringify(testInventory, null, 2)}\n`, 'utf8');
+mkdirSync(resolve(rootDir, 'audit/reports'), { recursive: true });
+mkdirSync(resolve(rootDir, 'audit/final-readiness'), { recursive: true });
 
-console.log(`Test inventory generated: ${testInventory.length} test cases written to audit/reports/v100-test-inventory.json`);
+const outputPath1 = resolve(rootDir, 'audit/reports/v100-test-inventory.json');
+const outputPath2 = resolve(rootDir, 'audit/final-readiness/test-inventory.json');
+
+writeFileSync(outputPath1, `${JSON.stringify(testInventory, null, 2)}\n`, 'utf8');
+writeFileSync(outputPath2, `${JSON.stringify(testInventory, null, 2)}\n`, 'utf8');
+
+console.log(`Test inventory generated: ${testInventory.length} test cases written to audit/reports/v100-test-inventory.json and audit/final-readiness/test-inventory.json`);

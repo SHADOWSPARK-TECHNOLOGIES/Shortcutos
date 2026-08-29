@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const countPatterns = {
   discovered: /^# tests\s+(\d+)\s*$/m,
@@ -108,36 +109,20 @@ export function runPrimitiveConformance({ root, runCommand = captureCommandEvide
   const nodeEvidence = invoke('node', ['--version']);
   const npmEvidence = invoke('npm', ['--version']);
   const build = invoke('npm', ['run', 'build']);
-  const testFiles = [
-    'tests/auditor-config.test.mjs',
-    'tests/authority.test.mjs',
-    'tests/capability.test.mjs',
-    'tests/cli.test.mjs',
-    'tests/conformance-runner.test.mjs',
-    'tests/conformance-schema.test.mjs',
-    'tests/context.test.mjs',
-    'tests/evidence.test.mjs',
-    'tests/evidence-security.test.mjs',
-    'tests/executor.test.mjs',
-    'tests/kernel.test.mjs',
-    'tests/memory.test.mjs',
-    'tests/node-adapters.test.mjs',
-    'tests/p0-runtime-hardening.test.mjs',
-    'tests/p1-retry-fallback.test.mjs',
-    'tests/p2-scheduler.test.mjs',
-    'tests/p3-adversarial-security.test.mjs',
-    'tests/p4-parallel-execution.test.mjs',
-    'tests/p5-resource-scheduler.test.mjs',
-    'tests/p6-evidence-system.test.mjs',
-    'tests/p7-memory-context.test.mjs',
-    'tests/p8-specialist-runtime.test.mjs',
-    'tests/p9-failure-recovery.test.mjs',
-    'tests/registry.test.mjs',
-    'tests/status.test.mjs',
-    'tests/audit-remediation.test.mjs',
-    'tests/audit-remediation-round2.test.mjs',
-    'tests/v100-mandatory-gaps.test.mjs'
-  ];
+
+  let testFiles = [];
+  try {
+    testFiles = readdirSync(resolve(root, 'tests'))
+      .filter((f) => f.endsWith('.test.mjs'))
+      .sort()
+      .map((f) => `tests/${f}`);
+  } catch {
+    testFiles = [];
+  }
+
+  if (testFiles.length === 0) {
+    testFiles = ['tests/*.test.mjs'];
+  }
 
   const rawTests = invoke('node', ['--test', ...testFiles]);
   const rawSelfCheck = invoke('node', ['cli.mjs', 'self-check']);
