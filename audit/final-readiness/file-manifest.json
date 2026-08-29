@@ -1,7 +1,7 @@
 {
   "algorithm": "SHA-256",
-  "generated_at": "2026-08-29T13:07:25.827Z",
-  "total_files": 85,
+  "generated_at": "2026-08-29T13:14:56.850Z",
+  "total_files": 86,
   "files": {
     "package.json": "4efea46dc8012fc1bc34159bd7118370e29e59ab7372df37e06a4e71d63e6c1e",
     "package-lock.json": "9aae0ff9ea1cf8ab91de963d14a0e08d915a878ba48e3c0c56359ecd431bdeed",
@@ -73,6 +73,7 @@
     "scripts/generate-final-report.mjs": "89c233cc39b638f5eb55cbd42c1408777985e8a46a94ed908a361db600e56dc5",
     "scripts/generate-test-inventory.mjs": "83f32c1667be6a547d3c8b7d3dc854806df0ed4a641041d25219bc62bc77d2fb",
     "scripts/lock-release-provenance.mjs": "b821b5942f29b82c57390664397bbcf1ffcc2fe543e30f4f78d04f00e8e40255",
+    "scripts/push-to-github.ps1": "ed4c62f50621059e84e736cf7e2da9a27fc1a1aa95ec6871cd378b2adbf2c1b1",
     "scripts/run-conformance.mjs": "80c0cd612c8baf2aaa06417dce530c7b73fb04cfe46055c42a8c163b3922295e",
     "scripts/run-github-automation.ps1": "eb660327032bb1f0ee857a314111f9bf185f701d7485d775b7451ff8f40ca211",
     "scripts/update-contract-inventory.mjs": "fa36528eff7806070dc707d0471337892da4f4486054fd7bc8c5bc96caa4e461",
