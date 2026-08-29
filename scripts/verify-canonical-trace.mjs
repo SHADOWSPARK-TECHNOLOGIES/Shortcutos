@@ -121,7 +121,7 @@ if (existsSync(fileManifestPath)) {
         fileManifestTampered = true;
         break;
       }
-      const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt');
+      const isText = relPath.endsWith('.ts') || relPath.endsWith('.mjs') || relPath.endsWith('.json') || relPath.endsWith('.md') || relPath.endsWith('.txt') || relPath.endsWith('.ps1') || relPath.endsWith('.yaml') || relPath.endsWith('.yml');
       let actualHash = '';
       if (isText) {
         const text = readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');
