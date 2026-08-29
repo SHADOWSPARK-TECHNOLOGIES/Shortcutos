@@ -75,13 +75,39 @@ if (gitAvailable) {
   }
 }
 
-// FINDING E & F CHECK: Validate File Manifest Hashes against disk files
+// FINDING E & F CHECK: Validate File Manifest and Release Bundle Hashes against disk files
 let fileManifestTampered = false;
-const fileManifestPath = resolve(rootDir, 'audit/reports/v100-file-manifest.json');
+const fileManifestPath = existsSync(resolve(rootDir, 'audit/final-readiness/file-manifest.json'))
+  ? resolve(rootDir, 'audit/final-readiness/file-manifest.json')
+  : resolve(rootDir, 'audit/reports/v100-file-manifest.json');
+
+if (existsSync(receiptPath)) {
+  try {
+    const receiptData = JSON.parse(readFileSync(receiptPath, 'utf8'));
+    const zipFilename = receiptData.release_zip?.filename || 'shortcutos-v100-runtime-final.zip';
+    const zipPath = resolve(rootDir, zipFilename);
+    if (receiptData.release_zip?.sha256) {
+      if (!existsSync(zipPath)) {
+        console.error(`Declared release ZIP missing: ${zipFilename}`);
+        fileManifestTampered = true;
+      } else {
+        const actualZipHash = createHash('sha256').update(readFileSync(zipPath)).digest('hex').toLowerCase();
+        if (actualZipHash !== receiptData.release_zip.sha256.toLowerCase()) {
+          console.error(`Release ZIP hash mismatch: expected ${receiptData.release_zip.sha256}, got ${actualZipHash}`);
+          fileManifestTampered = true;
+        }
+      }
+    }
+  } catch {
+    fileManifestTampered = true;
+  }
+}
+
 if (existsSync(fileManifestPath)) {
   try {
     const fileManifest = JSON.parse(readFileSync(fileManifestPath, 'utf8'));
     const skipFiles = new Set([
+      'audit/final-readiness/file-manifest.json',
       'audit/reports/v100-file-manifest.json',
       'audit/reports/v100-canonical-certification.json',
       'audit/reports/v100-release-manifest.json',
@@ -89,7 +115,7 @@ if (existsSync(fileManifestPath)) {
       'shortcutos-v100-runtime-final.zip'
     ]);
     for (const [relPath, expectedHash] of Object.entries(fileManifest.files ?? {})) {
-      if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-')) continue;
+      if (skipFiles.has(relPath) || relPath.startsWith('audit/reports/conformance-') || relPath.startsWith('audit/final-readiness/github-push-')) continue;
       const fullPath = resolve(rootDir, relPath);
       if (!existsSync(fullPath)) {
         fileManifestTampered = true;
