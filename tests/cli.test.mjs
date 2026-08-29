@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 test('self-check reports PASS and never claims host integration', () => {
   const stdout = execFileSync(process.execPath, ['cli.mjs', 'self-check'], {
-    cwd: new URL('..', import.meta.url),
+    cwd: fileURLToPath(new URL('..', import.meta.url)),
     encoding: 'utf8'
   });
   const result = JSON.parse(stdout);
