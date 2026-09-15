@@ -20,6 +20,13 @@ test('parses Node TAP summary counts', () => {
   );
 });
 
+test('parses Node diagnostic summary counts', () => {
+  assert.deepEqual(
+    parseNodeTestSummary('ℹ tests 128\nℹ pass 127\nℹ fail 0\nℹ skipped 1\n'),
+    { discovered: 128, passed: 127, failed: 0, skipped: 1 }
+  );
+});
+
 test('missing TAP summary fields remain zero rather than invented', () => {
   assert.deepEqual(parseNodeTestSummary('TAP version 13\n'), {
     discovered: 0,

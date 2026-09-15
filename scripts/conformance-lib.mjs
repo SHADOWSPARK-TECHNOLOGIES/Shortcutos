@@ -3,10 +3,10 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const countPatterns = {
-  discovered: /^# tests\s+(\d+)\s*$/m,
-  passed: /^# pass\s+(\d+)\s*$/m,
-  failed: /^# fail\s+(\d+)\s*$/m,
-  skipped: /^# skipped\s+(\d+)\s*$/m
+  discovered: /^(?:#|ℹ) tests\s+(\d+)\s*$/m,
+  passed: /^(?:#|ℹ) pass\s+(\d+)\s*$/m,
+  failed: /^(?:#|ℹ) fail\s+(\d+)\s*$/m,
+  skipped: /^(?:#|ℹ) skipped\s+(\d+)\s*$/m
 };
 
 function readCount(output, pattern) {
